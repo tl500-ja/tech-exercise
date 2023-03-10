@@ -1,49 +1,39 @@
-## 🐌 The Basics - CRW, OCP & Helm
-## CodeReady Workspaces setup
+## 🐌 基本 - CRW、OCP、Helm
 
-1. Login to your CodeReadyWorkspace (CRW) Editor. The link to this will be provided by your instructor.
+## CodeReady Workspaces のセットアップ
+
+1. CodeReadyWorkspace (CRW) エディターにログインします。これへのリンクは、インストラクターによって提供されます。
 
     ![crw](./images/crw.png)
 
-    <p class="warn">
-    If the workspace has not been set up for you, you can create one from this devfile.
-    </br>
-    On CodeReady Workspaces, "Create Workspace > Custom Workspace".
-    </br>
-    For OpenShift 4.9, 4.10 - Enter this URL to load the TL500 stack:</br>
-    <span style="color:blue;"><a id=crw_dev_filelocation href=""></a></span>
-    </br>
-    On DevSpaces Workspaces, "Add Workspace > Import from Git".
-    </br>
-    For OpenShift 4.11+ - Enter this URL to load the TL500 stack:</br>
-    <span style="color:blue;"><a id=crw_dev_filelocation_4.11 href=""></a></span>
-    </p>
+     <p class="warn">ワークスペースが設定されていない場合は、この devfile から作成できます。 CodeReady ワークスペースでは、"Create Workspace &gt; Custom Workspace" を選択します。 OpenShift 4.9、4.10 の場合 - 次の URL を入力して TL500 スタックをロードします。<span style="color:blue;"></span><a id="crw_dev_filelocation" href=""></a> DevSpaces ワークスペースでは、"Add Workspace &gt; Import from Git"を実行します。 OpenShift 4.11+ の場合 - 次の URL を入力して TL500 スタックをロードします。<span style="color:blue;"></span><a id="crw_dev_filelocation_4.11" href=""></a></p>
+    
 
-2. In your IDE (it may take some time to open ... ⏰☕️), open a new terminal by hitting `Terminal > Open Terminal in Specific Container > stack-tl500` from the menu.
+2. IDE で (開くのに時間がかかる場合があります ... ⏰☕️)、メニューから`Terminal > Open Terminal in Specific Container > stack-tl500`をクリックして、新しいターミナルを開きます。
 
     ![new-terminal](./images/new-terminal.png)
 
-3. Notice the nifty default shell in the stack-tl500 container is `zsh` which rhymes with swish. It also has neat shortcuts and plugins - plus all the cool kids are using it 😎! We will be setting our environment variables in both `~/.zshrc` and `~/.bashrc` in case you want to switch to `bash`.
+3. stack-tl500 コンテナーの気の利いたデフォルト シェルは、swish と韻を踏む`zsh`であることに注意してください。また、きちんとしたショートカットとプラグインもあります - さらに、すべてのクールな子供たちがそれを使用しています 😎! `bash`に切り替えたい場合に備えて`~/.zshrc`と`~/.bashrc`の両方で環境変数を設定します。
 
-4. Setup your `TEAM_NAME` name in the environment of the CodeReadyWorkspace by running the command below. We will use the `TEAM_NAME` variable throughout the exercises so having it stored in our session means less changing of this variable throughout the exercises 💪. **Ensure your `TEAM_NAME` consists of only lower case alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name',  or '123-abc.)**
+4. 以下のコマンドを実行して、CodeReadyWorkspace の環境で`TEAM_NAME`名をセットアップします。演習全体で`TEAM_NAME`変数を使用するため、セッションに保存すると、演習全体でこの変数の変更が少なくなります 💪. <strong data-md-type="double_emphasis">`TEAM_NAME`が小文字の英数字または「-」のみで構成されていることを確認し、英数字で開始および終了する必要があります (例: 「my-name」または「123-abc.」)。</strong>
 
     ```bash#test
     echo export TEAM_NAME="<TEAM_NAME>" | tee -a ~/.bashrc -a ~/.zshrc
     ```
 
-5. Add the `CLUSTER_DOMAIN` to the environment:
+5. `CLUSTER_DOMAIN`を環境に追加します。
 
     ```bash#test
     echo export CLUSTER_DOMAIN="<CLUSTER_DOMAIN>" | tee -a ~/.bashrc -a ~/.zshrc
     ```
 
-6. Add the `GIT_SERVER` to the environment:
+6. `GIT_SERVER`環境に追加します。
 
     ```bash#test
     echo export GIT_SERVER="<GIT_SERVER>" | tee -a ~/.bashrc -a ~/.zshrc
     ```
 
-7. Verify the variables you have set:
+7. 設定した変数を確認します。
 
     ```zsh#test
     source ~/.zshrc
@@ -52,17 +42,16 @@
     echo ${GIT_SERVER}
     ```
 
-8. Check if you can connect to OpenShift. Run the command below.
+8. OpenShift に接続できるかどうかを確認します。以下のコマンドを実行します。
 
-    <p class="tip">
-    ⛷️ <b>TIP</b> ⛷️ - Before you hit enter, make sure you change the username and password to match your team's login details. If your password includes special characters, put it in single quotes. ie: <strong>'A8y?Rpm!9+A3B/KG'</strong>
-    </p>
+     <p class="tip">⛷️<b>ヒント</b>⛷️ - Enter キーを押す前に、チームのログイン情報と一致するようにユーザー名とパスワードを変更してください。パスワードに特殊文字が含まれている場合は、一重引用符で囲みます。例: <strong>'A8y?Rpm!9+A3B/KG'</strong></p>
+
 
     ```bash
     oc login --server=https://api.${CLUSTER_DOMAIN##apps.}:6443 -u <USER_NAME> -p <PASSWORD>
     ```
 
-9. Check your user permissions in OpenShift by creating your team's `ci-cd` project. 
+9. チームの`ci-cd`プロジェクトを作成して、OpenShift でのユーザー権限を確認します。
 
     ```bash#test
     oc new-project ${TEAM_NAME}-ci-cd || true
@@ -70,35 +59,34 @@
 
     ![new-project](./images/new-project.png)
 
-    <p class="warn">
-        ⛷️ <b>NOTE</b> ⛷️ - If you are working as a team and are using the same TEAM_NAME, you may receive a message saying this project already exists. One of your team mates would have already created this project. It's all good!
-    </p>
+     <p class="warn">⛷️<b>注</b>⛷️ - チームとして作業していて、同じ TEAM_NAME を使用している場合、このプロジェクトが既に存在するというメッセージが表示される場合があります。チーム メイトの 1 人がすでにこのプロジェクトを作成しているはずです。問題ありません！</p>
+    
 
-### Helm 101
+### Helm 入門
 
-> Helm is the package manager for Kubernetes. It provides a way to create templates for the Kubernetes YAML that defines our application. The Kubernetes resources such as `DeploymentConfig`, `Route` & `Service` can be processed by supplying `values` to the templates. In Helm land, there are a few ways to do this. A package containing the templates and their default values is called a `chart`. 
+> Helm は Kubernetes のパッケージ マネージャーです。アプリケーションを定義する Kubernetes YAML のテンプレートを作成する方法を提供します。 `DeploymentConfig` 、 `Route` &amp; `Service`などの Kubernetes リソースは、テンプレートに`values`指定することで処理できます。 Helm ランドでは、これを行う方法がいくつかあります。テンプレートとそのデフォルト値を含むパッケージは`chart`と呼ばれます。
 
-Let's deploy a simple application using Helm.
+Helm を使用して簡単なアプリケーションをデプロイしてみましょう。
 
-1. Helm charts are packaged and stored in repositories. They can be added as dependencies of other charts or used directly. Let's add a chart repository now. The chart repository stores the version history of our charts as well as the packaged tar file.
+1. Helm チャートはパッケージ化され、リポジトリに保存されます。これらは、他のチャートの依存関係として追加するか、直接使用できます。チャート リポジトリを追加しましょう。チャート リポジトリには、チャートのバージョン履歴とパッケージ化された tar ファイルが保存されます。
 
     ```bash#test
     helm repo add tl500 https://rht-labs.com/todolist/
     ```
 
-2. Let's install a chart from this repo. First search the repository to see what is available.
+2. このリポジトリからチャートをインストールしましょう。まずリポジトリを検索して、利用可能なものを確認します。
 
     ```bash#test
     helm search repo todolist
     ```
 
-    Now install the latest version. Helm likes to give each install a release, for convenience we've set ours to `my`. This will add a prefix of `my-` to all the resources that are created.
+    ここで最新バージョンをインストールします。 Helm は各インストールにリリースを与えるのが好きです。便宜上、私たちのものを`my`に設定しました。これにより、作成されるすべてのリソースに`my-`のプレフィックスが追加されます。
 
     ```bash#test
     helm install my tl500/todolist --namespace ${TEAM_NAME}-ci-cd || true
     ```
 
-3. Open the application up in the browser to verify it's up and running. Here's a handy one-liner to get the address of the app
+3. ブラウザでアプリケーションを開き、アプリケーションが稼働中であることを確認します。これは、アプリのアドレスを取得するための便利なワンライナーです。
 
     ```bash#test
     echo https://$(oc get route/my-todolist -n ${TEAM_NAME}-ci-cd --template='{{.spec.host}}')
@@ -106,54 +94,57 @@ Let's deploy a simple application using Helm.
 
     ![todolist](./images/todolist.png)
 
-4. You can overwrite the default <span style="color:blue;">[values](https://github.com/rht-labs/todolist/blob/master/chart/values.yaml)</span> in a chart from the command line. Let's upgrade our deployment to show this. We'll make a simple change to the values to scale up our app. By default, we only have 1 replica.
+4. コマンドラインからチャートのデフォルト<span style="color:blue;"><a href="https://github.com/rht-labs/todolist/blob/master/chart/values.yaml">値</a></span>を上書きできます。これを示すために、デプロイをアップグレードしてみましょう。値を簡単に変更して、アプリをスケールアップします。デフォルトでは、レプリカ(アプリケーションのプロセス数)は 1 つだけです。
 
     ```bash#test
     oc get pods -n ${TEAM_NAME}-ci-cd
     ```
 
-    By default, we only have one replica of our application. Let's use helm to set this to 5.
+    デフォルトでは、アプリケーションのレプリカは 1 つだけです。 helm を使用してこれを 5 に設定しましょう。
 
     ```bash#test
     helm upgrade my tl500/todolist --set replicas=5 --namespace ${TEAM_NAME}-ci-cd
     ```
 
-    Verify the deployment has scaled up to 5 replicas.
+    デプロイが 5 つのレプリカにスケールアップされたことを確認します。
 
     ```bash#test
     oc get pods -n ${TEAM_NAME}-ci-cd
     ```
 
-5. If you're done playing with the #amazing-todolist-app then let's tidy up our work by removing the chart. To do this, run helm uninstall to remove our release of the chart.
+5. #amazing-todolist-app で遊んだことが終わったら、チャートを削除して作業を整理しましょう。これを行うには、helm uninstall を実行してチャートのリリースを削除します。
 
     ```bash#test
     helm uninstall my --namespace ${TEAM_NAME}-ci-cd
     ```
 
-    Verify the clean up
+    クリーンアップを確認します。
 
     ```bash#test
     oc get pods -n ${TEAM_NAME}-ci-cd | grep todolist
     ```
 
-6. For those who are really interested, this is the anatomy of our Helm chart. It can be <span style="color:blue;">[found here](https://github.com/rht-labs/todolist)</span>, but the basic structure is as follows:
+6. 本当に興味のある方のために、これは Helm チャートの構造です。 <span style="color:blue;"><a href="https://github.com/rht-labs/todolist">ここで見つける</a></span>ことができますが、基本的な構造は次のとおりです。
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-bash">
-    todolist/chart
-    ├── Chart.yaml
-    ├── templates
-    │   ├── _helpers.tpl
-    │   ├── deploymentconfig.yaml
-    │   ├── route.yaml
-    │   └── service.yaml
-    └── values.yaml
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-bash">
+        todolist/chart
+        ├── Chart.yaml
+        ├── templates
+        │   ├── _helpers.tpl
+        │   ├── deploymentconfig.yaml
+        │   ├── route.yaml
+        │   └── service.yaml
+        └── values.yaml
+        </code></pre>
+    </div>
 
-    where:
-    * `Chart.yaml` - is the manifest of the chart. It defines the name, version and dependencies for our chart.
-    * `values.yaml` - is the sensible defaults for our chart to work, it contains the variables that are passed to the templates. We can overwrite these values on the command line.
-    * `templates/*.yaml` - they are our k8s resources. 
-    * `_helpers.tpl` - is a collection of reusable variables an yaml snippets that are applied across all of the k8s resources uniformly for example, labels are defined in here and included on each k8s resource file as necessary.
 
-🪄🪄 Now, let's continue with even more exciting tools... !🪄🪄
+    以下が説明になります。
+
+    - `Chart.yaml` - チャートのマニフェストです。チャートの名前、バージョン、および依存関係を定義します。
+    - `values.yaml` - グラフが機能するための適切なデフォルトであり、テンプレートに渡される変数が含まれています。コマンドラインでこれらの値を上書きできます。
+    - `templates/*.yaml` - これらは k8s リソースです。
+    - `_helpers.tpl` - 再利用可能な変数のコレクションであり、すべての k8s リソースに均一に適用される yaml スニペットです。たとえば、ラベルはここで定義され、必要に応じて各 k8s リソース ファイルに含まれます。
+
+🪄🪄 さて、さらにエキサイティングなツールを続けましょう... !🪄🪄
