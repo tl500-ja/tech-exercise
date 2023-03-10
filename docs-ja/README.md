@@ -1,33 +1,37 @@
-# DevOps Culture & Practice (TL500)
+# DevOps Culsture &amp; Practice (TL500)
 
 ![jenkins-crio-ocp-star-wars-kubes](./images/jenkins-crio-ocp-star-wars-kubes.png)
 
-## Slide Decks
-Slide decks are now published along side the tech exercise. The raw Markdown files for each of the tech exercise is in the same monorepo used by learners and facilitators. To add a new slide deck or update any existing ones, simply navigate to `docs/slides/content` and edit and existing file or create a new `.md` file. This will auto generate the slide deck once published. You can view or edit the for testing by running the docsify server. See the github repo for more information
+## スライドデッキ
+
+技術演習と並行して、スライド デッキが公開されるようになりました。各技術演習の未加工の Markdown ファイルは、学習者とファシリテーターが使用する同じ monorepo にあります。新しいスライド デッキを追加するか、既存のものを更新するには、 `docs/slides/content`に移動して既存のファイルを編集するか、新しい`.md`ファイルを作成します。これにより、公開後にスライド デッキが自動生成されます。 docsify サーバーを実行して、テスト用に を表示または編集できます。詳細については、github リポジトリを参照してください。
 
 👨‍🏫 👉 [The Published Slides Live Here](https://rht-labs.com/tech-exercise/slides/) 👈 🧑‍💻
 
-## 🪄 Customize The Instructions
-The box on the top of the page allows you to load the docs with variables used by your team prefilled. All you have to do is fill in the boxes on the top of the page with your teams name in the box and the domain your cluster is using and hit `save`. This will persist the values in your local storage for the site - so hitting `clear` will reset these for you if you made a mistake.
+## 🪄 インストラクションをカスタマイズする
 
-* If my team is called `biscuits` then pop that in the first box. This value will be prefixed to some of the things such as the namespaces we use.
-* For the cluster domain, you want to add the `apps.*` the bit from the OpenShift domain. For example if my console address lives at <code class="language-yaml">https://console-openshift-console.apps.hivec.sandbox1243.opentlc.com/</code>
- then just put `apps.hivec.sandbox1243.opentlc.com` in the box to generate the correct address for the exercises.
-* For the git server, you could use your preferred and accessible Git server (GitHub, GitLab, ...). The instructor could provide you one.
-For example if the git server lives at <code class="language-yaml">https://gitlab-ce.apps.hivec.sandbox1243.opentlc.com/</code>, then just
-put `gitlab-ce.apps.hivec.sandbox1243.opentlc.com`in the box to generate the correct address for the exercises.
+ページ上部のボックスを使用すると、チームが使用する変数が事前に入力されたドキュメントを読み込むことができます。ページ上部のボックスに自分のチーム名とクラスターが使用しているドメインを入力し、 `save`をクリックするだけです。これにより、サイトのローカル ストレージに値が保持されます。間違いを犯した場合は、 `clear`押すと値がリセットされます。
 
-## 🦆 Conventions
-When running through the exercise, we're tried to call out where things need replacing. The key ones are anything inside an `<>` should be replaced. For example, if your team is called `biscuits` then in the instructions if you see `\<TEAM_NAME\>` this should be replaced with `biscuits` like so:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-bash">
-    name: <\TEAM_NAME\>
+- 私のチームが`biscuits`と呼ばれている場合は、最初のボックスに入れます。この値は、使用する名前空間などの一部にプレフィックスが付けられます。
+- クラスター ドメインの場合、 `apps.*` OpenShift ドメインからのビットを追加します。たとえば、私のコンソール アドレスが<code class="language-yaml">https://console-openshift-console.apps.hivec.sandbox1243.opentlc.com/</code>にある場合、 `apps.hivec.sandbox1243.opentlc.com`とボックスに記入すれば、演習用の正しいアドレスが生成されます。
+- git サーバーの場合、好みのアクセス可能な Git サーバー (GitHub、GitLab など) を使用できます。インストラクターはあなたにそれを提供することができます。たとえば、git サーバーが<code class="language-yaml">https://gitlab-ce.apps.hivec.sandbox1243.opentlc.com/</code>にある場合、ボックスに`gitlab-ce.apps.hivec.sandbox1243.opentlc.com`を入れるだけで正しい演習のアドレスが生成されます。
+
+## 🦆 規則
+
+演習を実行するとき、置換が必要な場所を指摘します。重要なのは、 `<>`内のすべてを置き換える必要があることです。たとえば、あなたのチームが`biscuits`と呼ばれている場合、手順で`\<TEAM_NAME\>`が表示されている場合は、次のように`biscuits`に置き換える必要があります。
+
+<div class="highlight" style="background: #f7f7f7">
+<pre><code class="language-bash">
+    name: &lt;\TEAM_NAME\&gt;
     # ^ this becomes
     name: biscuits
-    </code></pre></div>
+    </code></pre>
+</div>
 
-There are lots of code blocks for you to copy and paste. They have little ✂️ icon on the right if you move your cursor on the code block. 
+コピーして貼り付けるコード ブロックが多数あります。コード ブロックにカーソルを移動すると、右側に小さな ✂️ アイコンが表示されます。
+
 ```bash
 echo "like this one :)"
 ```
-But there are also some blocks that you shouldn't copy and paste which doesn't have the copy✂️ icon. That means you should validate your outputs or yamls against the given block.
+
+ただし、コピー✂️アイコンのない、コピーして貼り付けてはならないブロックもあります。つまり、指定されたブロックに対して出力の内容または yaml を検証する必要があります。
