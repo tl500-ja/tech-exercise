@@ -1,18 +1,24 @@
-# Exercise 1 - The Manual Menace
+# 演習 1 - 手動の脅威
+
 > A GitOps approach to perform and automate deployments.
-## 👨‍🍳 Exercise Intro
-In this exercise, we will use GitOps to set up our working environment. We will set up Git projects, create `dev`, `test` and `stage` projects in OpenShift, and deploy tools like Jenkins and Nexus to enable CI/CD in the next exercise. In order to do that, we'll use a popular approach called _GitOps_
+
+## 👨‍🍳演習の紹介
+
+この演習では、GitOps を使用して作業環境をセットアップします。次の演習では、Git プロジェクトをセットアップし、OpenShift で`dev` 、 `test`および`stage`プロジェクトを作成し、Jenkins や Nexus などのツールをデプロイして CI/CD を有効にします。そのために、 *GitOps*と呼ばれる一般的なアプローチを使用します。
 
 ## 🖼️ Big Picture
+
 ![big-picture-tools](images/big-picture-tools.jpg)
 
-## 🔮 Learning Outcomes
-* Understand the benefits gained from GitOps approach
-* Deploy helm charts manually
-* Drive tool installations through GitOps
+## 🔮 学習成果
 
-## 🔨 Tools used in this exercise
-* <span style="color:blue;">[Helm](https://helm.sh/)</span> - Helps us to define, install, and upgrade Kubernetes application.
-* <span style="color:blue;">[ArgoCD](https://argoproj.github.io/argo-cd/)</span> - A controller which continuously monitors application and compare the current state against the desired
-* <span style="color:blue;">[Nexus](https://www.sonatype.com/nexus-repository-sonatype)</span> - Repository manager for storing lots of application types. Can also host `npm` and `Docker` registries.
-* <span style="color:blue;">[Jenkins](https://jenkins.io/)</span> - OpenSource Build automation server. Highly customisable with plugins.
+- GitOps アプローチから得られる利点を理解する
+- Helm チャートを手動でデプロイする
+- GitOps によるツールのインストールの促進
+
+## 🔨 この演習で使用するツール
+
+- <span style="color:blue;"><a href="https://helm.sh/">Helm</a></span> - Kubernetes アプリケーションの定義、インストール、およびアップグレードを支援します。
+- <span style="color:blue;"><a href="https://argoproj.github.io/argo-cd/">ArgoCD</a></span> - アプリケーションを継続的に監視し、現在の状態を目的の状態と比較するコントローラー
+- <span style="color:blue;"><a href="https://www.sonatype.com/nexus-repository-sonatype">Nexus</a></span> - 多くのアプリケーション タイプを格納するためのリポジトリ マネージャー. `npm`および`Docker`レジストリーもホストできます。
+- <span style="color:blue;"><a href="https://jenkins.io/">Jenkins</a></span> - OpenSource ビルド自動化サーバー.プラグインによる高度なカスタマイズ。
