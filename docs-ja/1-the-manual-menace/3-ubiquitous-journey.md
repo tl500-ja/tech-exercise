@@ -1,84 +1,79 @@
-## 🔥🦄 Ubiquitous Journey
+## 🔥🦄ユビキタスジャーニー
 
-At Red Hat Open Innovation Labs, we have automated the bootstrap of Labs Residency CICD tooling to accelerate setup and onboarding. The code repository is called **Ubiquitous Journey** (🔥🦄). We have created a lite version of Ubiquitous Journey here and we will explore this repository and set up our technical foundation using it.
+Red Hat Open Innovation Labs では、セットアップとオンボーディングを加速するために、Labs Residency CICD ツールのブートストラップを自動化しました。コード リポジトリは**ユビキタス ジャーニー(Ubiquitous Journey )**(🔥🦄) と呼ばれます。ここでユビキタス ジャーニーのライト バージョンを作成しました。このリポジトリを探索し、それを使用して技術基盤をセットアップします。
 
-This repo is available on the Red Hat Labs GitHub organization – <span style="color:blue;">https://github.com/rht-labs/ubiquitous-journey.</span> Ubiquitous Journey allows us to plumb all of the pieces together in a developer friendly manner.
+このリポジトリは、Red Hat Labs GitHub 組織 ( <span style="color:blue;">https://github.com/rht-labs/ubiquitous-journey</span> ) で入手できます。Ubiquitous Journey を使用すると、開発者にとって使いやすい方法ですべての要素をまとめることができます。
 
-- **Extensible** - Our codebase is a *tool box* of code that we can evolve and easily extended to support new tools and methodologies.
-- **Traceable** - We can easily see where changes have occurred and most importantly trace exactly what git tag/commit is in which environment.
-- **Discoverable** - By making the source code easy to follow, with supporting and inline documentation, new team members can easily discover how application are built, tested and deployed.
-- **Auditable** - Git logs and history are the single source of truth for building our software. We can create compliance reports and easily enhance the toolset to support more advanced techniques such as code signing and attestations for all our pipeline steps if needed.
-- **Reusable** - Many parts of CICD are reusable. A good example are the reusable pipelines and tasks. Its not only the code however, solid foundational practices such as build once, tag and promote code through a lifecycle can be codified.
-- **Flexible** - Product teams often want to use both standard tools and be able to experiment with new ones. The *tool box* mentality helps a lot, so as a team you can work with the tools you are familiar with. We will see this in action with Jenkins and Tekton.
+- **拡張可能**- 私たちのコードベースは、新しいツールや方法論をサポートするために進化させ、簡単に拡張できるコードの*ツール ボックス*です。
+- **追跡可能**- 変更がどこで発生したかを簡単に確認でき、最も重要なのは、どの環境でどの git タグ/コミットが行われているかを正確に追跡できることです。
+- **発見可能**- ソース コードを簡単に追跡できるようにし、サポートおよびインライン ドキュメントを使用することで、新しいチーム メンバーは、アプリケーションがどのように構築、テスト、展開されているかを簡単に発見できます。
+- **監査可能**- Git のログと履歴は、ソフトウェアを構築するための唯一の信頼できる情報源です。コンプライアンス レポートを作成し、ツールセットを簡単に拡張して、必要に応じてすべてのパイプライン ステップのコード署名や証明書などのより高度な手法をサポートできます。
+- **再利用可能**- CICD の多くの部分は再利用可能です。良い例は、再利用可能なパイプラインとタスクです。コードだけでなく、ビルド ワンス、タグ付け、ライフサイクルを通じたコードのプロモートなどの堅実な基本プラクティスを成文化することができます。
+- **柔軟性**- 製品チームは、多くの場合、標準ツールの両方を使用し、新しいツールを試してみたいと考えています。*ツール ボックスの*考え方は非常に役立ちます。そのため、チームとして使い慣れたツールを使用して作業できます。 Jenkins と Tekton でこれを実際に見ていきます。
 
-All of these traits lead to one outcome - the ability to build and release quality code into multiple environments whenever we need to.
+これらの特性はすべて、必要なときにいつでも高品質のコードをビルドして複数の環境にリリースできるという 1 つの結果につながります。
 
-### Get GitLab Ready for GitOps
-> In this exercise we'll setup our git project to store our code and configuration. We will then connect ArgoCD (our gitOps controller) to this git repository to enable the GitOps workflow. Tooling will be shared by all members of your team, so do this exercise as a mob please!
- 
-1. Log into GitLab with your credentials. GitLab URL:
+### GitLab を GitOps 用に準備する
+
+> この演習では、コードと構成を保存するように git プロジェクトをセットアップします。次に、ArgoCD (gitOps コントローラー) をこの git リポジトリに接続して、GitOps ワークフローを有効にします。ツールはチームのメンバー全員で共有されるので、この演習はモブプログラミングとして行ってください!
+
+1. 資格情報を使用して GitLab にログインします。 GitLab の URL:
 
     ```bash
     https://<GIT_SERVER>
     ```
 
-    We need to create a group in GitLab as <TEAM_NAME>.  Click "Create a group" on the screen:
-    ![gitlab-initial-login](images/gitlab-initial-login.png)
+    &lt;TEAM_NAME&gt; として GitLab にグループを作成する必要があります。画面のCreate a groupをクリックします。 ![gitlab-initial-login](images/gitlab-initial-login.png)
 
-2. Put your TEAM_NAME (`<TEAM_NAME>`) as the group name, select **Public** for Visibility level, and hit Create group. This is so we can easily share code and view other teams' activity.
-![gitlab-create-group](images/gitlab-create-group.png)
+2. TEAM_NAME ( `<TEAM_NAME>` ) をグループ名として入力し、Visibility levelで**Public**を選択して、Create group をクリックします。これは、コードを簡単に共有し、他のチームのアクティビティを表示できるようにするためです。![gitlab-create-group](images/gitlab-create-group.png)
 
-3. If you are working as a team, you must add your team members to this group. This will give them permissions to work on the projects created in this group. Select "Members" from the left panel and invite your team members via "Invite member" option. Make sure to choose "Maintainer" or "Owner" role permission. You can ignore this step if your are not working as a team.
-![gitlab-group-add-members](images/gitlab-group-add-members.png)
+3. チームとして作業している場合は、チーム メンバーをこのグループに追加する必要があります。これにより、このグループで作成されたプロジェクトで作業する権限が付与されます。左側のパネルから Memberを選択し、Invite member オプションからチーム メンバーを招待します。 MaintainerまたはOwnerロールのアクセス許可を必ず選択してください。チームで作業していない場合は、この手順を無視できます。 ![gitlab-group-add-members](images/gitlab-group-add-members.png)
 
-4. Now lets create the git repository that we are going to use for <span style="color:purple;" >GIT</span>Ops purposes. The `tech-exercise` will serve as a mono-repo holding both our tooling configuration and the application definitions and some other stuff. In the real world, you may want to separate these into different repos! Anyways, hit `New project` button on the right hand side
-![gitlab-new-project](images/gitlab-new-project.png)
+4. 次に、 <span style="color:purple;">GIT</span> Ops の目的で使用する git リポジトリを作成しましょう。 `tech-exercise`ツール構成とアプリケーション定義およびその他のものの両方を保持する単独のリポジトリとして機能します。現実の世界では、これらを別々のリポジトリに分けたいと思うかもしれません!とにかく、右側の`New project`ボタンを押します![gitlab-new-project](images/gitlab-new-project.png)
 
-5. On the new view, use `tech-exercise` as Project Name, select **Internal** for Visibility level, then hit Create project. Make sure the project is in the group you created previously and not the username's.
-![gitlab-new-project](images/gitlab-new-project-2.png)
+5. 新しいビューで、 `tech-exercise` Project Name として使用し、Visibility level で**Internal**を選択して、Create project をクリックします。プロジェクトがユーザー名ではなく、以前に作成したグループにあることを確認してください。![gitlab-new-project](images/gitlab-new-project-2.png)
 
-6. We are going to create a Gitlab Personal Access Token (PAT). The token is a more secure and reliable method for accessing Gitlab from our scripts later on. Note, that for reference's sake, you can also generate a PAT in Gitlab under User > Settings > Access Tokens in the Web UI. We use a helper script here to help automate that process. To generate the token, open a terminal if you have not got one open and run the following commands.
+6. Gitlab Personal Access Token (PAT) を作成します。トークンは、後でスクリプトから Gitlab にアクセスするためのより安全で信頼性の高い方法です。参考までに、Web UI の [User] &gt; [Settings] &gt; [Access Tokens] の下にある Gitlab で PAT を生成することもできます。ここではヘルパー スクリプトを使用して、そのプロセスを自動化します。トークンを生成するには、ターミナルを開いていない場合は開き、次のコマンドを実行します。
 
-    Export your Gitlab username.
+    Gitlab ユーザー名をエクスポートします。
 
     ```bash
     export GITLAB_USER=<YOUR_GITLAB_USER>
     ```
 
-    Export your Gitlab password.
+    Gitlab パスワードをエクスポートします。
 
     ```bash
     export GITLAB_PASSWORD=<YOUR_GITLAB_PASSWORD>
     ```
 
-    <p class="tip">
-    ⛷️ <b>TIP</b> ⛷️ - If your password includes special characters, try putting it in single quotes. ie: <strong>'A8y?Rpm!9+A3B/KG'</strong>
-    </p>
+     <p class="tip">⛷️<b>ヒント</b>⛷️ - パスワードに特殊文字が含まれている場合は、一重引用符で囲みます。例: <strong>'A8y?Rpm!9+A3B/KG'</strong></p>
 
-    Generate your Gitlab PAT.
+
+    Gitlab PAT を生成します。
 
     ```bash
     gitlab_pat
     ```
 
-    Echo the `GITLAB_PAT` environment variable.
+    `GITLAB_PAT`環境変数を出力します。
 
     ```bash
     echo $GITLAB_PAT
     ```
 
-    We can see the PAT printed out on the command line, it is also stored in an environment variable called `GITLAB_PAT`
+    コマンド ラインに出力された PAT を確認できます。これは、 `GITLAB_PAT`という環境変数にも格納されています。
 
     ![gitlab-pat](images/gitlab-pat.png)
 
-7. Let's push our code to the GitLab server. Back in your CodeReady Workspace from the terminal
+7. コードを GitLab サーバーにプッシュしましょう。ターミナルから CodeReady ワークスペースに戻ります
 
     ```bash#test
     cd /projects/tech-exercise
     git remote set-url origin https://${GIT_SERVER}/${TEAM_NAME}/tech-exercise.git
     ```
 
-    Use the `GITLAB_PAT` from above when you are prompted for the password (this will be cached)
+    パスワードの入力を求められたら、上記の`GITLAB_PAT`を使用します (これはキャッシュされます)。
 
     ```bash#test
     cd /projects/tech-exercise
@@ -87,30 +82,30 @@ All of these traits lead to one outcome - the ability to build and release quali
     git push -u origin --all
     ```
 
-    With our git project created and our configuration pushed to it - let's start our GitOps Journey 🧙‍♀️🦄!
+    Git プロジェクトを作成し、構成をプッシュしたので、GitOps の旅を始めましょう 🧙‍♀️🦄!
 
-    <p class="tip">
-    ⛷️ <b>TIP</b> ⛷️ - If your credentials are cached incorrectly, you can try clearing the cache using: <strong>git credential-cache exit</strong>
-    </p>
+     <p class="tip">⛷️<b>ヒント</b>⛷️ - 資格情報が正しくキャッシュされていない場合は、次を使用してキャッシュをクリアしてみてください: <strong>git credential-cache exit</strong></p>
+    
 
-### Deploy Ubiquitous Journey 🔥🦄
-> In this exercise, we'll create our first namespaces and tooling using a repeatable pattern - GitOps.
+### ユビキタスジャーニーのデプロイ🔥🦄
 
-1. The Ubiquitous Journey (🔥🦄) is just another Helm Chart with a pretty neat pattern built in to create App of Apps in ArgoCD. Let's get right into it - in the your IDE, Open the `values.yaml` file in the root of the project. Update it to reference the git repo you just created and your team name. This values file is the default ones for the chart and will be applied to all of the instances of this chart we create. The Chart's templates are not like the previous chart we used (`services`, `deployments` & `routes`) but an ArgoCD application definition, just like the one we manually created in the previous exercise when we deployed an app in the UI of ArgoCD.
+> この演習では、繰り返し可能なパターンである GitOps を使用して、最初の名前空間とツールを作成します。
+
+1. The Ubiquitous Journey (🔥🦄) は、ArgoCD で App of Apps を作成するための非常にきちんとしたパターンが組み込まれた別の Helm チャートです。早速始めましょう - IDE で、プロジェクトのルートにある`values.yaml`ファイルを開きます。作成したばかりの git リポジトリとチーム名を参照するように更新します。この値ファイルはチャートのデフォルト ファイルであり、作成するこのチャートのすべてのインスタンスに適用されます。チャートのテンプレートは、以前に使用したチャート ( `services` 、 `deployments` &amp; `routes` ) とは異なりますが、前の演習で ArgoCD の UI にアプリをデプロイしたときに手動で作成したものと同じように、ArgoCD アプリケーション定義です。
 
     ```yaml
     source: "https://<GIT_SERVER>/<TEAM_NAME>/tech-exercise.git"
     team: <TEAM_NAME>
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     yq eval -i '.team=env(TEAM_NAME)' /projects/tech-exercise/values.yaml
     yq eval ".source = \"https://$GIT_SERVER/$TEAM_NAME/tech-exercise.git\"" -i /projects/tech-exercise/values.yaml
     ```
 
-2. The `values.yaml` file refers to the `ubiquitous-journey/values-tooling.yaml` which is where we store all the definitions of things we'll need for our CI/CD pipelines. The definitions for things like Jenkins, Nexus, Sonar etc will all live in here eventually, but let's start small with two objects. One for boostrapping the cluster with some namespaces and permissions. And another to deploy our good friend Jenkins. Update your `ubiquitous-journey/values-tooling.yaml` by changing your `\<TEAM_NAME\>` in the bootstrap section so it looks like this:
+2. `values.yaml`ファイルは`ubiquitous-journey/values-tooling.yaml`を参照します。ここには、CI/CD パイプラインに必要なすべての定義が格納されています。 Jenkins、Nexus、Sonar などの定義は最終的にすべてここに格納されますが、2 つのオブジェクトから始めましょう。 1 つは、いくつかの名前空間とアクセス許可を使用してクラスターをブートストラップするためのものです。もう 1 つは、Jenkins をデプロイすることです。ブートストラップ セクションで`\<TEAM_NAME\>`を次のように変更して、 `ubiquitous-journey/values-tooling.yaml`を更新します。
 
     ```bash
             - name: jenkins
@@ -132,13 +127,13 @@ All of these traits lead to one outcome - the ability to build and release quali
               operatorgroup: true
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     sed -i "s|TEAM_NAME|$TEAM_NAME|" /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
     ```
 
-3. This is GITOPS - so in order to affect change, we now need to commit things! Let's get the configuration into git, before telling ArgoCD to sync the changes for us.
+3. これが GITOPS です。つまり、変更に影響を与えるには、コミットする必要があります。 ArgoCDに変更を同期するように指示する前に、構成をgitに取得しましょう。
 
     ```bash#test
     cd /projects/tech-exercise/
@@ -147,13 +142,12 @@ All of these traits lead to one outcome - the ability to build and release quali
     git push
     ```
 
-  <p class="warn">
-    ⛷️ <b>NOTE</b> ⛷️ - Bootstrap step also provides the necessary rolebindings. That means now the other users in the same team can access <b><TEAM_NAME></b> environments.
-  </p>
+  <p class="warn">⛷️<b>注</b>⛷️ - ブートストラップ ステップは、必要なロール バインディングも提供します。つまり、同じチーム内の他のユーザーが<b></b>{team_name2}{/team_name2}環境にアクセスできるようになりました</p>
 
-4. In order for ArgoCD to sync the changes from our git repository, we need to provide access  to it. We'll deploy a secret to cluster, for now *not done as code* but in the next lab we'll add the secret as code and store it encrypted in Git. In your terminal
 
-    Add the Secret to the cluster:
+1. ArgoCD が git リポジトリからの変更を同期するためには、git リポジトリへのアクセスを提供する必要があります。シークレットをクラスターにデプロイします。今は*コードとして実行しません*が、次のラボではシークレットをコードとして追加し、暗号化して Git に保存します。
+
+    Secret をクラスターに追加します。
 
     ```bash#test
     cat <<EOF | oc apply -n ${TEAM_NAME}-ci-cd -f -
@@ -173,7 +167,7 @@ All of these traits lead to one outcome - the ability to build and release quali
     EOF
     ```
 
-5. Install the tooling in Ubiquitous Journey (only bootstrap, and Jenkins at this stage..). Once the command is run, open the ArgoCD UI to show the resources being created. We've just deployed our first AppOfApps!
+2. Ubiquitous Journey にツールをインストールします (この段階ではブートストラップと Jenkins のみ..)。コマンドが実行されたら、ArgoCD UI を開いて、作成中のリソースを表示します。最初の AppOfApps をデプロイしました。
 
     ```bash#test
     cd /projects/tech-exercise
@@ -182,7 +176,7 @@ All of these traits lead to one outcome - the ability to build and release quali
 
     ![argocd-bootrstrap-tooling](./images/argocd-bootstrap-tooling.png)
 
-6. As ArgoCD sync's the resources we can see them in the cluster:
+3. ArgoCD 同期のリソースとして、クラスターでそれらを確認できます。
 
     ```bash#test
     oc get projects | grep ${TEAM_NAME}
@@ -192,4 +186,4 @@ All of these traits lead to one outcome - the ability to build and release quali
     oc get pods -n ${TEAM_NAME}-ci-cd
     ```
 
-🪄🪄 Magic! You've now deployed an app of apps to scaffold our tooling and projects in a repeatable and auditable way (via git!). Next up, we'll make extend the Ubiquitous Journey with some more tooling 🪄🪄
+🪄🪄素晴らしい！これで、(git を介して) 反復可能で監査可能な方法でツールとプロジェクトを足場にするアプリのアプリをデプロイしました。次に、ツールを追加してユビキタス ジャーニーを拡張します 🪄🪄
