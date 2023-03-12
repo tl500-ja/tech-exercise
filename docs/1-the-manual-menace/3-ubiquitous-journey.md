@@ -170,7 +170,7 @@ All of these traits lead to one outcome - the ability to build and release quali
         labels:
           credential.sync.jenkins.openshift.io: "true"
         name: git-auth
-EOF
+    EOF
     ```
 
 5. Install the tooling in Ubiquitous Journey (only bootstrap, and Jenkins at this stage..). Once the command is run, open the ArgoCD UI to show the resources being created. We've just deployed our first AppOfApps!
