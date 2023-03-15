@@ -1,9 +1,8 @@
-## Extend UJ with a another tool, eg Nexus 
-Now, we have our projects, necessary rolebindings and Jenkins up and running. We also need a repository to manage and store our artifacts. Nexus is here to help! We can use Nexus helm chart to deploy it. And since this is GitOps, all we need to do is extend UJ! Because if it is not in Git, it's not REAL! ;)
+## UJをNexusなどの別のツールで拡張する
 
-<p class="warn">
-    ⛷️ <b>NOTE</b> ⛷️ - If you switch to a different CodeReady Workspaces environment, please run below commands before going forward.
-</p>
+これで、プロジェクト、必要なロールバインディング、および Jenkins が稼働しています。さらに、アーティファクトを管理および保存するためのリポジトリも必要です。Nexusが助けに来ました！ Nexus helm チャートを使用してデプロイできます。これは GitOps なので、UJ を拡張するだけです。それが Git にない場合、それは REAL ではないからです! ;)
+
+<p class="warn">⛷️<b>注</b>⛷️ - 別の CodeReady Workspaces 環境に切り替える場合は、先に進む前に以下のコマンドを実行してください。</p>
 
 ```bash
 cd /projects/tech-exercise
@@ -11,25 +10,25 @@ git remote set-url origin https://<GIT_SERVER>/<TEAM_NAME>/tech-exercise.git
 git pull
 ```
 
+### GitLab から ArgoCD Webhook を追加する
 
-### Add ArgoCD Webhook from GitLab
-> ArgoCD has a cycle time of about 3ish mins - this is too slow for us, so we can make ArgoCD sync our changes AS SOON AS things hit the git repo.
+> ArgoCD のサイクル タイムは約 3 分です。これは私たちには遅すぎるため、git リポジトリにヒットしたらすぐに変更を ArgoCD に同期させることができます。
 
-1. Let's add a webhook to connect ArgoCD to our `ubiquitous-journey` project. Get ArgoCD URL with following:
+1. ArgoCD を`ubiquitous-journey`プロジェクトに接続するための Webhook を追加しましょう。次のように ArgoCD の URL を取得します。
 
     ```bash#test
     echo https://$(oc get route argocd-server --template='{{ .spec.host }}'/api/webhook  -n ${TEAM_NAME}-ci-cd)
     ```
 
-2. Go to `tech-exercise` git repository on GitLab. From left panel, go to `Settings > Integrations` and add the URL you just copied from your terminal to enable the WebHook. Now whenever a change is made in Git, ArgoCD will instantly reconcile and apply the differences between the current state in the cluster and the desired state in git 🪄. Click `Add webhook`.
+2. GitLab の`tech-exercise` git リポジトリに移動します。左側のパネルから`Settings > Integrations`に移動し、端末からコピーしたばかりの URL を追加して、WebHook を有効にします。これで、Git で変更が行われるたびに、ArgoCD は即座に調整 (reconcile) を行い、クラスターの現在の状態と git の目的の状態の違いを適用します🪄。 `Add webhook`をクリックします。
 
     ![gitlab-argocd-webhook](images/gitlab-argocd-webhook.png)
 
+### ツールボックスに Nexus を追加
 
-### Add Nexus to our tool box
-> In this exercise we'll add Sonatype's Nexus repository manager to our tooling - this tool will be used to host our application binaries and helm charts!
+> この演習では、Sonatype の Nexus リポジトリ マネージャーをツールに追加します。このツールは、アプリケーション バイナリと Helm チャートをホストするために使用されます。
 
-1. Update your `ubiquitous-journey/values-tooling.yaml` to include Nexus with some sensible defaults. In this example we're just pointing our ArgoCD config to a helm chart. Add the following into the file under the `# Nexus` placeholder
+1. `ubiquitous-journey/values-tooling.yaml`を更新して、Nexusを適切なデフォルト値で取り込むようにします。この例では、ArgoCD 構成をヘルム チャートに向けているだけです。 `# Nexus`プレースホルダーの下のファイルに以下を追加します。
 
     ```yaml
       # Nexus
@@ -44,7 +43,7 @@ git pull
             name: nexus
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     if [[ $(yq e '.applications[] | select(.name=="nexus") | length' /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml) < 1 ]]; then
@@ -52,19 +51,18 @@ git pull
     fi
     ```
 
-2. Now push the changes into your git repository for it to be automatically rolled out by ArgoCD!
+2. ArgoCD によって自動的にロールアウトされるように、変更を git リポジトリにプッシュします。
 
     ```bash#test
     cd /projects/tech-exercise
     git add .
     git commit -m  "🦘 ADD - nexus repo manager 🦘"
-    git push 
+    git push
     ```
 
-3. ArgoCD will detect the change in `ubiquitous-journey/values-tooling.yaml` and deploy Nexus on our behalf in order to match what is in git also in the cluster. You can see it also in ArgoCD UI.
-![argocd-nexus](images/argocd-nexus.png)
+3. ArgoCD は`ubiquitous-journey/values-tooling.yaml`の変更を検出し、クラスタ内の git にあるものと一致させるために Nexus をデプロイします。 ArgoCD UI でも見ることができます。![argocd-nexus](images/argocd-nexus.png)
 
-4. With the Webhook in place, it should only take a few seconds for things to become available. But you can verify it is all working by opening the Nexus URL in a new tab (admin / admin123 is the default credential):
+4. Webhook が配置されていれば、利用可能になるまでに数秒しかかかりません。ただし、Nexus の URL を新しいタブで開くと、すべてが機能していることを確認できます (admin / admin123 がデフォルトの資格情報です)。
 
     ```bash#test
     echo https://$(oc get route nexus --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)
