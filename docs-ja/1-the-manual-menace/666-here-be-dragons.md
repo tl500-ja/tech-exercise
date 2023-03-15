@@ -1,20 +1,20 @@
-## Here be dragons!
+## ドラゴンが来た！
 
 ![oh-look-a-dragon](../images/oh-look-dragons.png)
 
-### Extend 🔥🦄
-- Add $SOMETHING from the redhat-cop/helm-charts repo to the UJ eg Hoverfly, Zalenium or something else
-[todo links to example charts]
+### 拡張🔥🦄
 
-### Helm in more detail
+- $SOMETHING を redhat-cop/helm-charts リポジトリから UJ に追加します。
 
-There is a bit of hidden magic from the `helm repo add` and `helm install` commands in [the-basics](1-the-manual-menace/1-the-basics) exercise. A hosted helm repository holds your packaged up Charts and an `index.yaml` file.
+### Helmの詳細
 
-For the `todolist` application we deploy you can take a look at the file by browsing <span style="color:blue;">[here](https://rht-labs.com/todolist/index.yaml).<span>
+<a>基本</a>演習の`helm repo add`および<code>helm install</code>コマンドには、ちょっとした魔法が隠されています。ホストされた helm リポジトリには、パッケージ化されたチャートと`index.yaml`ファイルが保持されます。
+
+私たちがデプロイする`todolist`アプリケーションについては、<span style="color:blue;"><a href="https://rht-labs.com/todolist/index.yaml">ここ</a></span>を参照してファイルを確認できます。<span></span>
 
 ![images/helm-index.png](images/helm-index.png)
 
-This lists the versions and details that the helm repository contains. So when you `helm repo add` it adds the repo url to your operating system dependent config file. This from `man helm`:
+これには、helm リポジトリに含まれるバージョンと詳細が一覧表示されます。そのため、 `helm repo add`と、リポジトリの URL がオペレーティング システムに依存する構成ファイルに追加されます。これは`man helm`から:
 
 ```bash
 | Operating System | Cache Path                | Configuration Path             | Data Path               |
@@ -24,9 +24,9 @@ This lists the versions and details that the helm repository contains. So when y
 | Windows          | %TEMP%\helm               | %APPDATA%\helm                 | %APPDATA%\helm          |
 ```
 
-In OpenShift you can create `HelmChartRepository` objects that populate the WebUI, read more about that <span style="color:blue;">[here](https://docs.openshift.com/container-platform/4.9/applications/working_with_helm_charts/configuring-custom-helm-chart-repositories.html).</span>
+OpenShift では、WebUI に入力する`HelmChartRepository`オブジェクトを作成できます。詳細については<span style="color:blue;"><a href="https://docs.openshift.com/container-platform/4.9/applications/working_with_helm_charts/configuring-custom-helm-chart-repositories.html">、こちらを</a></span>参照してください。
 
-When installing the helm chart into your namespace, the helm command line actually uploads your full chart, stores it in a secret that the Helm Controller in your OpenShift cluster can act upon.
+helm チャートを名前空間にインストールすると、helm コマンド ラインは実際に完全なチャートをアップロードし、OpenShift クラスターの Helm コントローラーが操作できるシークレットに格納します。
 
 <div class="highlight" style="background: #f7f7f7">
 <pre><code class="language-bash">
@@ -37,34 +37,36 @@ sh.helm.release.v1.argocd.v2   helm.sh/release.v1   1      3d
 sh.helm.release.v1.my.v1       helm.sh/release.v1   1      7m39s
 sh.helm.release.v1.uj.v1       helm.sh/release.v1   1      2d23h
 sh.helm.release.v1.uj.v2       helm.sh/release.v1   1      2d23h
-</code></pre></div>
+</code></pre>
+</div>
 
-### Environment
-- use the learnings from above to create a `uat` environment from code.
+### 環境
 
-### Make ArgoCD more secure
+- 上記の学習を使用して、コードから`uat`環境を作成します。
 
-`FIXME` - write about these topics with some examples.
+### ArgoCD をより安全にする
 
-- Using ArgoCD RBAC, Projects
-- Using Red Hat GitOps Operator + Keycloak RBAC
-- Parent/Child argocd's
-- Restricting service accounts, least privilege.
+`FIXME` - これらのトピックについていくつかの例を挙げて書いてください。
 
-### ArgoCD - Add Repositories at runtime
+- ArgoCD RBAC、プロジェクトの使用
+- Red Hat GitOps Operator + Keycloak RBAC の使用
+- argocd の親/子
+- サービス アカウントの制限、最小権限
 
-Post deployment, ArgoCD manages Repositories in a ConfigMap ```oc get cm argocd-cm -o yaml```
+### ArgoCD - 実行時にリポジトリを追加
 
-We can add `Git|Helm` repositories via `ssh|https`.
+デプロイ後、ArgoCD は ConfigMap でリポジトリを管理します`oc get cm argocd-cm -o yaml`
 
-Lets add our GitLab repo.
+`ssh|https`経由で`Git|Helm`リポジトリを追加できます。
+
+GitLab リポジトリを追加しましょう。
 
 ```bash
 export GITLAB_USER=<your gitlab user>
 export GITLAB_PAT=<your gitlab pat token>
 ```
 
-Lets put our git credentials via a Kubernetes secret for now. **We will fix this with a Sealed Secrets in a later exercise**
+とりあえず、Kubernetes シークレットを介して git 資格情報を入力しましょう。**これは、後の演習でSealed Secretを使用して修正します。**
 
 ```bash
 cat <<EOF | oc apply -f -
@@ -84,7 +86,7 @@ metadata:
 EOF
 ```
 
-Patch the repository list, be sure to use your `GITLAB_URL`
+リポジトリ リストにパッチを適用します。必ず`GITLAB_URL`を使用してください
 
 ```bash
 oc -n ${TEAM_NAME}-ci-cd patch cm argocd-cm --patch "
@@ -108,18 +110,18 @@ data:
 "
 ```
 
-### ArgoCD - Add Repositories at install time
+### ArgoCD - インストール時にリポジトリを追加
 
-**Going the Extra Mile**
+**余分なマイルを行く**
 
-We can also add repositories at install time, be sure to use your `GITLAB_URL`.
+インストール時にリポジトリを追加することもできます。必ず`GITLAB_URL`を使用してください。
 
 ```bash
 export GITLAB_USER=<your gitlab user>
 export GITLAB_PAT=<your gitlab pat token>
 ```
 
-Lets our git creds via a secret (**UJ this**)
+シークレットを介して git creds を許可します ( **UJ this** )
 
 ```bash
 cat <<EOF | oc apply -n ${TEAM_NAME}-ci-cd -f -
@@ -139,7 +141,7 @@ metadata:
 EOF
 ```
 
-Create our configuration, be sure to use your `GITLAB_URL`.
+構成を作成します。必ず`GITLAB_URL`を使用してください。
 
 ```bash
 cat <<'EOF' > /tmp/initial-repos.yaml
@@ -174,7 +176,7 @@ cat <<'EOF' > /tmp/initial-creds.yaml
 EOF
 ```
 
-Reinstall ArgoCD using new initial settings:
+新しい初期設定を使用して ArgoCD を再インストールします。
 
 ```bash
 helm upgrade --install argocd \
