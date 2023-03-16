@@ -1,12 +1,10 @@
 ## Sealed Secrets
 
-When we say GitOps, we say _"if it's not in Git, it's NOT REAL"_ but how are we going to store our sensitive data like credentials in Git repositories, where many people can access?! Sure, Kubernetes provides a way to manage secrets, but the problem is that it stores the sensitive information as a base64 string - anyone can decode the base64 string! Therefore, we cannot store `Secret` manifest files openly. We use an open-source tool called Sealed Secrets to address this problem.
+GitOps と言うと、 *「Git になければ本物ではない」と言いますが、*資格情報などの機密データを、多くの人がアクセスできる Git リポジトリにどのように保存するのでしょうか?!確かに、Kubernetes はシークレットを管理する方法を提供しますが、問題は機密情報を base64 文字列として保存することです。誰でも base64 文字列をデコードできます! したがって、 `Secret`マニフェスト ファイルを公開された場所に保存することはできません。この問題に対処するために、Sealed Secrets と呼ばれるオープンソース ツールを使用します。
 
-Sealed Secrets allows us to _seal_ Kubernetes secrets by using a utility called `kubeseal`. The `SealedSecrets` are Kubernetes resources that contain encrypted `Secret` object that only the controller can decrypt. Therefore, a `SealedSecret` is safe to store even in a public repository.
+Sealed Secrets を使用すると、 <code>kubeseal</code>というユーティリティを使用して Kubernetes シークレットを<em>封印(seal)</em>できます。 `SealedSecrets` 、コントローラーのみが復号化できる暗号化された`Secret`オブジェクトを含む Kubernetes リソースです。したがって、 `SealedSecret`はパブリック リポジトリに格納しても安全です。
 
-<p class="warn">
-    ⛷️ <b>NOTE</b> ⛷️ - If you switch to a different CodeReady Workspaces environment, please run below commands before going forward.
-</p>
+<p class="warn">⛷️<b>注</b>⛷️ - 別の CodeReady Workspaces 環境に切り替える場合は、先に進む前に以下のコマンドを実行してください。</p>
 
 ```bash
 cd /projects/tech-exercise
@@ -16,14 +14,14 @@ git pull
 
 ### Sealed Secrets in action
 
-1. The observant among you will have noticed that in the previous exercise we created a secret for git and added it to the cluster WITHOUT putting it in git...😳 Lets start by fixing this and sealing our Git credentials so they can be safely checked in to the code. First, we'll create the secret in a tmp directory. Make sure you have your gitlab user and PAT from the previous exercise set in your environment
+1. 注意深い人は、前の演習で git のシークレットを作成し、それを git に配置せずにクラスターに追加したことに気づいたでしょう...😳 これを修正し、Git 資格情報を封印して、安全にチェックインできるようにすることから始めましょう。コードに。まず、tmp ディレクトリにシークレットを作成します。前の演習で使用した gitlab ユーザーと PAT が環境に設定されていることを確認してください。
 
     ```bash
     echo ${GITLAB_USER}
     echo ${GITLAB_PAT}
     ```
 
-2. Run this command to generate a Kubernetes secret object in `/tmp` with the right labels needed for Tekton and Jenkins later.
+2. このコマンドを実行して、後で Tekton と Jenkins に必要な適切なラベルを持つ Kubernetes シークレット オブジェクトを`/tmp`に生成します。
 
     ```bash#test
     cat << EOF > /tmp/git-auth.yaml
@@ -40,14 +38,13 @@ git pull
       labels:
         credential.sync.jenkins.openshift.io: "true"
       name: git-auth
-EOF
+    EOF
     ```
 
-3. Use `kubeseal` command line to seal the secret definition. This will encrypt it using a certificate stored in the controller running inside the cluster. This has already been deployed for you as only one instance can exist per cluster.
+3. `kubeseal`コマンド ラインを使用して、シークレットの定義を封印します。これはクラスタ内部で動作するコントローラに格納されている証明書を使用してシークレットを暗号化します。クラスターごとに 1 つのインスタンスしか存在できないため、これは既にデプロイされています。
 
-    <p class="warn">
-        ⛷️ <b>NOTE</b> ⛷️ - If you get an error "Error: cannot get sealed secret service: Unauthorized" from running the Kubeseal command, just re-login to OpenShift and run the command again. 
-    </p>
+     <p class="warn">⛷️<b>注意</b>⛷️ - Kubeseal コマンドを実行して"Error: cannot get sealed secret service: Unauthorized" というエラーが表示された場合は、OpenShift に再度ログインして、コマンドを再度実行してください。</p>
+
 
     ```bash
     oc login --server=https://api.${CLUSTER_DOMAIN##apps.}:6443 -u <USER_NAME> -p <PASSWORD>
@@ -61,42 +58,46 @@ EOF
         -o yaml
     ```
 
-4. Verify that secret is sealed:
+4. シークレットが封印されていることを確認します。
 
     ```bash#test
-    cat /tmp/sealed-git-auth.yaml 
+    cat /tmp/sealed-git-auth.yaml
     ```
 
-    We should now see the secret is sealed, so it is safe for us to store in our repository. It should look something a bit like this, but with longer password and username output.
+    シークレットが封印されていることがわかるはずなので、リポジトリに安全に保存できます。このように見えるはずですが、実際にはパスワードとユーザー名の出力がもっと長くなります。
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-    apiVersion: bitnami.com/v1alpha1
-    kind: SealedSecret
-    metadata:
-      creationTimestamp: null
-      name: git-auth
-      namespace: biscuits-ci-cd
-    spec:
-      encryptedData:
-        username: AgAtnYz8U0AqIIaqYrj...
-        password: AgAj3JQj+EP23pnzu...
-    ...
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+        apiVersion: bitnami.com/v1alpha1
+        kind: SealedSecret
+        metadata:
+          creationTimestamp: null
+          name: git-auth
+          namespace: biscuits-ci-cd
+        spec:
+          encryptedData:
+            username: AgAtnYz8U0AqIIaqYrj...
+            password: AgAj3JQj+EP23pnzu...
+        ...
+        </code></pre>
+    </div>
+    
 
-5. We want to grab the results of this sealing activity, in particular the `encryptedData` so we can add it to git. We have already written a <span style="color:blue;">[helper helm chart](https://github.com/redhat-cop/helm-charts/tree/master/charts/helper-sealed-secrets)</span> that can be used to add sealed secrets to our cluster in repeatable way. We'll provide the `encryptedData` values to this chart in the next step.
+5. この封印活動の結果、特に`encryptedData`を取得し、gitに追加できるようにしたいと思います。封印されたシークレットを反復可能な方法でクラスターに追加するために使用できる<span style="color:blue;"><a href="https://github.com/redhat-cop/helm-charts/tree/master/charts/helper-sealed-secrets">ヘルパー Helm チャートを</a></span>既に作成しています。次のステップで、このチャートに`encryptedData`値を提供します。
 
     ```bash#test
     cat /tmp/sealed-git-auth.yaml | grep -E 'username|password'
     ```
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-        username: AgAtnYz8U0AqIIaqYrj...
-        password: AgAj3JQj+EP23pnzu...
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+            username: AgAtnYz8U0AqIIaqYrj...
+            password: AgAj3JQj+EP23pnzu...
+        </code></pre>
+    </div>
+    
 
-6. In `ubiquitous-journey/values-tooling.yaml` add an entry for this helper chart under `# Sealed Secrets`. Copy the output of `username` and `password` from the previous command and update the values accordingly. **Make sure you indent the data correctly**.
+6. `ubiquitous-journey/values-tooling.yaml`で、 `# Sealed Secrets`の下にこのヘルパー チャートのエントリを追加します。前のコマンドからの`username`と`password`の出力をコピーし、それに応じて値を更新します。**データが正しくインデントされていることを確認してください**。
 
     ```yaml
       # Sealed Secrets
@@ -119,7 +120,7 @@ EOF
                 password: <YOUR_SEALED_SECRET_PASSWORD>
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     if [[ $(yq e '.applications[] | select(.name=="sealed-secrets") | length' /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml) < 1 ]]; then
@@ -132,7 +133,7 @@ EOF
     fi
     ```
 
-7. Now that we update the file, we need to push the changes to our repository for ArgoCD to detect the update. Because it is GitOps :)
+7. ファイルを更新したので、更新を検出するために ArgoCD のリポジトリに変更をプッシュする必要があります。それはGitOpsだからです:)
 
     ```bash#test
     cd /projects/tech-exercise
@@ -141,14 +142,13 @@ EOF
     git push
     ```
 
-    🪄 🪄 Log in to ArgoCD - you should now see the SealedSecret chart in ArgoCD UI. It is unsealed as a regular k8s secret 🪄 🪄
-    ![argocd-ss.png](images/argocd-ss.png)
+    🪄 🪄 ArgoCD にログインします。ArgoCD UI に SealedSecret チャートが表示されます。通常のk8sシークレットとして開封です🪄🪄![argocd-ss.png](images/argocd-ss.png)
 
 8. If you drill into the `SealedSecret` on ArgoCD's UI - you should see the `git-auth` secret has synced automatically:
 
     ![argocd-git-auth-synced.png](images/argocd-git-auth-synced.png)
 
-9. You can also verify it's been synced to Jenkins now by opening `Jenkins -> Manage Jenkins -> Manage Credentials` to view `<TEAM_NAME>-ci-cd-git-auth`
+9. `Jenkins -> Manage Jenkins -> Manage Credentials`開いて`<TEAM_NAME>-ci-cd-git-auth`を表示することで、Jenkins に同期されていることを確認することもできます。
 
     ```bash#test
     echo https://$(oc get route jenkins --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)
