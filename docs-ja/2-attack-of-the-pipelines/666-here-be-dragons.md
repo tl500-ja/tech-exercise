@@ -2,9 +2,9 @@
 
 ![oh-look-another-dragon](../images/oh-look-dragons.png)
 
-## Tekton Pruning
+## Tektonプルーニング
 
-We can globally configure pruning for Tekton resources by configuring the Operator *TektonConfig*. For example we can keep the last 15 *PipelineRun* resources, and prune every 15 minutes using this configuration:
+Operator *TektonConfig*を設定することで、Tekton リソースのプルーニングをグローバルに設定できます。たとえば、次の構成を使用して、最後の 15 個の*PipelineRun*リソースを保持し、15 分ごとにプルーニングできます。
 
 ```yaml
   pruner:
@@ -14,16 +14,16 @@ We can globally configure pruning for Tekton resources by configuring the Operat
     schedule: '*/15 * * * *'
 ```
 
-As a **cluster-admin** patch this in using:
+**cluster-admin**パッチとして、これを使用します。
 
 ```bash
 oc patch tektonconfig config -p '{"spec":{"pruner":{"keep":15,"resources":["pipelinerun"],"schedule":"*/15 * * * *"}}}' --type=merge
 ```
 
-This generates a kubernetes *CronJob* in the *targetNamespace* which is:
+これにより、次の*targetNamespace*に kubernetes *CronJob*が生成されます。
 
 ```bash
 oc get cronjob resource-pruner -n openshift-pipelines -o yaml
 ```
 
-?> **GitOps** this should be put into the global chart/configuration used to deploy Tekton for the cluster.
+?&gt; **GitOps** これは、クラスターの Tekton をデプロイするために使用されるグローバル チャート/構成に配置する必要があります。
