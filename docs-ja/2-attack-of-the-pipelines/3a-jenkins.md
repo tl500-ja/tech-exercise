@@ -1,6 +1,6 @@
-### Jenkins Pipeline
+### Jenkinsパイプライン
 
-> Jenkins is a tool that's been around for sometime but it's stuck with a lot of customers. It's a build server that's pretty dumb by nature but can be enhanced with lots of plugins and agents which is why it's such a powerful tool.
+> Jenkinsは以前からあるツールですが、多くの顧客から支持されています。ビルドサーバーでありながら、プラグインやエージェントで拡張できるため、非常に強力なツールとなっています。
 
 <!---
 #### Jenkins access to GitLab
@@ -28,13 +28,13 @@ git push
 ```
 --->
 
-#### Setup Pet Battle (front end) GitLab Project
+#### Pet Battle (フロントエンド) GitLabプロジェクトのセットアップ
 
-1. Open the GitLab UI. Create a Project in GitLab under `<TEAM_NAME>` group called `pet-battle`. Make the project as **public**.
+1. GitLab UI を開きます。 `pet-battle`という名前の`<TEAM_NAME>`グループの下に GitLab でプロジェクトを作成します。プロジェクトを**public**にします。
 
     ![pet-battle-git-repo](images/pet-battle-git-repo.png)
 
-2. Back in your CodeReady Workspace, we'll fork the PetBattle Frontend code to this newly created repository on git.
+2. CodeReady ワークスペースに戻り、PetBattle フロントエンド コードを git で新しく作成されたリポジトリにフォークします。
 
     ```bash#test
     cd /projects
@@ -44,21 +44,21 @@ git push
     git push -u origin main
     ```
 
-3. We want to be able to tell Jenkins to run a build for every code change - welcome our good ol' friend the Webhook. Just like we did with Argo CD earlier, let's add a webhook to GitLab for our Pet Battle front end so every commit triggers it. Jenkins needs a url of the form `<JENKINS_URL>/multibranch-webhook-trigger/invoke?token=<APP_NAME>` to trigger a build:
+3. コードを変更するたびにビルドを実行するように Jenkins に指示できるようにしたいと考えています。前に Argo CD で行ったのと同じように、Pet Battle フロント エンドの Webhook を GitLab に追加して、コミットごとにトリガーされるようにしましょう。 Jenkins がビルドをトリガーする`<JENKINS_URL>/multibranch-webhook-trigger/invoke?token=<APP_NAME>`形式の URL が必要です。
 
     ```bash#test
     echo "https://$(oc get route jenkins --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)/multibranch-webhook-trigger/invoke?token=pet-battle"
     ```
 
-    Once you have the URL, over on GitLab go to `pet-battle > Settings > Integrations` to add the webhook
-    ![gitlab-webhook-trigger-fe.png](./images/gitlab-webhook-trigger-fe.png)
+    URL を取得したら、GitLab で`pet-battle > Settings > Integrations`に移動して Webhook を追加します。 ![gitlab-webhook-trigger-fe.png](./images/gitlab-webhook-trigger-fe.png)
 
-#### Jenkins Pipeline
-> Jenkins is preloaded with a simple job called a `seed-multibranch-pipeline`. This is a small bit of groovy scripting that will automatically scaffold out our pipelines from each repositories `Jenkinsfile`. The logic of this script is simple; it checks a group for a given GitLab instance for any projects that contain Jenkinsfile. If it finds one, it will scaffold a pipeline from it, and if not, it will skip.
+#### Jenkinsパイプライン
 
-1. To get the `seed-multibranch-pipeline` job to work we simply have to connect Jenkins to GitLab by exposing some variables on the deployment for it... we could of course just add them to the deployment in OpenShift BUTTTTTT this is GITOPS! :muscle: :gun:
+> Jenkins には`seed-multibranch-pipeline`と呼ばれる単純なジョブがプリロードされています。これは、各リポジトリ`Jenkinsfile`からパイプラインを自動的に雛形化(scaffold)するちょっとした groovy スクリプトです。このスクリプトのロジックは単純です。 Jenkinsfile を含むプロジェクトの特定の GitLab インスタンスのグループをチェックします。見つかった場合はそこからパイプラインを作成し、見つからない場合はスキップします。
 
-    Update the `ubiquitous-journey/values-tooling.yaml` Jenkins block / values to match with the following:
+1. `seed-multibranch-pipeline`ジョブを機能させるには、デプロイメントでいくつかの変数を公開して、Jenkins を GitLab に接続するだけです...もちろん、それらを OpenShift デプロイメントに追加することもできます。でも、これは GITOPS です! :muscle: :gun:
+
+    `ubiquitous-journey/values-tooling.yaml` Jenkins ブロックにおける各値を次のように更新します。
 
     ```yaml
           #... more jenkins configuration here
@@ -74,37 +74,39 @@ git push
                 value: 'jaffa-cakes🍪'
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     yq e '(.applications[] | (select(.name=="jenkins").values.deployment.env_vars[] | select(.name=="GITLAB_HOST")).value)|=env(GIT_SERVER)' -i /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
     yq e '(.applications[] | (select(.name=="jenkins").values.deployment.env_vars[] | select(.name=="GITLAB_GROUP_NAME")).value)|=env(TEAM_NAME)' -i /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
     ```
 
-2. Jenkins will push changes to our Helm Chart to Nexus as part of the pipeline. Previously we configured our App of Apps to pull from the PetBattle public chart repository so we also need to update it. Change the `pet-battle/test/values.yaml` file to point to the Nexus chart repository deployed in OpenShift. To do this, update the `source` as shown below for the `pet-battle`:
+2. Jenkins は、パイプラインの一部として、Helm チャートへの変更を Nexus にプッシュします。以前は、PetBattle パブリック チャート リポジトリからプルするように App of Apps を構成したため、これも更新する必要があります。 `pet-battle/test/values.yaml`ファイルを変更して、OpenShift にデプロイされた Nexus チャート リポジトリを指すようにします。これを行うには、次のように`pet-battle`の`source`を更新します。
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-    # Pet Battle Apps
-    pet-battle-api:
-        ...
-    pet-battle:
-        name: pet-battle
-        enabled: true
-        source: http://nexus:8081/repository/helm-charts #<- update this
-        source_ref: 1.0.6 # helm chart version
-        ...
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+        # Pet Battle Apps
+        pet-battle-api:
+            ...
+        pet-battle:
+            name: pet-battle
+            enabled: true
+            source: http://nexus:8081/repository/helm-charts #&lt;- update this
+            source_ref: 1.0.6 # helm chart version
+            ...
+        </code></pre>
+    </div>
 
-    Then do the same thing for `pet-battle/stage/values.yaml` file as well.
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    次に、 `pet-battle/stage/values.yaml`ファイルにも同じことを行います。
+
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     yq e '.applications.pet-battle.source |="http://nexus:8081/repository/helm-charts"' -i /projects/tech-exercise/pet-battle/test/values.yaml
     ```
 
-3. Commit these changes to git so Argo CD can sync them.
+3. これらの変更を git にコミットして、Argo CD がそれらを同期できるようにします。
 
     ```bash#test
     cd /projects/tech-exercise
@@ -113,7 +115,7 @@ git push
     git push
     ```
 
-4. When this change rolls out we should see the seed job has scaffolded out a pipeline for the frontend in the Jenkins UI. It's done this by looking in the pet-battle repo where it found the `Jenkinsfile` (our pipeline definition). However it will fail on the first execution. This is expected as we're going write some stuff to fix it!
+4. この変更がロールアウトされると、シード ジョブが Jenkins UI のフロントエンドのパイプラインを雛形化していることがわかります。これは、 `Jenkinsfile` (パイプライン定義) が見つかった pet-battle リポジトリを調べることによって行われます。ただし、最初の実行では失敗します。これを修正するために、いくつかの記述を書くことは想定されていることです!
 
     ```bash#test
     # to get the Jenkins route on your terminal
@@ -122,24 +124,25 @@ git push
 
     ![jenkins-ui](images/jenkins-ui.png)
 
-    <p class="warn"><b>INFO</b> - If after Jenkins restarts you do not see the job run, feel free to manually trigger it to get it going</p>
+     <p class="warn"><b>INFO</b>- Jenkins の再起動後にジョブが実行されていない場合は、ジョブを手動でトリガーして実行してください。</p>
+    
 
-
-5. With Jenkins now scanning our GitLab project for new repositories and git setup to trigger a build on Jenkins, let's explore our pipeline! A `Jenkinsfile` uses a DSL (Jenkins language) to declaratively describe the pipeline in a series of blocks. Ours is setup a lot like this :
+5. Jenkins が GitLab プロジェクトをスキャンして新しいリポジトリと git セットアップし、Jenkins でビルドをトリガーするようになったので、パイプラインを調べてみましょう。 `Jenkinsfile` 、DSL (Jenkins 言語) を使用して、パイプラインを一連のブロックで宣言的に記述します。私たちのものは次のように設定されています：
 
     ![jenkins-pipe](images/jenkins-pipe.png)
 
-    Some of the key things to note above are:
-    * `pipeline {}` is how all declarative Jenkins pipelines begin.
-    * `environment {}` defines environment variables to be used across all build stages
-    * `options {}` contains specific Job specs you want to run globally across the jobs e.g. setting the terminal colour
-    * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed e.g. `bake-image`
-    * `steps {}` each `stage` has one or more steps involved. These could be execute shell or git checkout etc.
-    * `agent {}` specifies the node the build should be run on e.g. `jenkins-agent-npm`
-    * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
-    * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
+    上記の重要な点は次のとおりです。
 
-6. Now that we've gone through what this stuff does, let's try fix the failing build. If you look at the output of the Jenkins job, you'll see it's not able to find anything in Nexus to put in a container. To fix this, update the `Jenkinsfile` by adding a new `stage` which will run app compilation, producing the artifact in Nexus for us. Add the following below to the  `// 💥🔨 PIPELINE EXERCISE GOES HERE ` comment:
+    - `pipeline {}`を使って、すべての宣言型 Jenkins パイプラインを開始します。
+    - `environment {}`は、すべてのビルド段階で使用される環境変数を定義します
+    - `options {}`端末の色の設定など、ジョブ全体でグローバルに実行する特定のジョブ仕様が含まれています
+    - `stage {}`すべてのジョブには 1 つのステージが必要です。これは、実行されるビルドの論理部分です。例: `bake-image`
+    - `steps {}`各`stage`は 1 つ以上のステップが含まれます。これらは、execute shell や git checkout などです。
+    - `agent {}` 、ビルドを実行する必要があるノードを指定します (例: `jenkins-agent-npm`
+    - `post {}`フックは、ビルド後のアクションを指定するために使用されます。 Jenkins の宣言型パイプライン構文は、ジョブ フローの制御に役立つ、 `success` 、 `failure` 、および`always`ための非常に便利なコールバックを提供します。
+    - `when {}` は、ステージ レベルで使用でき、そのステージに入るパイプラインを停止するために使用できます。たとえば、ブランチがmasterの場合にコードを`test`環境にデプロイします。
+
+6. ここまでパイプラインが何をするかを見てきたので、失敗したビルドを修正してみましょう。 Jenkins ジョブの出力を見ると、Nexus でコンテナーに入れるものを見つけることができないことがわかります。これを修正するには、アプリのコンパイルを実行する新しい`stage`を追加するように`Jenkinsfile`を更新し、Nexus でアーティファクトを生成します。以下を`// 💥🔨 PIPELINE EXERCISE GOES HERE`コメントに追加します。
 
     ```groovy
             // 💥🔨 PIPELINE EXERCISE GOES HERE
@@ -188,13 +191,13 @@ git push
             }
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     wget -O /projects/pet-battle/Jenkinsfile https://raw.githubusercontent.com/rht-labs/tech-exercise/main/tests/doc-regression-test-files/3a-jenkins-Jenkinsfile.groovy
     ```
 
-7. Push the changes to git.
+7. 変更を git にプッシュします。
 
     ```bash#test
     cd /projects/pet-battle
@@ -203,8 +206,8 @@ git push
     git push
     ```
 
-8. Back on Jenkins we should now see the pipeline is running. If you swap to the Blue Ocean view, you get a lovely graph of what it looks like in execution.
+8. Jenkins に戻ると、パイプラインが実行されていることがわかります。ブルー オーシャン ビューに切り替えると、実行中の様子を示す素敵なグラフが表示されます。
 
     ![jenkins-blue-ocean](./images/jenkins-blue-ocean.png)
 
-🪄OBSERVE PIPELINE RUNNING :D - At this point check in with the other half of the group and see if you've managed to integrate the apps🪄
+🪄パイプラインの実行を観察します:D - この時点で、グループの残りの半分にチェックインし、アプリの統合に成功したかどうかを確認します🪄
