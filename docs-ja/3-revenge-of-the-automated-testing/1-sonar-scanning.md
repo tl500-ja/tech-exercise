@@ -1,14 +1,14 @@
-# Sonar Scanning
+# Sonarスキャン
 
-> Sonarqube is a tool that performs static code analysis. It looks for pitfalls in coding and reports them. It's great tool for catching vulnerabilities!
+> Sonarqube は、静的コード分析を実行するツールです。コーディングの落とし穴を探して報告します。脆弱性をキャッチするための優れたツールです。
 
-## Task
+## タスク
 
 ![task-sonar](./images/task-sonar.png)
 
-## Deploy Sonarqube using GitOps
+## GitOps を使用して Sonarqube をデプロイする
 
-1. Create a SealedSecrets in our git repository for the Sonarqube admin user _(yes, because it is GitOps!)_ so that the deployment and pipeline can leverage the secret when executing.
+1. デプロイとパイプラインが実行時にシークレットを活用できるように、Sonarqube 管理者ユーザー用に Git リポジトリに SealedSecrets を作成します*(はい、GitOps であるためです!)* 。
 
     ```bash
     cat << EOF > /tmp/sonarqube-auth.yaml
@@ -25,7 +25,7 @@
     EOF
     ```
 
-2. Just as before, use `kubeseal` command line to seal the secret definition just created.
+2. 前と同じように、 `kubeseal`コマンド ラインを使用して、作成したシークレット定義を封印します。
 
     ```bash
     kubeseal < /tmp/sonarqube-auth.yaml > /tmp/sealed-sonarqube-auth.yaml \
@@ -35,32 +35,38 @@
         -o yaml
     ```
 
-    We want to grab the results of this sealing activity, in particular the `encryptedData`.
+    この封印の結果、特に`encryptedData`を取得します。
 
     ```bash
     cat /tmp/sealed-sonarqube-auth.yaml| grep -E 'username|password|currentAdminPassword'
     ```
 
-    The output should look like this with massively long nonsense strings:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-        username: AgAj3JQj+EP23pnzu...
-        password: AgAtnYz8U0AqIIaqYrj...
-        currentAdminPassword: AgAtnYz8U0AqIIaqYrj...
-    </code></pre></div>
+    非常に長い無意味な文字列を含む出力は、次のようになります。
 
-3. Open up `ubiquitous-journey/values-tooling.yaml` file and extend the **Sealed Secrets** entry. Copy the output of `username`, `password` and `currentAdminPassword` from the previous command and update the values. Make sure you indent the data correctly.
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+            username: AgAj3JQj+EP23pnzu...
+            password: AgAtnYz8U0AqIIaqYrj...
+            currentAdminPassword: AgAtnYz8U0AqIIaqYrj...
+        </code></pre>
+    </div>
+    
 
-    Find the Sealed Secrets entry, it should look like this (don't copy this bit!)
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-      # Sealed Secrets
-      - name: sealed-secrets
-        values:
-          secrets:
-    </code></pre></div>
+3. `ubiquitous-journey/values-tooling.yaml`ファイルを開き、 **Sealed Secrets**エントリを拡張します。前のコマンドからの`username` 、 `password` 、および`currentAdminPassword`の出力をコピーし、値を更新します。データを正しくインデントしていることを確認してください。
 
-    and add `sonarqube-auth` entry (copy this bit!):
+    Sealed Secrets エントリを見つけます。次のようになっているはずです (これをコピーしないでください!)。
+
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+          # Sealed Secrets
+          - name: sealed-secrets
+            values:
+              secrets:
+        </code></pre>
+    </div>
+
+
+    `sonarqube-auth`エントリを追加します (これをコピーしてください!):
 
     ```yaml
             - name: sonarqube-auth
@@ -71,9 +77,9 @@
                 username: AgAj3JQj+EP23pnzu...
                 password: AgAtnYz8U0AqIIaqYrj...
                 currentAdminPassword: AgCHCphbYpeLYMPK...
-      ```
+    ```
 
-    and push the changes:
+    変更をプッシュします。
 
     ```bash
     cd /projects/tech-exercise
@@ -81,15 +87,17 @@
     git commit -m  "🍳 ADD - sonarqube creds sealed secret 🍳"
     git push
     ```
-  <p class="tip">If you get an error like <b>error: failed to push some refs to..</b>, please run <b><i>git pull --rebase</i></b>, then <b><i>git push</i></b> again.</p>
 
-4. Verify that you have the secret definition available in the cluster by checking the UI or on the terminal:
+  <p class="tip"><b>error: failed to push some refs to..</b>のようなエラーが発生した場合は、 <b><i>git pull --rebase</i></b>を実行してから、再度<b><i>git push</i></b>を実行してください。</p>
+
+
+1. UI またはターミナルをチェックして、クラスターで使用可能なシークレット定義があることを確認します。
 
     ```bash
     oc get secrets -n <TEAM_NAME>-ci-cd | grep sonarqube-auth
     ```
 
-5. Install **Sonarqube**, the code quality tool. Edit `ubiquitous-journey/values-tooling.yaml` file in your IDE  and add to the `applications` list:
+2. コード品質ツールである**Sonarqube**をインストールします。 IDE で`ubiquitous-journey/values-tooling.yaml`ファイルを編集し、 `applications`リストに追加します。
 
     ```yaml
       # Sonarqube
@@ -108,18 +116,18 @@
               - https://github.com/dependency-check/dependency-check-sonar-plugin/releases/download/2.0.8/sonar-dependency-check-plugin-2.0.8.jar
     ```
 
-6. Git add, commit, push your changes (GITOPS WOOOO 🪄🪄). On ArgoCD you'll see it come alive.
+3. Git の追加、コミット、変更のプッシュ (GITOPS 🪄🪄)。 ArgoCD では、それが生きているのがわかります。
 
     ```bash
     cd /projects/tech-exercise
     git add .
     git commit -m  "🦇 ADD - sonarqube 🦇"
-    git push 
+    git push
     ```
 
     ![argocd-sonar](./images/argocd-sonar.png)
 
-7. Connect to Sonarqube UI to verify if the installation is successful (username `admin` & password `admin123`):
+4. Sonarqube UI に接続して、インストールが成功したかどうかを確認します (ユーザー名`admin`とパスワード`admin123` )。
 
     ```bash
     echo https://$(oc get route sonarqube --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)
@@ -127,13 +135,13 @@
 
     ![sonary-alive](./images/sonary-alive.png)
 
-    Now that we have the tool deployed ...
+    ツールがデプロイされたので...
 
-#### In your groups pick the tool you'd like to integrate the pipeline with:
+#### グループで、パイプラインを統合するツールを選択します。
 
-| 🐈‍⬛ **Jenkins Group** 🐈‍⬛  |  🐅 **Tekton Group** 🐅 |
-|-----------------------|----------------------------|
-| * Configure your pipeline to run code analysis | * Configure your pipeline to run code analysis |
-| * Configure your pipeline to check the quality gate | * Configure your pipeline to check the quality gate |
-| * Improve your application code quality | * Improve your application code quality |
-| <span style="color:blue;">[jenkins](3-revenge-of-the-automated-testing/1a-jenkins.md)</span> | <span style="color:blue;">[tekton](3-revenge-of-the-automated-testing/1b-tekton.md)</span> |
+🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
+--- | ---
+* コード分析を実行するようにパイプラインを構成する | * コード分析を実行するようにパイプラインを構成する
+* 品質ゲートをチェックするようにパイプラインを構成する | * 品質ゲートをチェックするようにパイプラインを構成する
+* アプリケーション コードの品質を向上させる | * アプリケーション コードの品質を向上させる
+<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/1a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/1b-tekton.md">tekton</a></p></span>
