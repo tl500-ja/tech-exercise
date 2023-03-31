@@ -1,4 +1,4 @@
-## Sealed Secrets
+## 封印されたシークレット
 
 GitOps と言うと、 *「Git になければ本物ではない」と言いますが、*資格情報などの機密データを、多くの人がアクセスできる Git リポジトリにどのように保存するのでしょうか?!確かに、Kubernetes はシークレットを管理する方法を提供しますが、問題は機密情報を base64 文字列として保存することです。誰でも base64 文字列をデコードできます! したがって、 `Secret`マニフェスト ファイルを公開された場所に保存することはできません。この問題に対処するために、Sealed Secrets と呼ばれるオープンソース ツールを使用します。
 
@@ -12,7 +12,7 @@ git remote set-url origin https://${GIT_SERVER}/${TEAM_NAME}/tech-exercise.git
 git pull
 ```
 
-### Sealed Secrets in action
+### 封印されたシークレットの実践
 
 1. 注意深い人は、前の演習で git のシークレットを作成し、それを git に配置せずにクラスターに追加したことに気づいたでしょう...😳 これを修正し、Git 資格情報を封印して、安全にチェックインできるようにすることから始めましょう。コードに。まず、tmp ディレクトリにシークレットを作成します。前の演習で使用した gitlab ユーザーと PAT が環境に設定されていることを確認してください。
 
@@ -68,18 +68,18 @@ git pull
 
      <div class="highlight" style="background: #f7f7f7">
      <pre><code class="language-yaml">
-        apiVersion: bitnami.com/v1alpha1
-        kind: SealedSecret
-        metadata:
-          creationTimestamp: null
-          name: git-auth
-          namespace: biscuits-ci-cd
-        spec:
-          encryptedData:
-            username: AgAtnYz8U0AqIIaqYrj...
-            password: AgAj3JQj+EP23pnzu...
-        ...
-        </code></pre>
+            apiVersion: bitnami.com/v1alpha1
+            kind: SealedSecret
+            metadata:
+              creationTimestamp: null
+              name: git-auth
+              namespace: biscuits-ci-cd
+            spec:
+              encryptedData:
+                username: AgAtnYz8U0AqIIaqYrj...
+                password: AgAj3JQj+EP23pnzu...
+            ...
+            </code></pre>
     </div>
     
 
@@ -91,9 +91,9 @@ git pull
 
      <div class="highlight" style="background: #f7f7f7">
      <pre><code class="language-yaml">
-            username: AgAtnYz8U0AqIIaqYrj...
-            password: AgAj3JQj+EP23pnzu...
-        </code></pre>
+                username: AgAtnYz8U0AqIIaqYrj...
+                password: AgAj3JQj+EP23pnzu...
+            </code></pre>
     </div>
     
 
