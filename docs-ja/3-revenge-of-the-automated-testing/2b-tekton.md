@@ -1,10 +1,10 @@
-## Extend Tekton Pipeline with Automated Testing
+## 自動テストによる Tekton パイプラインの拡張
 
-> In this exercise we'll deploy Allure - a useful tool for managing your java tests and other reports from your CI/CD server. The exercise is in two parts: first we'll deploy Allure using gitOps and then add the tests to our pipeline
+> この演習では、CI/CD サーバーから Java テストやその他のレポートを管理するための便利なツールである Allure をデプロイします。演習は 2 つの部分に分かれています。最初に gitOps を使用して Allure をデプロイし、次にパイプラインにテストを追加します。
 
-### Part 1 - Allure 
+### パート1 - Allure
 
-1. For this exercise, we will use a tool called **Allure**, a test repository manager for Java, but first let's create SealedSecrets object for username and password we'll use for this tool. This process should be pretty familiar by now 🃏🃏🃏
+1. この演習では、Java 用のテスト リポジトリ マネージャーである**Allure**というツールを使用しますが、最初に、このツールで使用するユーザー名とパスワード用の SealedSecrets オブジェクトを作成しましょう。このプロセスは、今ではかなり慣れているはずです 🃏🃏🃏
 
     ```bash
     cat << EOF > /tmp/allure-auth.yaml
@@ -18,7 +18,7 @@
     EOF
     ```
 
-2. Use `kubeseal` commandline to seal the secret definition.
+2. `kubeseal`コマンドラインを使用して、シークレットの定義を封印します。
 
     ```bash
     kubeseal < /tmp/allure-auth.yaml > /tmp/sealed-allure-auth.yaml \
@@ -28,31 +28,37 @@
         -o yaml
     ```
 
-3. Grab the `encryptedData`:
+3. `encryptedData`を取得します。
 
     ```bash
     cat /tmp/sealed-allure-auth.yaml| grep -E 'username|password'
     ```
 
-    Output should look something like this:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-        username: AgAj3JQj+EP23pnzu...
-        password: AgAtnYz8U0AqIIaqYrj...
-    </code></pre></div>
+    出力は次のようになります。
 
-4. Open up `ubiquitous-journey/values-tooling.yaml` file and extend the **Sealed Secrets** entry. Copy the output of `username` and `password` from the previous command and update the values. Make sure you indent the data correctly.
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+            username: AgAj3JQj+EP23pnzu...
+            password: AgAtnYz8U0AqIIaqYrj...
+        </code></pre>
+    </div>
+    
 
-    Find the Sealed Secrets entry:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-      # Sealed Secrets
-      - name: sealed-secrets
-        values:
-          secrets:
-    </code></pre></div>
+4. `ubiquitous-journey/values-tooling.yaml`ファイルを開き、 **Sealed Secrets**エントリを拡張します。前のコマンドからの`username`と`password`の出力をコピーし、値を更新します。データを正しくインデントしていることを確認してください。
 
-    and add `allure-auth` entry:
+    Sealed Secretsエントリを見つけます。
+
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+          # Sealed Secrets
+          - name: sealed-secrets
+            values:
+              secrets:
+        </code></pre>
+    </div>
+
+
+    `allure-auth`エントリを追加します。
 
     ```yaml
             - name: allure-auth
@@ -62,7 +68,7 @@
                 password: AgAtnYz8U0AqIIaqYrj...
     ```
 
-5. While in the `ubiquitous-journey/value-tooling.yaml` file - install Allure by adding it's helm chart:
+5. `ubiquitous-journey/value-tooling.yaml`ファイルで、Helm チャートを追加して Allure をインストールします。
 
     ```yaml
       # Allure
@@ -76,18 +82,19 @@
             secret: allure-auth
     ```
 
-6. Finally - push the changes to the repository:
+6. 最後に、変更をリポジトリにプッシュします。
 
     ```bash
     cd /projects/tech-exercise
     git add ubiquitous-journey/values-tooling.yaml
     git commit -m  "👩‍🏭 ADD - Allure tooling 👩‍🏭"
-    git push 
+    git push
     ```
 
-    <p class="warn">If you get an error like <b>error: failed to push some refs to..</b>, please run <b><i>git pull</i></b>, then push your changes again by running above commands.</p>
+     <p class="warn">error <b>: failed to push some refs to..</b>のようなエラーが発生した場合は、 <b><i>git pull</i></b>を実行してから、上記のコマンドを実行して変更を再度プッシュしてください。</p>
+    
 
-7. You should see the Allure UI come up in a few moments after ArgoCD syncs it. You can browse the default project on Allure to verify it's up and running
+7. ArgoCD が同期した後、しばらくすると Allure UI が表示されるはずです。 Allure でデフォルト プロジェクトを参照して、それが稼働中であることを確認できます。
 
     ```bash
     echo https://$(oc get route allure --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)/allure-docker-service/projects/default/reports/latest/index.html
@@ -95,12 +102,13 @@
 
     ![allure-up](./images/allure-up.png)
 
-</br>
-</br>
 
-### Part 2 - Testing Tasks
 
-1. In our IDE, let's create a tekton task to push our test scores to allure. Add the `allure-post-report.yaml` Task to the `tekton/templates/tasks/` folder.
+
+
+### パート 2 - テスト タスク
+
+1. IDE で、テスト スコアをallureにプッシュする tekton タスクを作成しましょう。 `allure-post-report.yaml`タスクを`tekton/templates/tasks/`フォルダーに追加します。
 
     ```yaml
     cd /projects/tech-exercise
@@ -160,7 +168,7 @@
     EOF
     ```
 
-2. Open the maven pipeline (`/projects/tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml`) and add the `save-test-results` step to our pipeline.
+2. Maven パイプライン ( `/projects/tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml` ) を開き、パイプラインに`save-test-results`ステップを追加します。
 
     ```yaml
         # Save Test Results
@@ -179,35 +187,34 @@
               workspace: shared-workspace
     ```
 
-3. **(Optional)** Only perform this step if you **did not** perform the previous testing section [3. Revenge of the Automated Testing / Sonarqube / Tekton](./3-revenge-of-the-automated-testing%2F1b-tekton.md#extend-tekton-pipeline-with-sonar-scanning). Otherwise skip this step. Open the maven pipeline (`/projects/tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml`) and **remove** the `skipTests` argument from the pipeline. This will ensure that our unit tests are run.
+3. **(オプション)**このステップは、前のテスト セクション<a>3. 自動テスト / Sonarqube / Tekton の復習 を</a>実行して<strong>いない</strong>場合にのみ実行してください。それ以外の場合は、この手順をスキップしてください。 Maven パイプライン ( `/projects/tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml` ) を開き、パイプラインから<code>skipTests</code>引数<strong>を削除します</strong>。これにより、単体テストが確実に実行されます。
 
-    Change the build options from this:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-    - name: maven
-      params:
-        - name: MAVEN_BUILD_OPTS
-          value: "-Dquarkus.package.type=fast-jar <strong>-DskipTests"</strong>
-    </code></pre></div>
-    to this:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-    - name: maven
-      params:
-        - name: MAVEN_BUILD_OPTS
-          value: "-Dquarkus.package.type=fast-jar"
-    </code></pre></div>
+    ビルド オプションを次から変更します。
 
-4. Git add, commit, push your changes
+     <div class="highlight" style="background: #f7f7f7">  <pre><code class="language-yaml">
+        - name: maven
+          params:
+            - name: MAVEN_BUILD_OPTS
+              value: "-Dquarkus.package.type=fast-jar &lt;strong&gt;-DskipTests"&lt;/strong&gt;
+        </code></pre>
+    </div>  to this:  <div class="highlight" style="background: #f7f7f7">  <pre><code class="language-yaml">
+        - name: maven
+          params:
+            - name: MAVEN_BUILD_OPTS
+              value: "-Dquarkus.package.type=fast-jar"
+        </code></pre>
+    </div>
+
+4. Git の追加、コミット、変更のプッシュ
 
     ```bash
     cd /projects/tech-exercise
     git add .
     git commit -m  "🥽 ADD - save-test-results step 🥽"
-    git push 
+    git push
     ```
 
-5. Trigger a new `PipelineRun` with an empty commit and head over to OpenShift Pipelines to see the execution:
+5. 空のコミットで新しい`PipelineRun`をトリガーし、OpenShift Pipelines に移動して実行を確認します。
 
     ```bash
     cd /projects/pet-battle-api
@@ -217,20 +224,20 @@
 
     ![allure-tekkers](./images/allure-tekkers.png)
 
-6. Browse to the uploaded test results from the pipeline in Allure:
+6. Allure のパイプラインからアップロードされたテスト結果を参照します。
 
     ```bash
     echo https://$(oc get route allure --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)/allure-docker-service/projects/pet-battle-api/reports/latest/index.html
     ```
 
-    From here you can browse Test results + behaviours.
+    ここから、テスト結果と動作を参照できます。
 
     ![images/allure-test-suite.png](images/allure-test-suite.png)
 
-    and even drill down to test body attachments.
+    ドリルダウンしてボディの取り付けをテストすることもできます。
 
     ![images/allure-behaviours.png](images/allure-behaviours.png)
 
-    <p class="warn"><b>TIP</b> You can also find the available projects and test reports from Allure swagger api by navigating to <span style="color:blue;"><a href="https://allure-<TEAM_NAME>-ci-cd.<CLUSTER_DOMAIN>/allure-docker-service/">https://allure-<TEAM_NAME>-ci-cd.<CLUSTER_DOMAIN>/allure-docker-service/</a></span></p>
+    <p class="warn"><b>ヒント</b> Allure swagger apiから<span style="color:blue;"><a href="https://allure-&lt;TEAM_NAME&gt;-ci-cd.&lt;CLUSTER_DOMAIN&gt;/allure-docker-service/">https://allure-{team_name4}-ci-cd.{cluster_domain5}/allure-docker-service/{/cluster_domain5}{/team_name4}</a></span> に移動すると、利用できるプロジェクトとテストレポートも見つかります。</p>
 
     ![images/allure-api.png](images/allure-api.png)
