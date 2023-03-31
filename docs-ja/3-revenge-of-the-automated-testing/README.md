@@ -1,37 +1,46 @@
-# Exercise 3 - Revenge of the Automated Testing
+# 演習 3 - 自動テストの復讐
 
-> Continuous Testing - End-to-end testing looks good, but is invariably bad because it will never catch all the bugs. What we really need is continuous testing.
+> 継続的なテスト - エンド ツー エンドのテストは良さそうに見えますが、すべてのバグをキャッチすることはできないため、常に悪いものです。私たちが本当に必要としているのは、継続的なテストです。
 
-Continuous Delivery needs rapid and reliable feedback. Investing in continuous testing is a worthwhile activity.
+継続的デリバリーには、迅速で信頼できるフィードバックが必要です。継続的なテストへの投資は価値のある活動です。
 
-## 👨‍🍳 Exercise Intro
+## 👨‍🍳演習の説明
 
-**💥 Choose your own adventure 💥**
+**💥 あなた自身の冒険を選んでください 💥**
 
-There are lots of things we can do under the heading of `Quality Gates`, so decide for yourselves what you'd like to do. In your table groups, create a Kanban with each of the exercise titles. Discuss among yourselves the order you'd like to do them in and as mobs / pairs, take tasks from the list and implement them. At the end of each section, play back to the other group what you've accomplished. Then grab the next priortized item on your list!
+`Quality Gates`の見出しの下でできることはたくさんあるので、自分で何をしたいかを決めてください。テーブル グループで、各演習のタイトルでかんばんを作成します。モブ/ペアとして、リストからタスクを取得して実行します。各セクションの終わりに、自分が達成したことを他のグループに再生します。次に、リストの次の優先項目を取得します。
 
 ![team-kanban](images/team-kanban.jpg)
 
-## 🖼️ Big Picture
+## ビッグピクチャー
 
 ![big-picture-pipeline-complete](images/big-picture-pipeline-complete.jpg)
 
-## 🔮 Learning Outcomes
+## 🔮 学習成果
 
-- [ ] Can add security gates to pipeline
-- [ ] Can add testing gates to pipeline
-- [ ] Can add static code analysis gates to pipeline
-- [ ] Can add image signing to the pipeline
-- [ ] Can add load testing to the pipeline
+- [ ] パイプラインにセキュリティ ゲートを追加できる
+- [ ] パイプラインにテスト ゲートを追加できる
+- [ ] 静的コード分析ゲートをパイプラインに追加できる
+- [ ] イメージ署名をパイプラインに追加できる
+- [ ] パイプラインに負荷テストを追加できる
 
 ## 🔨 Tools used in this exercise!
 
-* <span style="color:blue;">[Sonar](https://www.sonarqube.org/)</span> - Add static code analysis to the pipelines
-* Testing Tools - <span style="color:blue;">[Jest](https://jestjs.io/)</span>, <span style="color:blue;">[Allure](https://github.com/allure-framework/allure2)</span>, <span style="color:blue;">[RESTassured](https://quarkus.io/guides/getting-started-testing)</span> - Add API and front end tests
-* Code Linting - <span style="color:blue;">[npm lint](https://www.npmjs.com/package/lint)</span>, <span style="color:blue;">[checkstyle](https://checkstyle.sourceforge.io)</span> - Static code linter and coverage reports for our tests
-* Kube Linting - <span style="color:blue;">[kubelinter](https://github.com/stackrox/kube-linter)</span>- Validate K8S yamls against best practices
-* <span style="color:blue;">[ZAP - OWASP](https://owasp.org/www-project-zap)</span> application scanning to check for common attack patterns
-* Image Security - <span style="color:blue;">[StackRox](https://www.stackrox.com)</span> - Finding vulnerabilities inside the images and hosts with StackRox
-* Image Signing - <span style="color:blue;">[sigstore](https://www.sigstore.dev)</span> - Sign your images with cosign
-* Load Testing - <span style="color:blue;">[locust](https://docs.locust.io/en/stable/index.html)</span> - Automated load tests in your pipeline
-* System Test - test the system before promoting to the next stage
+- <span style="color:blue;"><a href="https://www.sonarqube.org/">Sonar</a></span> - 静的コード分析をパイプラインに追加する
+- テストツール -
+    <span style="color:blue;"><a href="https://jestjs.io/">Jest</a></span> 、
+    <span style="color:blue;"><a href="https://github.com/allure-framework/allure2">Allure</a></span> 、
+    <span style="color:blue;"><a href="https://quarkus.io/guides/getting-started-testing">RESTassured</a></span> - API とフロントエンドのテストを追加
+- コード リンティング -
+    <span style="color:blue;"><a href="https://www.npmjs.com/package/lint">npm lint</a></span> 、
+    <span style="color:blue;"><a href="https://checkstyle.sourceforge.io">checkstyle</a></span> - テストの静的コード リンターとカバレッジ レポート
+- Kube Linting -
+    <span style="color:blue;"><a href="https://github.com/stackrox/kube-linter">kubeinter</a></span> - ベスト プラクティスに照らして K8S yaml を検証する
+- <span style="color:blue;"><a href="https://owasp.org/www-project-zap">ZAP - 一般的な攻撃パターンをチェックするための OWASP</a></span>アプリケーション スキャン
+- Image Security -
+    <span style="color:blue;"><a href="https://www.stackrox.com">StackRox</a></span> - StackRox を使用してイメージとホスト内の脆弱性を見つける
+- 画像署名 -
+    <span style="color:blue;"><a href="https://www.sigstore.dev">sigstore</a></span> - cosign で画像に署名します
+- 負荷テスト -
+    <span style="color:blue;"><a href="https://docs.locust.io/en/stable/index.html">イナゴ</a></span>- パイプラインでの自動負荷テスト
+- システム テスト - 次の段階に進む前にシステムをテストします。
