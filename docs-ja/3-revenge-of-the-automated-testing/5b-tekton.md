@@ -1,8 +1,8 @@
-# Extend Tekton Pipeline with Kube Linting Task
+# KubeリンティングによるTekton パイプラインの拡張
 
-Let's enable the **kube-linter** task in our pipeline.
+パイプラインで**kube-linter**タスクを有効にしましょう。
 
-1. Kube lint has a tekton task on Tekton Hub so let's grab it and add the `Task` to our cluster. Feel free to explore what the `Task` will be doing 
+1. Kube lint は Tekton Hub に tekton タスクを持っているので、それを取得してクラスターに`Task`を追加しましょう。 `Task`何をするかを自由に調べてください
 
     ```bash
     curl -sLo /projects/tech-exercise/tekton/templates/tasks/kube-linter.yaml \
@@ -10,14 +10,14 @@ Let's enable the **kube-linter** task in our pipeline.
     ```
 
     ```bash
-    # commit this so ArgoCD will sync it 
+    # commit this so ArgoCD will sync it
     cd /projects/tech-exercise
     git add .
     git commit -m  "☎️ ADD - kube-linter task ☎️"
     git push
     ```
 
-2. We could run the **kube-linter** task with all default checks in our pipeline but this would fail the build. So let's do the _naughty thing_ and run with a restricted set of checks. Add the following step in our `maven-pipeline.yaml` (stored in `/projects/tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml`). 
+2. パイプラインですべてのデフォルト チェックを使用して**kube-linter**タスクを実行できますが、これはビルドに失敗します。そこで、*いたずら心で*チェックのセットを制限して実行することにしましょう。`maven-pipeline.yaml` ( `/projects/tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml`に格納) を次のステップに追加します。
 
     ```yaml
         # Kube-linter
@@ -38,31 +38,33 @@ Let's enable the **kube-linter** task in our pipeline.
               value: "no-extensions-v1beta,no-readiness-probe,no-liveness-probe,dangling-service,mismatching-selector,writable-host-mount"
     ```
 
-    Be sure to update the `maven` task in the pipeline as well so its `runAfter` is the `kube-linter` task 💪💪💪
+    `runAfter`が`kube-linter`タスクになるように、パイプラインの`maven`タスクも必ず更新してください 💪💪💪
 
-    <p class="warn">
-    ⛷️ <b>NOTE</b> ⛷️ - If you've completed Sonarqube step, you need to set <strong>runAfter</strong> as <strong>analysis-check</strong>
-    </p>
+     <p class="warn">⛷️<b>注</b>⛷️ - Sonarqube のステップが完了したら、<strong>分析チェック</strong>として<strong>runAfter</strong>を設定する必要があります</p>
 
-    You should have a pipeline definition like this:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-        - name: kube-linter
-        runAfter:
-        - fetch-app-repository
-    ...
-        - name: maven
-          taskRef:
-            name: maven
-          runAfter: <== make sure you update this 💪💪
-            - kube-linter # check the NOTE above❗❗ this could be `analysis-check` as well.
-          params:
-            - name: WORK_DIRECTORY
-            value: "$(params.APPLICATION_NAME)/$(params.GIT_BRANCH)"
-    ...
-    </code></pre></div>
 
-3. Check our changes into git.
+    次のようなパイプライン定義が必要です。
+
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+            - name: kube-linter
+            runAfter:
+            - fetch-app-repository
+        ...
+            - name: maven
+              taskRef:
+                name: maven
+              runAfter: &lt;== make sure you update this 💪💪
+                - kube-linter # check the NOTE above❗❗ this could be `analysis-check` as well.
+              params:
+                - name: WORK_DIRECTORY
+                value: "$(params.APPLICATION_NAME)/$(params.GIT_BRANCH)"
+        ...
+        </code></pre>
+    </div>
+    
+
+3. 変更を git にチェックします。
 
     ```bash
     cd /projects/tech-exercise
@@ -72,7 +74,7 @@ Let's enable the **kube-linter** task in our pipeline.
     git push
     ```
 
-4. Trigger a pipeline build.
+4. パイプライン ビルドをトリガーします。
 
     ```bash
     cd /projects/pet-battle-api
@@ -80,22 +82,22 @@ Let's enable the **kube-linter** task in our pipeline.
     git push
     ```
 
-    🪄 Watch the pipeline run with the **kube-linter** task.
+    🪄 **kube-linter**タスクで実行されるパイプラインを確認します。
 
     ![acs-kube-linter-task](./images/acs-kube-linter-task.png)
 
-## Breaking the Build
+## ビルドを壊す
 
-Let's run through a scenario where we break/fix the build with **kube-linter**.
+**kube-linter**でビルドを中断/修正するシナリオを実行してみましょう。
 
-1. Edit `maven-pipeline.yaml` again and add **required-label-owner** to the **includelist** list on the **kube-linter** task:
+1. `maven-pipeline.yaml`を再度編集し、 **kube-linter**タスクの**includelist**リストに**required-label-owner**を追加します。
 
     ```yaml
             - name: includelist
               value: "no-extensions-v1beta,no-readiness-probe,no-liveness-probe,dangling-service,mismatching-selector,writable-host-mount,required-label-owner"
     ```
 
-2. Check in these changes and trigger a pipeline run.
+2. これらの変更をチェックインして、パイプラインの実行をトリガーします。
 
     ```bash
     cd /projects/tech-exercise
@@ -105,9 +107,10 @@ Let's run through a scenario where we break/fix the build with **kube-linter**.
     git push
     ```
 
-    <p class="warn">If you get an error like <b>error: failed to push some refs to..</b>, please run <b><i>git pull</i></b>, then push your changes again by running above commands.</p>
+     <p class="warn">error <b>: failed to push some refs to..</b>のようなエラーが発生した場合は、 <b><i>git pull</i></b>を実行してから、上記のコマンドを実行して変更を再度プッシュしてください。</p>
 
-    Make an empty commit to trigger the pipeline.
+
+    空のコミットを作成して、パイプラインをトリガーします。
 
     ```bash
     cd /projects/pet-battle-api
@@ -115,11 +118,11 @@ Let's run through a scenario where we break/fix the build with **kube-linter**.
     git push
     ```
 
-3. Wait for the pipeline to sync and trigger a **pet-battle-api** build. This should now fail.
+3. パイプラインが同期し、 **pet-battle-api**ビルドがトリガーされるまで待ちます。これで失敗するはずです。
 
     ![images/acs-lint-fail.png](images/acs-lint-fail.png)
 
-4. We can take a look at the error and replicate it on the command line:
+4. エラーを確認して、コマンド ラインで再現できます。
 
     ```bash
     cd /projects/pet-battle-api
@@ -128,45 +131,48 @@ Let's run through a scenario where we break/fix the build with **kube-linter**.
 
     ![images/acs-owner-label-fail.png](images/acs-owner-label-fail.png)
 
-5. The linter is complaining we're missing a label on our resources - let's fix our deployment by adding an **owner** label using helm. Edit `pet-battle-api/chart/values.yaml` file and add a value for **owner**:
+5. リンターは、リソースにラベルがないことを訴えています。helm を使用して**所有者**ラベルを追加して、デプロイメントを修正しましょう。 `pet-battle-api/chart/values.yaml`ファイルを編集して、 **owner**の値を追加します。
 
     ```yaml
     # Owner value
     owner: <TEAM_NAME>
     ```
 
-6. In helm land, the `_helpers.tpl` file allows us to define variables and chunks of yaml that can be reused across all resources in a chart easily. Let's update our label definitions in there to fix the kube-lint issue. Edit `pet-battle-api/chart/templates/_helpers.tpl` and add the `owner` label like this in two places - where we **define "pet-battle-api.labels"** and where we **define "mongodb.labels"** append it below `app.kubernetes.io/managed-by: {{ .Release.Service }}`
+6. Helm ランドでは、 `_helpers.tpl`ファイルを使用して、チャート内のすべてのリソースで簡単に再利用できる変数と yaml のチャンクを定義できます。そこにあるラベル定義を更新して、kube-lint の問題を修正しましょう。 `pet-battle-api/chart/templates/_helpers.tpl`編集し、このように`owner`ラベルを 2 つの場所に追加します - **pet-battle-api.labelsを定義する**場所と**mongodb.labelsを定義する**場所に`app.kubernetes.io/managed-by: {{ .Release.Service }}`の下に追加します。
 
     ```yaml
     owner: {{ .Values.owner }}
     ```
 
-    So it looks like this:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-    ...
-        {{- end }}
-        app.kubernetes.io/managed-by: {{ .Release.Service }}
-        owner: {{ .Values.owner }}
-        {{- end }}
-    ...
-    </code></pre></div>
+    したがって、次のようになります。
 
-7. We can now trigger the Pipeline with the new version. Edit pet-battle-api `pom.xml` found in the root of the `pet-battle-api` project and update the `version` number. The pipeline will update the `chart/Chart.yaml` with these versions for us. Increment and change the version number to suit.
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+        ...
+            {{- end }}
+            app.kubernetes.io/managed-by: {{ .Release.Service }}
+            owner: {{ .Values.owner }}
+            {{- end }}
+        ...
+        </code></pre>
+    </div>
+    
+
+7. 新しいバージョンでパイプラインをトリガーできるようになりました。 `pet-battle-api`プロジェクトのルートで見つかるpet-battle-api `pom.xml`を編集し、 `version`番号を更新します。パイプラインは`chart/Chart.yaml`をこれらのバージョンで更新します。バージョン番号をインクリメントして適切に変更します。
 
     ```xml
         <artifactId>pet-battle-api</artifactId>
         <version>1.3.1</version>
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     cd /projects/pet-battle-api
     mvn -ntp versions:set -DnewVersion=1.3.1
     ```
 
-8. We can check the **kube-linter** command again and check these changes in:
+8. **kube-linter**コマンドを再度確認し、これらの変更を以下で確認できます。
 
     ```bash
     cd /projects/pet-battle-api
@@ -175,4 +181,4 @@ Let's run through a scenario where we break/fix the build with **kube-linter**.
     git push
     ```
 
-    🪄 Observe the **pet-battle-api** pipeline running successfully again.
+    🪄 **pet-battle-api**パイプラインが再び正常に実行されていることを確認します。
