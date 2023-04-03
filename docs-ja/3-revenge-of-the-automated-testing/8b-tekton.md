@@ -1,6 +1,6 @@
-## Extend Tekton Pipeline with Image Signing
+## イメージ署名によるTektonパイプラインの拡張
 
-1. Add a task into our codebase to sign our built images.
+1. ビルドしたイメージに署名するタスクをコードベースに追加します。
 
     ```bash
     cd /projects/tech-exercise
@@ -43,7 +43,7 @@
     EOF
     ```
 
-2. Let's add this task into pipeline. Edit `tekton/templates/pipelines/maven-pipeline.yaml` and copy below yaml where the placeholder is.
+2. このタスクをパイプラインに追加しましょう。 `tekton/templates/pipelines/maven-pipeline.yaml`を編集し、プレースホルダーがある yaml の下にコピーします。
 
     ```yaml
         # Cosign Image Sign
@@ -66,7 +66,7 @@
               value: "$(params.APPLICATION_NAME)/$(params.GIT_BRANCH)"
     ```
 
-3. It's not real unless it's in git, right?
+3. git にないと本物じゃないですよね？
 
     ```bash
     # git add, commit, push your changes..
@@ -76,7 +76,7 @@
     git push
     ```
 
-4. Store the public key in `pet-battle-api` repository for anyone who would like to verify our images. This push will also trigger the pipeline.
+4. イメージを確認したい人のために、公開鍵を`pet-battle-api`リポジトリに保存します。このプッシュは、パイプラインもトリガーします。
 
     ```bash
     cp /tmp/cosign.pub /projects/pet-battle-api/
@@ -86,13 +86,13 @@
     git push
     ```
 
-    🪄 Observe the **pet-battle-api** pipeline running with the **image-sign** task.
+    🪄 **pet-battle-api**パイプラインで**image-sign**タスクが実行されている様子の観察します。
 
-    After the task successfully finish, go to OpenShift UI > Builds > ImageStreams and select `pet-battle-api`. You'll see a tag ending with `.sig` which shows you that this is image signed. 
+    タスクが正常に終了したら、OpenShift UI &gt; Builds &gt; ImageStreams に移動し、 `pet-battle-api`を選択します。これがイメージ署名されていることを示す`.sig`で終わるタグが表示されます。
 
     ![cosign-image-signing](images/cosign-image-signing.png)
 
-5. Let's verify the signed image with the public key. Make sure you use the right `APP VERSION` for the image. (`1.3.1` in this case)
+5. 署名されたイメージを公開鍵で検証しましょう。画像に適切な`APP VERSION`を使用していることを確認してください。 (この場合は`1.3.1` )
 
     ```bash
     cd /projects/pet-battle-api
@@ -100,14 +100,16 @@
     cosign verify --key k8s://<TEAM_NAME>-ci-cd/<TEAM_NAME>-cosign default-route-openshift-image-registry.<CLUSTER_DOMAIN>/<TEAM_NAME>-test/pet-battle-api:1.3.1 --allow-insecure-registry
     ```
 
-    The output should be like:
+    出力は次のようになります。
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-bash">
-    Verification for default-route-openshift-image-registry.<CLUSTER_DOMAIN>/<TEAM_NAME>-test/pet-battle-api:1.3.1 --
-    The following checks were performed on each of these signatures:
-      - The cosign claims were validated
-      - The signatures were verified against the specified public key
-      - Any certificates were verified against the Fulcio roots.
-    {"critical":{"identity":{"docker-reference":"default-route-openshift-image-registry.<CLUSTER_DOMAIN>/<TEAM_NAME>-test/pet-battle-api"},"image":{"docker-manifest-digest":"sha256:1545e1d2cf0afe5df99fe5f1d39eef8429a2018c3734dd3bdfcac5a068189e39"},"type":"cosign container image signature"},"optional":null}
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-bash">
+        Verification for default-route-openshift-image-registry.&lt;CLUSTER_DOMAIN&gt;/&lt;TEAM_NAME&gt;-test/pet-battle-api:1.3.1 --
+        The following checks were performed on each of these signatures:
+          - The cosign claims were validated
+          - The signatures were verified against the specified public key
+          - Any certificates were verified against the Fulcio roots.
+        {"critical":{"identity":{"docker-reference":"default-route-openshift-image-registry.&lt;CLUSTER_DOMAIN&gt;/&lt;TEAM_NAME&gt;-test/pet-battle-api"},"image":{"docker-manifest-digest":"sha256:1545e1d2cf0afe5df99fe5f1d39eef8429a2018c3734dd3bdfcac5a068189e39"},"type":"cosign container image signature"},"optional":null}
+        </code></pre>
+    </div>
+    
