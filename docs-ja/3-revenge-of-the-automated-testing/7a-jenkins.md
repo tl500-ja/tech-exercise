@@ -1,28 +1,31 @@
-# Extend Jenkins Pipeline with Stackrox
+# StackroxによるJenkinsパイプラインの拡張
 
-## Scan Images
+## イメージスキャン
 
-1. First, add the access credentials to Jenkinsfile. Open the file under `/projects/pet-battle` and add the following to the list of other `CREDS` in the `environment {}` block in the `Jenkinsfile`.
+1. まず、Jenkinsfile にアクセス資格情報を追加します。 `/projects/pet-battle`の下にあるファイルを開き、 `Jenkinsfile`の`environment {}`ブロック内の他の`CREDS`のリストに以下を追加します。
 
     ```groovy
             ROX_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-rox-auth")
     ```
 
-    You'll have something like this afterwards:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-groovy">
-    environment {
-        // .. other stuff ...
-            // Credentials bound in OpenShift
-            GIT_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-git-auth")
-            NEXUS_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-nexus-password")
-            SONAR_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-sonar-auth")
-            ROX_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-rox-auth")
-        // .. more stuff ...
-    }
-    </code></pre></div>
+    その後、次のようなものが得られます。
 
-2. And add a new stage to the pipeline where `// IMAGE SCANNING` placeholder is. This needs to be happen after `bake` / before `deploy`. Because we do not want to deploy any unsecure image :)
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-groovy">
+        environment {
+            // .. other stuff ...
+                // Credentials bound in OpenShift
+                GIT_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-git-auth")
+                NEXUS_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-nexus-password")
+                SONAR_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-sonar-auth")
+                ROX_CREDS = credentials("${OPENSHIFT_BUILD_NAMESPACE}-rox-auth")
+            // .. more stuff ...
+        }
+        </code></pre>
+    </div>
+    
+
+2. `// IMAGE SCANNING`プレースホルダーがあるパイプラインに新しいステージを追加します。これは、 `bake`後と`deploy`前に行う必要があります。安全でないイメージを展開したくないため:)
 
     ```groovy
             // 📠 IMAGE SCANNING EXAMPLE GOES HERE
@@ -46,23 +49,23 @@
             }
     ```
 
-3. Push the changes to the repo, which also will trigger the pipeline.
+3. 変更をリポジトリにプッシュすると、パイプラインもトリガーされます。
 
     ```bash
     # git add, commit, push your changes..
     cd /projects/pet-battle
     git add .
     git commit -m  "🎄 ADD - image scan stage 🎄"
-    git push 
+    git push
     ```
 
-     🪄 Observe the **pet-battle** pipeline running with the **image-scan** stage.
+    🪄**pet-battle**パイプラインで**image-scan**ステージが実行されている様子を観察します。
 
-## Check Build/Deploy Time Violations
+## ビルド/デプロイ時の違反を確認する
 
-?> **Tip** We could extend the previous check by changing the output format to **json** and installing and using the **jq** command. For example, to check the image scan output and return a results when the **riskScore** and **topCvss** are below a certain value say. These are better handled as *Build Policy* within ACS which we can check next.
+?&gt;**ヒント**出力形式を**json**に変更し、 **jq**コマンドをインストールして使用することで、以前のチェックを拡張できます。たとえば、イメージ スキャンの出力を確認し、 **riskScore**と**topCvss **が特定の値を下回ったときに結果を返すには、次のようにします。これらは、次に確認できる ACS 内の*ビルド ポリシー*としてより適切に処理されます。
 
-1. Lets extend the stage to check for any build time violations. Add the following into the placeholder inside the image-scanning stage:
+1. ステージを拡張して、ビルド時間の違反をチェックしましょう。image-scanningステージ内のプレースホルダーに以下を追加します。
 
     ```groovy
                         // BUILD & DEPLOY CHECKS
@@ -74,21 +77,23 @@
                         '''
     ```
 
-2. Again, push the changes to the repo, which also will trigger the pipeline.
+2. 再度、変更をリポジトリにプッシュします。これにより、パイプラインもトリガーされます。
 
     ```bash
     # git add, commit, push your changes..
     cd /projects/pet-battle
     git add .
     git commit -m  "🎄 ADD - image scan stage 🎄"
-    git push 
+    git push
     ```
 
-    🪄 Observe the **pet-battle** pipeline, check the logs for image scanning stage and detects some violations for deploy 😔😔
+    🪄**pet-battle**パイプラインを観察し、イメージ スキャン ステージのログを確認し、デプロイの違反を検出します 😔😔
 
     ![acs-jenkins-pipeline](images/acs-jenkins-pipeline.png)
 
-3. Go back to StackRox webUI and see the failure in the *Violations* view. 
-    <p class="tip">We should have broken the pipeline and fix these violations in order to continue to our pipeline. Please refer _Here Be Dragons_ section for it.</p>
+3. StackRox webUI に戻り、*Violations*ビューで失敗を確認します。
+
+     <p class="tip">パイプラインを続行するには、パイプラインを中断し、これらの違反を修正する必要があります。詳しくは _ドラゴンが来た_ セクションを参照してください。</p>
+
 
     ![acs-pet-battle-violations](images/acs-pet-battle-violations.png)
