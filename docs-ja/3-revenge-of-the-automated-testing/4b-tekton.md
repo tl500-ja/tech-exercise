@@ -1,4 +1,4 @@
-## CodeリンティングによるTektonパイプラインの拡張
+## コードリンティングによるTektonパイプラインの拡張
 
 1. <span style="color:blue;"><a href="https://code.revelc.net/formatter-maven-plugin/usage.html">maven formatter plugin</a></span>を使用して、maven ビルド ライフサイクルの一部としてコードのフォーマットを試してみましょう。このコマンドをシェルで実行して、コードをフォーマットします。
 
