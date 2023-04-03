@@ -1,44 +1,44 @@
-# Image Signing
+# イメージ署名
 
-> It is important to verify that the container image we deploy to our clusters has not been tampered and comes from a valid source. This is generally achieved by signing the image after building and verifying the signature before deployment. In this exercise, we will user `cosign` for creating, storing and verifying container image signatures.
+> クラスターにデプロイするコンテナー イメージが改ざんされておらず、有効なソースからのものであることを確認することが重要です。これは通常、構築後にイメージに署名し、展開前に署名を検証することによって実現されます。この演習では、コンテナー イメージの署名を作成、保存、検証するために`cosign`を使用します。
 
-## Task
+## タスク
 
 ![task-image-signing](./images/task-image-signing.png)
 
-## Before starting, generate your keys
+## 開始する前に、鍵を生成します
 
-1. Generate a keypair to use for signing images. It expects you to enter a password for private key. Feel free to select anything you like :)
+1. イメージの署名に使用する鍵ペアを生成します。秘密鍵のパスワードを入力する必要があります。好きなものを自由に選択してください:)
 
     ```bash
     cd /tmp
-    cosign generate-key-pair k8s://${TEAM_NAME}-ci-cd/${TEAM_NAME}-cosign 
+    cosign generate-key-pair k8s://${TEAM_NAME}-ci-cd/${TEAM_NAME}-cosign
     ```
 
-    You should get an output like this:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-bash">
-    $ cosign generate-key-pair k8s://${TEAM_NAME}-ci-cd/${TEAM_NAME}-cosign 
-    Enter password for private key:
-    Enter again:
-    Successfully created secret cosign in namespace <TEAM_NAME>-ci-cd
-    Public key written to cosign.pub
-    </code></pre></div>
+    次のような出力が得られるはずです。
 
-    You just generated two keys (one private key, one public key). Private key is used to sign the images and it is automatically saved as a secret in your `ci-cd` namespace alongside the password you choose. Public key is used to verify the signed images. You can share your public key for people to verify your images but private one should not be shared or at least sealed before storing publicly.
-
-    <p class="tip">
-    🐌 THIS IS NOT GITOPS - The generated private key is stored in a Kubernetes secret in you <TEAM_NAME>-ci-cd project. We'll leave it as an exercise to the reader to extract and store this as a SealedSecret instead! 🐎
-    </p>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-bash">
+        $ cosign generate-key-pair k8s://${TEAM_NAME}-ci-cd/${TEAM_NAME}-cosign
+        Enter password for private key:
+        Enter again:
+        Successfully created secret cosign in namespace &lt;TEAM_NAME&gt;-ci-cd
+        Public key written to cosign.pub
+        </code></pre>
+    </div>
 
 
-Now let's proceed to extend the pipelines with image signing step.
+    2 つのキー (1 つの秘密キーと 1 つの公開キー) を生成しました。秘密鍵はイメージの署名に使用され、選択したパスワードと共に`ci-cd`namespaceにシークレットとして自動的に保存されます。公開鍵は、署名されたイメージを検証するために使用されます。画像を検証するために公開鍵を共有することはできますが、秘密鍵は公開する前に共有したり、少なくとも封印したりしないでください。
 
-_This step makes more sense when you use an external image registry and share images across clusters or publicly._
+    <p class="tip">🐌 これは GITOPS ではありません - 生成された秘密鍵は、ユーザーの Kubernetes シークレットに保存されます{team_name1}-ci-cd プロジェクト。代わりに、これを抽出して SealedSecret として保存することは、読者の課題として残しておきます。 🐎{/team_name1}</p>
 
-#### In your groups pick the tool you'd like to integrate the pipeline with:
+次に、イメージ署名ステップでパイプラインを拡張しましょう。
 
-| 🐈‍⬛ **Jenkins Group** 🐈‍⬛  |  🐅 **Tekton Group** 🐅 |
-|-----------------------|----------------------------|
-| * Add image signing stage to your pipeline | * Add image signing task to your pipeline |
-| <span style="color:blue;">[jenkins](3-revenge-of-the-automated-testing/8a-jenkins.md)</span> | <span style="color:blue;">[tekton](3-revenge-of-the-automated-testing/8b-tekton.md)</span> |
+*この手順は、外部イメージ レジストリを使用し、クラスター間またはパブリックでイメージを共有する場合に、より効果的です。*
+
+#### グループで、パイプラインを統合するツールを選択します。
+
+🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
+--- | ---
+* パイプラインにイメージ署名ステージを追加 | * イメージ署名タスクをパイプラインに追加します
+<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/8a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/8b-tekton.md">tekton</a></p></span>
