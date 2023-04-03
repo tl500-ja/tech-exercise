@@ -1,53 +1,52 @@
-# Image Security (Stack Rox)
+# イメージ セキュリティ (Stack Rox)
 
-> We use some ready container images to build our own application images. We use them as base and add our app binaries, or install packages on top of them. We need to protect our containers from errors and vulnerabilities in public registry images, or outdated packages and libraries. Image security step in our pipeline helps us to discover them before moving images to production.
+> いくつかの準備が整ったコンテナー イメージを使用して、独自のアプリケーション イメージを構築します。それらをベースとして使用し、アプリのバイナリを追加するか、それらの上にパッケージをインストールします。公開レジストリ イメージ、または古いパッケージやライブラリのエラーや脆弱性からコンテナーを保護する必要があります。パイプラインのイメージ セキュリティ ステップは、イメージを本番環境に移動する前にそれらを検出するのに役立ちます。
 
-## Task
+## タスク
 
 ![task-image-security](./images/task-image-security.png)
 
-## Set Up StackRox Access
+## StackRox アクセスのセットアップ
 
-StackRox / Advanced Cluster Security (ACS) is deployed once at the cluster scope. It can be used to monitor multiple clusters. The ACS/StackRox operator is already deployed and configured in the cluster for you.
+StackRox / Advanced Cluster Security (ACS) は、クラスター スコープで 1 回デプロイされます。複数のクラスターを監視するために使用できます。 ACS/StackRox オペレーターは、クラスターに既にデプロイされ、構成されています。
 
-1. Connect to the ACS WebUI Route:
+1. ACS WebUI ルートに接続します。
 
     ```bash
     # get web url
     echo https://$(oc -n stackrox get route central --template='{{ .spec.host }}')
     ```
 
-    Using the **admin** username:
+    **管理者**ユーザー名を使用:
 
     ```bash
     # get password to go with the "admin" username:
     echo $(oc -n stackrox get secret central-htpasswd -o go-template='{{index .data "password" | base64decode}}')
     ```
 
-    ![images/acs-dashboard.png](images/acs-dashboard.png)
-    ![images/acs-compliance-graphs.png](images/acs-compliance-graphs.png)
+    ![images/acs-dashboard.png](images/acs-dashboard.png) ![images/acs-compliance-graphs.png](images/acs-compliance-graphs.png)
 
-2. An API Token was created for us as part of the install configuration. We can retrieve it using:
+2. インストール構成の一部として、API トークンが作成されました。以下を使用して取得できます。
 
-    Export the token as environment variable:
+    トークンを環境変数としてエクスポートします。
 
     ```bash
     export ROX_API_TOKEN=$(oc -n stackrox get secret rox-api-token-tl500 -o go-template='{{index .data "token" | base64decode}}')
     ```
 
-    Export the StackRox endpoint:
+    StackRox エンドポイントをエクスポートします。
 
     ```bash
     export ROX_ENDPOINT=central-stackrox.<CLUSTER_DOMAIN>
     ```
 
-3. Verify the token by running **roxctl**
+3. **roxctl**を実行してトークンを確認します
 
     ```bash
     roxctl central whoami --insecure-skip-tls-verify -e $ROX_ENDPOINT:443
     ```
 
-4. This API token will be used by our pipelines. Let's create SealedSecret definition for it.
+4. この API トークンは、パイプラインで使用されます。そのための SealedSecret 定義を作成しましょう。
 
     ```bash
     cat << EOF > /tmp/rox-auth.yaml
@@ -63,7 +62,7 @@ StackRox / Advanced Cluster Security (ACS) is deployed once at the cluster scope
     EOF
     ```
 
-    Use `kubeseal` commandline to seal the secret definition.
+    `kubeseal`コマンドラインを使用して、シークレットの定義を封印します。
 
     ```bash
     kubeseal < /tmp/rox-auth.yaml > /tmp/sealed-rox-auth.yaml \
@@ -73,19 +72,21 @@ StackRox / Advanced Cluster Security (ACS) is deployed once at the cluster scope
         -o yaml
     ```
 
-    As always, we want to grab the results of this sealing activity, in particular the `encryptedData`. Because this is GitOps, and we will save it in our Git repos :)
+    いつものように、この封印 アクティビティの結果、特に`encryptedData`取得します。これは GitOps であるため、Git リポジトリに保存します :)
 
     ```bash
     cat /tmp/sealed-rox-auth.yaml | grep -E 'username|password'
     ```
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-        username: AgAj3JQj+EP23pnzu...
-        password: AgAtnYz8U0AqIIaqYrj...
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+            username: AgAj3JQj+EP23pnzu...
+            password: AgAtnYz8U0AqIIaqYrj...
+        </code></pre>
+    </div>
 
-    Open up `ubiquitous-journey/values-tooling.yaml` file and extend the Sealed Secrets entry. Copy the output of `username` and `password` from the previous command and update the values. Make sure you indent the data correctly.
+
+    `ubiquitous-journey/values-tooling.yaml`ファイルを開き、Sealed Secrets エントリを拡張します。前のコマンドからの`username`と`password`の出力をコピーし、値を更新します。データを正しくインデントしていることを確認してください。
 
     ```yaml
             - name: rox-auth
@@ -97,7 +98,7 @@ StackRox / Advanced Cluster Security (ACS) is deployed once at the cluster scope
                 password: AgAtnYz8U0AqIIaqYrj...
     ```
 
-    Check our changes into git.
+    変更を git にチェックします。
 
     ```bash
     cd /projects/tech-exercise
@@ -107,41 +108,39 @@ StackRox / Advanced Cluster Security (ACS) is deployed once at the cluster scope
     git push
     ```
 
-5. As a team we are going to update a *Build* policy that we will use later in the exercise. Browse to the *Platform Configuration -> Policy Management* view. Type in *Policy* and then *secure shell*, select the **Secure Shell (ssh) Port Exposed in Image** policy.
+5. チームとして、後で演習で使用する*Build*ポリシーを更新します。 *Platform Configuration -&gt; Policy Management*ビューを参照します。 *Policy*を入力してから*secure shell*を入力し、 **Secure Shell (ssh) Port Exposed in Image**ポリシーを選択します。
 
     ![images/acs-find-policy.png](images/acs-find-policy.png)
 
-6. Clone this Policy by clicking three dots on the right so we can edit it, give it a new name.
+6. 右側の 3 つのドットをクリックしてこのポリシーを複製し、編集して新しい名前を付けます。
 
     ![images/acs-clone-policy.png](images/acs-clone-policy.png)
 
-7. Click *Next* until we reach **Policy Behaviour**. Select **Inform and enforce** and configure the **Build** behaviour to **Enforce on Build**. This will fail the build if the policy conditions are matched.
+7. <strong>Policy Behavior</strong>に到達するまで<em>Next</em>をクリックします。 **Inform and enforce**を選択し、 **Build**動作を**Enforce on Build**に構成します。ポリシー条件が一致する場合、これはビルドに失敗します。
 
     ![images/acs-policy-behaviour.png](images/acs-policy-behaviour.png)
 
-8. Click *Next* until we reach **Policy Criteria**. Add **22** to the regular expression for *Arguments* in the disallowed Dockerfile line.
+8. <strong>Policy Criteria</strong>に到達するまで<em>Next</em>をクリックします。許可されていない Dockerfile 行の<em>Arguments</em>の正規表現に<strong>22</strong>を追加します。
 
     ![images/acs-policy-criteria.png](images/acs-policy-criteria.png)
 
-9. Hit *Next* and *Next* until you reach **Review Policy**, check the policy enforcement is enabled at *Build* time.
+9. <strong>Review Policy</strong>に到達するまで*Next*と<em>Next を</em>押し、*ビルド*時にポリシーの適用が有効になっていることを確認します。
 
     ![images/acs-policy-enforcement.png](images/acs-policy-enforcement.png)
 
-10. *Save* the policy. It should look like this now.
+10. ポリシー*を保存します*。今はこのようになっているはずです。
 
     ![images/acs-policy-done.png](images/acs-policy-done.png)
 
-    <p class="tip">
-    🐌 THIS IS NOT GITOPS - Manually configuring the policy and setup is a good way to play with StackRox. See advanced exercises for creating and storing the policy as code. 🐎
-    </p>
+    <p class="tip">🐌 これは GITOPS ではありません - ポリシーとセットアップを手動で構成することは、StackRox で遊ぶには良い方法です。ポリシーをコードとして作成および保存するための高度な演習を参照してください。 🐎</p>
 
-#### In your groups pick the tool you'd like to integrate the pipeline with:
+#### グループで、パイプラインを統合するツールを選択します。
 
 Now we can use ACS to help move security **LEFT** in our build pipeline. In each group we will do the following:
 
-| 🐈‍⬛ **Jenkins Group** 🐈‍⬛  |  🐅 **Tekton Group** 🐅 |
-|-----------------------|----------------------------|
-| * Configure your pipeline to `check` build time policy violations | * Configure your pipeline to `check` build time policy violations |
-| * Configure your pipeline to `scan` images for CVE/CVSS | * Configure your pipeline to `scan` images for CVE/CVSS |
-| * Break/Fix your pipeline | * Break/Fix your pipeline |
-| <span style="color:blue;">[jenkins](3-revenge-of-the-automated-testing/7a-jenkins.md)</span> | <span style="color:blue;">[tekton](3-revenge-of-the-automated-testing/7b-tekton.md)</span> |
+🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
+--- | ---
+* ビルド時のポリシー違反を`check`ようにパイプラインを構成する | * ビルド時のポリシー違反を`check`ようにパイプラインを構成する
+* CVE/CVSS のイメージを`scan`ようにパイプラインを構成する | * CVE/CVSS のイメージを`scan`ようにパイプラインを構成する
+* パイプラインを壊す/直す | * パイプラインを壊す/直す
+<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/7a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/7b-tekton.md">tekton</a></p></span>
