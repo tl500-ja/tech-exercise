@@ -1,42 +1,40 @@
-## Extend Tekton Pipeline with Code Linting Task
+## CodeリンティングによるTektonパイプラインの拡張
 
-1. Lets try some code formatting as part of the maven build lifecycle using the <span style="color:blue;">[maven formatter plugin](https://code.revelc.net/formatter-maven-plugin/usage.html).</span> Run this command in your shell to format your code.
+1. <span style="color:blue;"><a href="https://code.revelc.net/formatter-maven-plugin/usage.html">maven formatter plugin</a></span>を使用して、maven ビルド ライフサイクルの一部としてコードのフォーマットを試してみましょう。このコマンドをシェルで実行して、コードをフォーマットします。
 
     ```bash
     cd /projects/pet-battle-api
     mvn formatter:format
     ```
 
-    <p class="warn">
-    ⛷️ <b>NOTE</b> ⛷️ - If you are using DevSpaces in OpenShift 4.11+ you may need to add the `pet-battle-api` folder to you Che Workspace to open a file in the next step.
-    </p>
+     <p class="warn">⛷️<b>注</b>⛷️ - OpenShift 4.11+ で DevSpaces を使用している場合は、次のステップでファイルを開くためにpet-battle-apiフォルダーを Che Workspace に追加する必要がある場合があります。</p>
+
 
     ![add-folder-to-workspace](images/add-folder-to-workspace.png)
 
-2. Now edit a java class file, such as `/projects/pet-battle-api/src/test/java/app/battle/CatEndpointTest.java` and add some TAB/spaces e.g. in L19,21
+2. `/projects/pet-battle-api/src/test/java/app/battle/CatEndpointTest.java`などの Java クラス ファイルを編集し、L19,21 などにいくつかの TAB/スペースを追加します。
 
     ![images/formatting-code-pb-api.png](images/formatting-code-pb-api-tab.png)
 
-    Then rerun the `formatting:format` maven command which will remove these spaces.
+    次に、これらのスペースを削除する`formatting:format` mavenコマンドを再実行します。
 
     ![images/formatting-code-pb-api.png](images/formatting-code-pb-api.png)
 
-3. Linting and Formatting using Checkstyle (`checkstyle.xml`). Unfortunately we haven't installed these in our Cloud IDE yet so you may not be able to try these directly, but we will get to use the command line equivalents in the next step. For those using VCode you can checkout these links:
+3. Checkstyle ( `checkstyle.xml` ) を使用したリンティングとフォーマット。残念ながら、これらはまだクラウド IDE にインストールされていないため、これらを直接試すことはできないかもしれませんが、次のステップで同等のコマンド ラインを使用できるようになります。 VCode を使用している場合は、次のリンクをチェックアウトできます。
 
-    - There are some plugins to help us here. For example, if you are a user of VSCode, you can install <span style="color:blue;">[an IDE extension](https://code.visualstudio.com/docs/java/java-linting)</span> for realtime feedback.
-    ![images/checkstyle-extension.png](images/checkstyle-extension.png)
+    - ここで役立つプラグインがいくつかあります。たとえば、VSCode のユーザーは、リアルタイム フィードバック用の<span style="color:blue;"><a href="https://code.visualstudio.com/docs/java/java-linting">IDE 拡張機能</a></span>をインストールできます。 ![images/checkstyle-extension.png](images/checkstyle-extension.png)
 
-    - There is also a <span style="color:blue;">[Sonar Lint Extension](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode)</span> for realtime checking in your IDE.
+    - IDE でリアルタイムにチェックするための<span style="color:blue;"><a href="https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode">Sonar Lint Extension</a></span>もあります。
 
-4. Let's have a look at how we use these tools from the command line.
+4. コマンド ラインからこれらのツールを使用する方法を見てみましょう。
 
-    By default we have an overall checkstyle severity of `warning` in our Pet Battle API `checkstyle.xml` config file. This means we don't stop the build when codestyle is not met. Let's see this in action on the command line:
+    デフォルトでは、Pet Battle API の`checkstyle.xml`構成ファイルで、全体的な checkstyle の重大度が`warning`なっています。これは、コードスタイルが満たされていない場合でもビルドを停止しないことを意味します。コマンドラインでこれを実際に見てみましょう：
 
     ```bash
     mvn checkstyle:check
     ```
 
-5. Open up `/project/pet-battle-api/checkstyle.xml` file and search for `EmptyCatchBlock`. Then set the severity value as **error**. You can read about <span style="color:blue;">[EmptyCatchBlock here.](https://checkstyle.sourceforge.io/config_blocks.html#EmptyCatchBlock)</span>
+5. `/project/pet-battle-api/checkstyle.xml`ファイルを開き、 `EmptyCatchBlock`を検索します。次に、重大度の値を**error**に設定します。 <span style="color:blue;"><a href="https://checkstyle.sourceforge.io/config_blocks.html#EmptyCatchBlock">ここで EmptyCatchBlock </a></span>について読むことができます。
 
     ```xml
             <module name="EmptyCatchBlock">
@@ -45,7 +43,7 @@
             </module>
     ```
 
-    We can turn on checkstyle debugging by adding `consoleOutput` true to our pom.xml
+    pom.xml に`consoleOutput` true を追加することで、checkstyle デバッグを有効にすることができます。
 
     ```xml
                     <configuration>
@@ -54,7 +52,7 @@
                     </configuration>
     ```
 
-6. Edit the `CatResource.java` class file and remove the stack trace in the catch block that is part of the `loadlitter()`method, making it empty.
+6. `CatResource.java`クラス ファイルを編集し、 `loadlitter()`メソッドの一部である catch ブロックのスタック トレースを削除して、空にします。
 
     From this:
 
@@ -64,7 +62,7 @@
 
     ![images/codestyle-violation2.png](images/codestyle-violation2.png)
 
-    Now when we run the check we should get a hard error telling us we have an empty code block.
+    チェックを実行すると、空のコード ブロックがあることを示すハード エラーが表示されるはずです。
 
     ```bash
     mvn checkstyle:check
@@ -72,39 +70,39 @@
 
     ![images/checkstyle-error.png](images/checkstyle-error.png)
 
-7. These types of checks (as well as tests) are included in the Maven lifecycle phase called **verify**
+7. これらのタイプのチェック (およびテスト) は、**verify**と呼ばれる Maven ライフサイクル フェーズに含まれています。
 
     ```bash
     mvn verify
     ```
 
-8. We can stash these checkstyle changes and revert our code for now.
+8. これらの checkstyle の変更を隠して、いったんコードを元に戻すことができます。
 
     ```bash
     cd /projects/pet-battle-api
     git stash
     ```
 
-9. In our CICD pipeline, these checks are run as part of the `mvn test` lifecycle phase.
+9. CICD パイプラインでは、これらのチェックは`mvn test`ライフサイクル フェーズの一部として実行されます。
 
-    A Maven phase represents a stage in the Maven build lifecycle. Each phase is responsible for a specific task.
+    Maven フェーズは、Maven ビルド ライフサイクルのステージを表します。各フェーズは、特定のタスクを担当します。
 
-    Here are some of the most important phases in the default build lifecycle:
+    以下は、デフォルトのビルド ライフサイクルにおける最も重要なフェーズの一部です。
 
-    - clean: remove all files generated by the previous build
-    - validate: check if all information necessary for the build is available
-    - compile: compile the source code
-    - verify: run any checks to verify the package is valid and meets quality criteria
-    - test: run unit tests
+    - clean: 以前のビルドで生成されたすべてのファイルを削除します
+    - validate: ビルドに必要なすべての情報が利用可能かどうかを確認します
+    - compile: ソースコードをコンパイルします
+    - verify: チェックを実行して、パッケージが有効であり、品質基準を満たしていることを確認します
+    - test: 単体テストを実行します
 
-    We use these phases in out build pipeline. The full lifecycle reference is <span style="color:blue;">[here.](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference)</span>
+    これらのフェーズはアウト ビルド パイプラインで使用します。完全なライフサイクル リファレンスは<span style="color:blue;"><a href="https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference">こちらです。</a></span>
 
-    **If you have done the Sonarqube item, you'll see additional information in there....** We use the checkstyle plugin in Sonarqube which is found under **Rules** - **Java** language, **Repository**
+    **Sonarqube 項目を実行した場合は、そこに追加情報が表示されます....**Sonarqubeのcheckstyleプラグインは**Rules**の下の**Java**言語や**Repository**を使用します。
 
-    <p class="warn"><b>TIP</b> You can find the available projects and reports in Sonarqube by navigating to <span style="color:blue;"><a href="https://sonarqube-<TEAM_NAME>-ci-cd.<CLUSTER_DOMAIN>/">https://sonarqube-<TEAM_NAME>-ci-cd.<CLUSTER_DOMAIN>/</a></span></p>
+    <p class="warn"><b>ヒント</b> <span style="color:blue;"><a href="https://sonarqube-&lt;TEAM_NAME&gt;-ci-cd.&lt;CLUSTER_DOMAIN&gt;/">https://sonarqube-{team_name4}-ci-cd.{cluster_domain5}/{/cluster_domain5}{/team_name4}</a></span>に移動すると、Sonarqube で利用可能なプロジェクトとレポートを見つけることができます。</p>
 
     ![images/checkstyle-sonar.png](images/checkstyle-sonar.png)
 
-    Sonarqube reports warnings under **Code Smells*.
+    Sonarqube は * *Code Smells*の下に警告を報告します。
 
     ![images/sonar-code-smells.png](images/sonar-code-smells.png)
