@@ -1,31 +1,31 @@
-# Exercise 4 - Return of the Monitoring
+# 演習 4 - モニタリングの帰還
 
-> A metrics-driven transformation focuses on using value-based business metrics to understand how technology-related investments impact organizational performance and provide specific tools and guidance to help improve those metrics.
+> メトリック主導の変革では、価値ベースのビジネス メトリックを使用して、テクノロジ関連の投資が組織のパフォーマンスにどのように影響するかを理解し、それらのメトリックの改善に役立つ特定のツールとガイダンスを提供することに重点を置いています。
 
-With software, there are often two competing forces at work. Innovation, which inherently is accompanied by system change, and running software, which is serving end customers and implies that the system is stable. We can identify two important areas to focus on here:
+ソフトウェアでは、多くの場合、2 つの競合する力が働いています。本質的にシステムの変更を伴うイノベーションと、最終顧客にサービスを提供し、システムが安定していることを意味する実行中のソフトウェア。ここで注目すべき 2 つの重要な領域を特定できます。
 
-- To help measure the effectiveness of a team's development and delivery
-practices
-- To start measuring and monitoring activities that allow the rapid diagnosis
-of issues
+- チームの開発およびデリバリー プラクティスの有効性を測定するのに役立つ
+- 問題の迅速な診断を可能にする活動の測定と監視を開始する
 
-## 👨‍🍳 Exercise Intro
+## 👨‍🍳演習の説明
 
-In this exercise, we will use OpenShift out-of-the-box monitoring and logging stack. We will collect PetBattle metrics with `Prometheus` and set alerts with some sensible tresholds. Also visualize PetBattle metrics with `Grafana` to have a better understanding of PetBattle's status. Moreover, we will gather logs of the apps to store in `ElasticSearch` and visualize them with the help of `Kibana`.
-## 🖼️ Big Picture
+この演習では、OpenShift のすぐに使えるモニタリングおよびロギング スタックを使用します。 `Prometheus`で PetBattle メトリクスを収集し、適切なしきい値でアラートを設定します。また`Grafana`を使用して PetBattle メトリックを視覚化し、PetBattle のステータスをよりよく理解できるようにします。さらに、アプリのログを収集して`ElasticSearch`に保存し、 `Kibana`を使用してそれらを視覚化します。
+
+## ビッグピクチャー
 
 ![big-picture-monitoring](images/big-picture-monitoring.jpg)
-## 🔮 Learning Outcomes
 
-- [ ] Can add ServiceMonitor for apps to gather metrics
-- [ ] Can query Prometheus to see metrics 
-- [ ] Can create alerts with PrometheusRule
-- [ ] Can install Grafana create dashboards with it
-- [ ] Can create search index in Kibana
+## 🔮 学習成果
 
-## 🔨 Tools used in this exercise!
+- [ ] アプリに ServiceMonitor を追加してメトリックを収集できる
+- [ ] Prometheus にクエリを実行してメトリクスを確認できる
+- [ ] PrometheusRule でアラートを作成できる
+- [ ] Grafana をインストールしてダッシュボードを作成できます
+- [ ] Kibana で検索インデックスを作成できる
 
-* <span style="color:blue;">[Prometheus](https://prometheus.io/)</span> - Stores our metrics and used for alerting
-* <span style="color:blue;">[Grafana](https://grafana.com/)</span> - Used to visualize our metrics
-* <span style="color:blue;">[ElasticSearch](https://www.elastic.co/)</span> - Stores logs & data in an unstructured way
-* <span style="color:blue;">[Kibana](https://www.elastic.co/kibana/)</span> - Used to visualize ElasticSearch data
+## 🔨 この演習で使用するツール！
+
+- <span style="color:blue;"><a href="https://prometheus.io/">Prometheus</a></span> - メトリクスを保存し、アラートに使用します
+- <span style="color:blue;"><a href="https://grafana.com/">Grafana</a></span> - メトリクスを視覚化するために使用
+- <span style="color:blue;"><a href="https://www.elastic.co/">ElasticSearch</a></span> - ログとデータを構造化されていない方法で保存します
+- <span style="color:blue;"><a href="https://www.elastic.co/kibana/">Kibana</a></span> - ElasticSearch データの視覚化に使用
