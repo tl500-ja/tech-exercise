@@ -1,4 +1,4 @@
-#tech-exercise-docs-ja INSTALLATION
+# tech-exercise-docs-ja INSTALLATION
 
 ## ビルド
 podman build . -t tech-exercise-docs-ja
