@@ -18,7 +18,7 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
 
 1. GitLab UI を開きます。 `<TEAM_NAME>`グループの下に`pet-battle-api`という名前の GitLab プロジェクトを作成します。プロジェクトを**internal**として作成します。
 
-    ![pet-battle-api-git-repo](images/pet-battle-api-git-repo.png)
+    ![pet-battle-api-git-repo](images/tekton-pipeline-running.png)
 
 2. CodeReady ワークスペースに戻り、PetBattle API コードを git で新しく作成されたリポジトリにフォークします。
 
@@ -34,31 +34,31 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
 
      <div class="highlight" style="background: #f7f7f7">
      <pre><code class="language-bash">
-        tekton
-        ├── Chart.yaml
-        ├── templates
-        │   ├── pipelines
-        │   │   └── maven-pipeline.yaml
-        │   ├── secrets
-        │   │   ├── rolebindings.yaml
-        │   │   └── serviceaccount-pipeline.yaml
-        │   ├── tasks
-        │   │   ├── bake-image.yaml
-        │   │   ├── deploy.yaml
-        │   │   ├── helm-package.yaml
-        │   │   ├── maven.yaml
-        │   │   └── verify.yaml
-        │   ├── triggers
-        │   │   ├── gitlab-event-listener.yaml
-        │   │   ├── gitlab-trigger-binding.yaml
-        │   │   └── gitlab-trigger-template.yaml
-        │   └── workspaces
-        │       ├── configmap-maven-settings.yaml
-        │       ├── pipeline-serviceaccount.yaml
-        │       ├── pv-build-images.yaml
-        │       └── pv-maven-m2.yaml
-        └── values.yaml
-        </code></pre>
+            tekton
+            ├── Chart.yaml
+            ├── templates
+            │   ├── pipelines
+            │   │   └── maven-pipeline.yaml
+            │   ├── secrets
+            │   │   ├── rolebindings.yaml
+            │   │   └── serviceaccount-pipeline.yaml
+            │   ├── tasks
+            │   │   ├── bake-image.yaml
+            │   │   ├── deploy.yaml
+            │   │   ├── helm-package.yaml
+            │   │   ├── maven.yaml
+            │   │   └── verify.yaml
+            │   ├── triggers
+            │   │   ├── gitlab-event-listener.yaml
+            │   │   ├── gitlab-trigger-binding.yaml
+            │   │   └── gitlab-trigger-template.yaml
+            │   └── workspaces
+            │       ├── configmap-maven-settings.yaml
+            │       ├── pipeline-serviceaccount.yaml
+            │       ├── pv-build-images.yaml
+            │       └── pv-maven-m2.yaml
+            └── values.yaml
+            </code></pre>
     </div>
 
 
@@ -100,17 +100,17 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
 
      <div class="highlight" style="background: #f7f7f7">
      <pre><code class="language-yaml">
-          # Pet Battle Apps
-          pet-battle-api:
-            name: pet-battle-api
-            enabled: true
-            source: http://nexus:8081/repository/helm-charts #&lt;- update this
-            chart_name: pet-battle-api
-            source_ref: 1.2.1 # helm chart version
-            values:
-              image_name: pet-battle-api
-              image_version: latest # container image version
-        </code></pre>
+              # Pet Battle Apps
+              pet-battle-api:
+                name: pet-battle-api
+                enabled: true
+                source: http://nexus:8081/repository/helm-charts #&lt;- update this
+                chart_name: pet-battle-api
+                source_ref: 1.2.1 # helm chart version
+                values:
+                  image_name: pet-battle-api
+                  image_version: latest # container image version
+            </code></pre>
     </div>
 
 
@@ -129,7 +129,7 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
     git push
     ```
 
-    ![uj-and-tekkers](./images/uj-and-tekkers.png)
+    ![uj-and-tekkers](images/pet-battle-api-git-repo.png)
 
 7. パイプライン定義がクラスターに同期され (Argo CD に感謝🐙👏)、コードベースがフォークされたので、Webhook を GitLab `pet-battle-api`プロジェクトに追加できるようになりました。まず、パイプラインをトリガーするために呼び出す URL を取得します。
 
@@ -143,11 +143,11 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
     - `SSL Verification`を選択
     - `Add webhook`ボタンをクリックします。
 
-    ![gitlab-webhook-trigger.png](images/gitlab-webhook-trigger.png)
+    ![gitlab-webhook-trigger.png](./images/uj-and-tekkers.png)
 
     GitLab から Webhook の動作をテストできます。
 
-    ![gitlab-test-webhook.png](images/gitlab-test-webhook.png)
+    ![gitlab-test-webhook.png](images/gitlab-webhook-trigger.png)
 
 9. これらすべてのコンポーネントが配置されたら、Pet Battle API のコードをチェックインして、Webhook 経由でパイプラインをトリガーします。アプリケーションのバージョンに簡単な変更を加えてみましょう。 pet- `pet-battle-api` -api `pom.xml`を編集し、 `version`番号を更新します。パイプラインは`chart/Chart.yaml`これらのバージョンで更新します。
 
@@ -173,12 +173,11 @@ git commit -m  "🍕 UPDATED - pet-battle-version to 1.3.1 🍕"
 git push
 ```
 
-🪄 Observe Pipeline running by browsing to OpenShift UI -> Pipelines from left pane -> Pipelines in your `<TEAM_NAME>-ci-cd` project:
+🪄 Observe Pipeline running by browsing to OpenShift UI -&gt; Pipelines from left pane -&gt; Pipelines in your `<TEAM_NAME>-ci-cd` project:
 
-![images/tekton-pipeline-running.png](images/tekton-pipeline-running.png)
-```
+```bash
 
-?&gt; **TIP** **tkn**コマンド ラインを使用して、 `PipelineRun`ログを観察することもできます。
+?> **TIP** **tkn**コマンド ラインを使用して、 `PipelineRun`ログを観察することもできます。
 
 ```bash
 tkn -n ${TEAM_NAME}-ci-cd pr logs -Lf
