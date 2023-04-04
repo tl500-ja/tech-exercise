@@ -40,7 +40,7 @@
 - Image Security -
     <span style="color:blue;"><a href="https://www.stackrox.com">StackRox</a></span> - StackRox を使用してイメージとホスト内の脆弱性を見つける
 - 画像署名 -
-    <span style="color:blue;"><a href="https://www.sigstore.dev">sigstore</a></span> - cosign で画像に署名します
+    <span style="color:blue;"><a href="https://www.sigstore.dev">sigstore</a></span> - cosign でイメージに署名します
 - 負荷テスト -
     <span style="color:blue;"><a href="https://docs.locust.io/en/stable/index.html">イナゴ</a></span>- パイプラインでの自動負荷テスト
 - システム テスト - 次の段階に進む前にシステムをテストします。
