@@ -19,4 +19,4 @@ podman run --name tech-exercise-docs-ja -p 8081:8080 --rm localhost/tech-exercis
 ```
 
 ## ブラウザ上で翻訳を開く
-http://localhost:8081で翻訳ドキュメントが表示されます。
+localhost:8081 で翻訳ドキュメントが表示されます。
