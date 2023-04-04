@@ -11,23 +11,23 @@
 <body>
   <div class="team-name-form">
       <div class="team-inputs">
-        <label for="tname">Team Name</label><br/>
-        <input type="text" id="tname" name="teamname" placeholder="Your team name..">
+        <label for="tname">チーム名</label><br/>
+        <input type="text" id="tname" name="teamname" placeholder="チーム名..">
       </div>
 
       <div class="team-inputs">
-        <label for="cdomain">Cluster Domain</label><br/>
-        <input type="text" id="cdomain" name="clusterdomain" placeholder="Your cluster domain..">
+        <label for="cdomain">クラスタードメイン</label><br/>
+        <input type="text" id="cdomain" name="clusterdomain" placeholder="クラスタードメイン..">
       </div>
 
       <div class="team-inputs">
-        <label for="gitserver">Git Server (optional)</label><br/>
-        <input type="text" id="gitserver" name="gitserver" placeholder="Your git server..">
+        <label for="gitserver">Gitサーバー (オプション)</label><br/>
+        <input type="text" id="gitserver" name="gitserver" placeholder="Gitサーバー..">
       </div>
 
       <div class="">
-        <button class="storage-btns" onclick="setNamesInStorage()">Save</button>
-        <button class="storage-btns" onclick="clearStorage()">Clear</button>
+        <button class="storage-btns" onclick="setNamesInStorage()">保存</button>
+        <button class="storage-btns" onclick="clearStorage()">クリア</button>
       </div>
   </div>
 
@@ -49,11 +49,11 @@
 
       // Check inputs
       if (tname == '') {        
-        alert('Please enter a team name');
+        alert('チーム名を入力してください');
         return;
       }
       if (cdomain == '') {        
-        alert('Please enter a cluster domain');
+        alert('クラスタードメインを入力してください');
         return;
       }
 
