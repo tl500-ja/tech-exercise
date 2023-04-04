@@ -1,17 +1,18 @@
-# Automated Testing
+# 自動テスト
 
-> Testing testing .... is this thing on?
+> テスト テスト .... 始めてますか?
 
-Continuous Delivery needs rapid and reliable feedback. Investing in continuous testing is a worthwhile activity.
+継続的デリバリーには、迅速で信頼できるフィードバックが必要です。継続的なテストへの投資は価値のある活動です。
 
 ![images/continuous-testing.png](images/continuous-testing.png)
+
 ## Task
 
 ![task-testing](./images/task-testing.png)
 
-#### In your groups pick the tool you'd like to integrate the pipeline with:
+#### グループで、パイプラインを統合するツールを選択します。
 
-| 🐈‍⬛ **Jenkins Group** 🐈‍⬛  |  🐅 **Tekton Group** 🐅 |
-|-----------------------|----------------------------|
-| * Add Jest Testing to the pipeline | * Add Junit and Alure test reporting to the pipeline |
-| <span style="color:blue;">[jenkins](3-revenge-of-the-automated-testing/2a-jenkins.md)</span> | <span style="color:blue;">[tekton](3-revenge-of-the-automated-testing/2b-tekton.md)</span> |
+🐈‍⬛ **Jenkins グループ** 🐈‍⬛ | 🐅 **Tekton Group** 🐅
+--- | ---
+* パイプラインに Jest テストを追加 | * パイプラインに Junit と Alure のテスト レポートを追加
+<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/2a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/2b-tekton.md">tekton</a></p></span>
