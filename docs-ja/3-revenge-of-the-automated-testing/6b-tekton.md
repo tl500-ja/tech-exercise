@@ -1,9 +1,8 @@
-## Extend Tekton Pipeline with OWASP Zap Security Scanning
+## OWASP ZapセキュリティスキャンによるTektonパイプラインの拡張
 
-<p class="warn"> You will need to have *Allure* deployed from the testing exercise to run this task. If you did not do this task when prioritizing your work, no big deal, just <a href="/tech-exercise/#/3-revenge-of-the-automated-testing/2b-tekton?id=part-1-allure">head over here</a> and do <strong>Part 1 only</strong>.
-</p>
+<p class="warn">このタスクを実行するには、テスト演習から *Allure* をデプロイする必要があります。仕事の優先順位を付けるときにこのタスクを実行しなかった場合は、大したことではありません。<a href="/tech-exercise/#/3-revenge-of-the-automated-testing/2b-tekton?id=part-1-allure">ここに進んで</a>、<strong>パート 1 のみ</strong>を実行してください。</p>
 
-1. Add a task into our codebase to zap scan our deployed app in test
+1. タスクをコードベースに追加して、デプロイされたアプリをテストでzapスキャンします
 
     ```bash
     cd /projects/tech-exercise
@@ -83,7 +82,7 @@
     EOF
     ```
 
-2. Lets try this in our pipeline. Edit `maven-pipeline.yaml` and add a step definition for `pentesting-test`. Remember to adjust the `runAfter` to match the current state of your pipeline:
+2. これをパイプラインで試してみましょう。 `maven-pipeline.yaml`を編集し、 `pentesting-test`のステップ定義を追加します。パイプラインの現在の状態に一致するように`runAfter`を調整することを忘れないでください。
 
     ```yaml
         # Pen Testing
@@ -102,7 +101,7 @@
               workspace: shared-workspace
     ```
 
-3. Check our changes into git.
+3. 変更を git にチェックします。
 
     ```bash
     cd /projects/tech-exercise
@@ -112,7 +111,7 @@
     git push
     ```
 
-4. Trigger a pipeline build.
+4. パイプライン ビルドをトリガーします。
 
     ```bash
     cd /projects/pet-battle-api
@@ -120,13 +119,13 @@
     git push
     ```
 
-5. Check report in *Allure*
+5. *Allure*でレポートを確認する
 
     ```bash
     echo https://allure-<TEAM_NAME>-ci-cd.<CLUSTER_DOMAIN>/allure-docker-service/projects/zap-scan/reports/latest/index.html
     ```
 
-Drill down to test body attachments.
+ドリルダウンしてボディの添付ファイルをテストします。
 
 ![images/allure-zap-report-attachment.png](images/allure-zap-report-attachment.png)
 
