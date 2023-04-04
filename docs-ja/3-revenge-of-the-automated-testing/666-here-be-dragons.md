@@ -4,7 +4,7 @@
 
 ### 拡張機能のテスト
 
-- 何か何かTestContainers
+- TestContainersの何か
 
 ### 継続的なテスト
 
