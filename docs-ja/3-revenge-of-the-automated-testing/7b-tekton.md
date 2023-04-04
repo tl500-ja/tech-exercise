@@ -1,8 +1,8 @@
-# Extend Tekton Pipeline with Stackrox
+# StackroxによるTektonパイプラインの拡張
 
-## Scan Images
+## イメージスキャン
 
-1. Add a task into our codebase to scan our built images.
+1. ビルドしたイメージをスキャンするタスクをコードベースに追加します。
 
     ```bash
     cd /projects/tech-exercise
@@ -53,17 +53,17 @@
     EOF
     ```
 
-2. Its not real unless its in git
+2. gitにない限り、それは本物ではありません
 
     ```bash
     # git add, commit, push your changes..
     cd /projects/tech-exercise
     git add .
     git commit -m  "🐡 ADD - rox-image-scan-task 🐡"
-    git push 
+    git push
     ```
 
-3. Lets try this in our pipeline. Edit `maven-pipeline.yaml` and add a step definition that runs after the **bake** image task. Be sure to adjust the **helm-package** task to `runAfter` the **image-scan** task:
+3. これをパイプラインで試してみましょう。 `maven-pipeline.yaml`を編集し、イメージの**bake**タスクの後に実行されるステップ定義を追加します。 **image-scan**タスクの後に`runAfter`来るように**helm-package**タスクを調整してください。
 
     ```yaml
         # Image Scan
@@ -84,37 +84,40 @@
               value: table
     ```
 
-    So you'll have a pipeline definition like this:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-      ...
-      # Image Scan
-        - name: image-scan
-          runAfter:
-          - bake
-          taskRef:
-            name: rox-image-scan
-      ...
-      ...
-      - name: helm-package
-          taskRef:
-            name: helm-package
-          runAfter: <- make sure you update this❗❗
-            - image-scan <- make sure you update this❗❗
-      ...
-    </code></pre></div>
+    したがって、パイプライン定義は次のようになります。
 
-4. Check in these changes.
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+          ...
+          # Image Scan
+            - name: image-scan
+              runAfter:
+              - bake
+              taskRef:
+                name: rox-image-scan
+          ...
+          ...
+          - name: helm-package
+              taskRef:
+                name: helm-package
+              runAfter: &lt;- make sure you update this❗❗
+                - image-scan &lt;- make sure you update this❗❗
+          ...
+        </code></pre>
+    </div>
+    
+
+4. これらの変更をチェックインします。
 
     ```bash
     # git add, commit, push your changes..
     cd /projects/tech-exercise
     git add .
     git commit -m  "🔑 ADD - image-scan step to pipeline 🔑"
-    git push 
+    git push
     ```
 
-5. Trigger a pipeline build.
+5. パイプライン ビルドをトリガーします。
 
     ```bash
     cd /projects/pet-battle-api
@@ -122,13 +125,13 @@
     git push
     ```
 
-    🪄 Observe the **pet-battle-api** pipeline running with the **image-scan** task.
+    🪄 **pet-battle-api**パイプラインで**image-scan**タスクが実行されている様子を観察します。
 
-## Check Build/Deploy Time Violations
+## ビルド/デプロイ時の違反を確認する
 
-?> **Tip** We could extend the previous check by changing the output format to **json** and installing and using the **jq** command. For example, to check the image scan output and return a results when the **riskScore** and **topCvss** are below a certain value say. These are better handled as *Build Policy* within ACS which we can check next.
+?&gt;**ヒント**出力形式を**json**に変更し、 **jq**コマンドをインストールして使用することで、以前のチェックを拡張できます。たとえば、イメージ スキャンの出力を確認し、 **riskScore**と**topCvss **が特定の値を下回ったときに結果を返すには、次のようにします。これらは、次に確認できる ACS 内の*ビルド ポリシー*としてより適切に処理されます。
 
-1. Lets add another step to our **rox-image-scan** task to check for any build time violations.
+1. **rox-image-scan**タスクに別のステップを追加して、ビルド時の違反をチェックしましょう。
 
     ```bash
     cd /projects/tech-exercise
@@ -164,7 +167,7 @@
     EOF
     ```
 
-2. Its not real unless its in git
+2. gitにない限り、それは本物ではありません
 
     ```bash
     # git add, commit, push your changes..
@@ -174,7 +177,7 @@
     git push
     ```
 
-3. Trigger a pipeline run
+3. パイプラインの実行をトリガーする
 
     ```bash
     cd /projects/pet-battle-api
@@ -186,21 +189,21 @@
 
     ![acs-tasks-pipe.png](images/acs-tasks-pipe.png)
 
-    🪄 Observe the **pet-battle-api** pipeline running with the **image-scan** task.
+    🪄 **pet-battle-api**パイプラインで**image-scan**タスクが実行されている様子を観察します。
 
-## Breaking the Build
+## ビルドを壊す
 
-Let's run through a scenario where we break/fix the build using a build policy violation.
+ビルド ポリシー違反を使用してビルドを中断/修正するシナリオを実行してみましょう。
 
-1. Let's try breaking a *Build Policy* within ACS by triggering the *Build* policy we enabled earlier.
+1. 前に有効にした*ビルド ポリシーを*トリガーして、ACS 内の*ビルド*ポリシーを解除してみましょう。
 
-2. Edit the `pet-battle-api/Dockerfile.jvm` and add the following line under `EXPOSE 8080`:
+2. `pet-battle-api/Dockerfile.jvm`を編集し、 `EXPOSE 8080`の下に次の行を追加します。
 
     ```bash
     EXPOSE 22
     ```
 
-3. Check in this change and watch the build that is triggered.
+3. この変更をチェックインし、トリガーされるビルドを監視します。
 
     ```bash
     # git add, commit, push your changes..
@@ -210,15 +213,15 @@ Let's run through a scenario where we break/fix the build using a build policy v
     git push
     ```
 
-4. This should now fail on the **image-scan/rox-image-check** task.
+4. これは**image-scan/rox-image-check**タスクで失敗するはずです。
 
     ![images/acs-image-fail.png](images/acs-image-fail.png)
 
-5. Back in ACS we can also see the failure in the *Violations* view.
+5. ACS に戻ると、*Violations*ビューにも障害が表示されます。
 
     ![images/acs-violations.png](images/acs-violations.png)
 
-6. Remove the `EXPOSE 22` from the `Dockerfile.jvm` and check it in to make the build pass.
+6. `Dockerfile.jvm`から`EXPOSE 22`削除し、チェックインしてビルド パスを作成します。
 
     ```bash
     cd /project/pet-battle-api
@@ -227,4 +230,4 @@ Let's run through a scenario where we break/fix the build using a build policy v
     git push
     ```
 
-🪄 Observe the **pet-battle-api** pipeline running successfully again.
+🪄 **pet-battle-api**パイプラインが再び正常に実行されていることを確認します。
