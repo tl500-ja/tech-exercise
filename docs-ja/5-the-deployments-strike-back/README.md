@@ -1,21 +1,23 @@
-# Exercise 5 - The Deployments Strike Back
+# 演習 5 - デプロイメントの逆襲
 
-> Each application has different requirements for availability (and other considerations) during deployments. Advanced Deployment Strategies are here to support a variety of deployment scenarios.
+> 各アプリケーションには、デプロイ中の可用性 (およびその他の考慮事項) に関するさまざまな要件があります。 Advanced Deployment Strategies は、さまざまなデプロイシナリオをサポートするために用意されています。
 
-The time between software being written and tested, till it is deployed in production, should be as short as possible. There are simply too many details and configuration items that need to be changed when deploying to production that even for our small application suite. Manual deployment becomes error-prone and tedious. We continually drive to reduce this manual toil by automating the deployment processes and by utilizing the platform capabilities that OpenShift offers.
+ソフトウェアが作成されてからテストされてから、本番環境にデプロイされるまでの時間は、できるだけ短くする必要があります。小規模なアプリケーション スイートであっても、本番環境にデプロイするときに変更する必要がある詳細と構成項目が多すぎます。手動でのデプロイは、エラーが発生しやすく、退屈になります。私たちは、デプロイ プロセスを自動化し、OpenShift が提供するプラットフォーム機能を活用することで、この手作業の負担を軽減する努力を続けています。
 
-## 👨‍🍳 Exercise Intro
+## 👨‍🍳 演習の説明
 
-In this exercise, we will enable autoscale for frontend and run some tests to trigger scaling. Then, we will experience Blue/Green and A/B deployments with OpenShift's existing capabilities: deployments, services and routes. 
-## 🖼️ Big Picture
+この演習では、フロントエンドの自動スケーリングを有効にし、いくつかのテストを実行してスケーリングをトリガーします。次に、OpenShift の既存の機能 (デプロイ、サービス、およびルート) を使用して Blue/Green および A/B デプロイを体験します。
+
+## ビッグピクチャー
 
 ![big-picture-matomo](images/big-picture-matomo.jpg)
-## 🔮 Learning Outcomes
 
-- [ ] Can enable Horizontal Pod Autoscaler
-- [ ] Can add Blue/Green deployment method into pipeline
-- [ ] Can shift traffic gradually between two different versions with A/B deployment method
+## 🔮 学習成果
 
-## 🔨 Tools used in this exercise!
+- [ ] Horizontal Pod Autoscaler を有効にできます
+- [ ] Blue/Green デプロイメソッドをパイプラインに追加できる
+- [ ] A/B デプロイの方法を使用して、トラフィックを 2 つの異なるバージョン間で徐々に移行できる
 
-* Nothing special. OpenShift's existing capabilities help us to deploy these methods.
+## 🔨 この演習で使用するツール！
+
+- 特にありません。 OpenShift の既存の機能は、これらのメソッドをデプロイするのに役立ちます。
