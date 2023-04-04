@@ -1,15 +1,16 @@
-## Extend Tekton Pipeline with Load Testing
+## 負荷テストによるTektonパイプラインの拡張
 
-1. For load testing, we will use a Python-based open source tool called <span style="color:blue;">[`locust`](https://docs.locust.io/en/stable/index.html)</span>. Locust helps us to write scenario based load testing and fail the pipeline if the results don't match with our expectations (ie if average response time ratio is higher 200ms, the pipeline fails).
+1. 負荷テストには、 <span style="color:blue;"><a href="https://docs.locust.io/en/stable/index.html"><code>locust</code></a></span>という Python ベースのオープン ソース ツールを使用します。 Locust は、シナリオ ベースの負荷テストを記述し、結果が期待と一致しない場合にパイプラインを失敗させるのに役立ちます (つまり、平均応答時間の比率が 200 ミリ秒を超える場合、パイプラインは失敗します)。
 
-    We need to create a `locustfile.py` for testing scenario and save it in the application repository.
+    テスト シナリオ用に`locustfile.py`を作成し、アプリケーション リポジトリに保存する必要があります。
 
-    _You can find how to write more complex testing scenarios for your needs in <span style="color:blue;">[Locust documentation](https://docs.locust.io/en/stable/writing-a-locustfile.html)_</span>
+    *ニーズに合わせてより複雑なテスト シナリオを作成する方法については<span style="color:blue;"><a href="https://docs.locust.io/en/stable/writing-a-locustfile.html">、Locust のドキュメントを</a></span>参照してください。*
 
-    Below scenario calls `/cats` endpoint and fails the test if:
-    - 1% of calls are not 200 (OK)
-    - Total average response time to `/cats` endpoint is more than 200 ms
-    - The max response time in 90 percentile is higher than 800 ms
+    以下のシナリオでは`/cats`エンドポイントを呼び出し、次の場合にテストに失敗します。
+
+    - 呼び出しの 1% は 200 ではない (OK)
+    - `/cats`エンドポイントへの合計平均応答時間は 200 ミリ秒を超えています
+    - 90 パーセンタイルの最大応答時間は 800 ミリ秒を超えています
 
     ```bash
     cat << EOF > /projects/pet-battle-api/locustfile.py
@@ -39,7 +40,7 @@
     EOF
     ```
 
-2. Add a task to the tekton pipeline for running the load testing:
+2. 負荷テストを実行するためのタスクを tekton パイプラインに追加します。
 
     ```bash
     cd /projects/tech-exercise
@@ -68,11 +69,11 @@
           script: |
             #!/usr/bin/env bash
             pip3 install locust
-            locust --headless --users 10 --spawn-rate 1 -H https://$(params.APPLICATION_NAME)-$(params.TEAM_NAME)-test.{{ .Values.cluster_domain }} --run-time 1m --loglevel INFO --only-summary 
+            locust --headless --users 10 --spawn-rate 1 -H https://$(params.APPLICATION_NAME)-$(params.TEAM_NAME)-test.{{ .Values.cluster_domain }} --run-time 1m --loglevel INFO --only-summary
     EOF
     ```
 
-3. Let's add this task into pipeline. Edit `tekton/templates/pipelines/maven-pipeline.yaml` and copy below yaml where the placeholder is.
+3. このタスクをパイプラインに追加しましょう。 `tekton/templates/pipelines/maven-pipeline.yaml`を編集し、プレースホルダーがある yaml の下にコピーします。
 
     ```yaml
         # Load Testing
@@ -93,7 +94,7 @@
               value: "$(params.APPLICATION_NAME)/$(params.GIT_BRANCH)"
     ```
 
-4. Remember -  if it's not in git, it's not real.
+4. 覚えておいてください-gitにない場合、それは本物ではありません。
 
     ```bash
     cd /projects/tech-exercise/tekton
@@ -102,7 +103,7 @@
     git push
     ```
 
-5. Now let's trigger the pet-battle-api pipeline by pushing `locustfile.py` and verify if the load testing task works as expected.
+5. 次に、 `locustfile.py`をプッシュして pet-battle-api パイプラインをトリガーし、負荷テスト タスクが期待どおりに機能するかどうかを確認します。
 
     ```bash
     cd /projects/pet-battle-api
@@ -111,9 +112,9 @@
     git push
     ```
 
-    🪄 Observe the **pet-battle-api** pipeline running with the **load-testing** task.
+    🪄**負荷テスト**タスクで実行されている**pet-battle-api**パイプラインを観察します。
 
-    If the pipeline fails due to the tresholds we set, you can always adjust it by updating the `locustfile.py` with higher values.
+    設定したしきい値が原因でパイプラインが失敗した場合は、 `locustfile.py`をより高い値で更新することにより、いつでも調整できます。
 
     ```py
         if environment.stats.total.fail_ratio > 0.01:
