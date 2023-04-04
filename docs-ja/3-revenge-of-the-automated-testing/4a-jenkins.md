@@ -1,6 +1,6 @@
-## Extend Jenkins Pipeline with Code Linting Step
+## コードリンティングによるJenkinsパイプラインの拡張
 
-1. JavaScript has many wonderful _quirks_ and because it's not compiled being able to ensure code is written to a specific style is very important. Enter linting the code! In a large software project ensuring consistency across all engineers can be really helpful for support. We can also enforce the rules in the build! Let's play with them locally first, in your IDE install the app dependencies and run the linter:
+1. JavaScript には多くの素晴らしい*癖*があり、コンパイルされていないため、コードが特定のスタイルで記述されていることを確認できることが非常に重要です。コードのリンティングを入力してください！大規模なソフトウェア プロジェクトでは、すべてのエンジニア間で一貫性を確保することは、サポートに非常に役立ちます。ビルドにルールを適用することもできます! IDE でアプリの依存関係をインストールし、リンターを実行します。
 
     ```bash
     cd /projects/pet-battle
@@ -8,22 +8,22 @@
     npm run lint
     ```
 
-2. Linting should show no errors (huzzah!) but let's introduce something that will break our coding standards and see what happens:
+2. リンティングはエラーを表示しないはずですが、コーディング標準に違反するものを導入して、何が起こるか見てみましょう。
 
     ```bash
-    echo 'let biscuits="something"'  >> src/app/app.component.ts 
+    echo 'let biscuits="something"'  >> src/app/app.component.ts
     npm run lint
     ```
 
     ![lint-err](./images/lint-err.png)
 
-3. As we can see, our rules are setup to not allow `let` be used if a variable is not reassigned and to use single quotes instead of double quotes because of browser compatability issues. Let's fix this up with a handy one-liner 💪🔥
+3. ご覧のとおり、変数が再割り当てされていない場合は`let` の使用を許可せず、ブラウザーの互換性の問題により、二重引用符の代わりに単一引用符を使用するようにルールが設定されています。便利なワンライナーでこれを修正しましょう💪🔥
 
     ```bash
     npm run lint:fix
     ```
 
-4. Now let's add the linter to the pipeline so on every build it checks our style, extend the `stage{ "Build" }` of the `Jenkinsfile` with the lint task.
+4. 次に、リンターをパイプラインに追加して、ビルドごとにスタイルをチェックし、lint タスクで`Jenkinsfile`の`stage{ "Build" }`を拡張します。
 
     ```groovy
                     //💅 Lint exercise here
@@ -31,7 +31,7 @@
                     sh 'npm run lint'
     ```
 
-5. Push our changes to the repo to trigger a new build.
+5. 変更をリポジトリにプッシュして、新しいビルドをトリガーします。
 
     ```bash
     cd /projects/pet-battle
@@ -40,4 +40,4 @@
     git push
     ```
 
-6. On Jenkins you should see a new build has been triggered and the linter running as part of it.
+6. Jenkins では、新しいビルドがトリガーされ、リンターがその一部として実行されていることがわかります。
