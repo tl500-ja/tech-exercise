@@ -1,39 +1,41 @@
-## Autoscaling
+## 自動スケーリング
 
-> Horizontal pod autoscaler (HPA) helps us to specify how OpenShift should automatically increase or decrease the scale of an application, based on metrics collected from the pods. After we define an HPA (based on CPU and/or memory usage metrics), the platform calculates the current usage and compare it with the desired utilization, then scales pods up or down accordingly.
+> 水平ポッド オートスケーラー (HPA) は、ポッドから収集されたメトリックに基づいて、OpenShift がアプリケーションのスケールを自動的に増減する方法を指定するのに役立ちます。 HPA を定義した後 (CPU および/またはメモリ使用量メトリックに基づいて)、プラットフォームは現在の使用量を計算し、それを目的の使用率と比較してから、それに応じて Pod をスケールアップまたはスケールダウンします。
 
-1. The Pet Battle API helm chart contains the Horizontal Pod Autoscaler yaml. By default we've switched it off. This is what it looks like:
+1. Pet Battle API の Helm チャートには、Horizontal Pod Autoscaler yaml が含まれています。デフォルトではオフにしています。これは次のようになります。
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-    # Source: pet-battle-api/templates/hpa.yaml
-    apiVersion: autoscaling/v2beta2
-    kind: HorizontalPodAutoscaler
-    metadata:
-      name: pet-battle-api
-    spec:
-      scaleTargetRef:
-        apiVersion: apps/v1
-        kind: Deployment
-        name: pet-battle-api
-      minReplicas: 2
-      maxReplicas: 6
-      metrics:
-        - type: Resource
-          resource:
-            name: cpu
-            target:
-              type: AverageValue
-              averageValue: 200m
-        - type: Resource
-          resource:
-            name: memory
-            target:
-              type: AverageValue
-              averageValue: 300Mi
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+        # Source: pet-battle-api/templates/hpa.yaml
+        apiVersion: autoscaling/v2beta2
+        kind: HorizontalPodAutoscaler
+        metadata:
+          name: pet-battle-api
+        spec:
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: pet-battle-api
+          minReplicas: 2
+          maxReplicas: 6
+          metrics:
+            - type: Resource
+              resource:
+                name: cpu
+                target:
+                  type: AverageValue
+                  averageValue: 200m
+            - type: Resource
+              resource:
+                name: memory
+                target:
+                  type: AverageValue
+                  averageValue: 300Mi
+        </code></pre>
+    </div>
+    
 
-2. Often we only enable the HPA in the staging or prod environments so being able to configure it on / off when testing is useful. To turn it on in a given environment, we can simply supply new values to our application config. Update the `tech-exercise/pet-battle/test/values.yaml` by setting the `hpa` to `enabled:true`
+2. 多くの場合、ステージング環境または本番環境でのみ HPA を有効にするため、テスト時にオン/オフを構成できると便利です。特定の環境で有効にするには、アプリケーション構成に新しい値を指定するだけです。 `hpa`を`enabled:true`に設定して、 `tech-exercise/pet-battle/test/values.yaml`更新します。
 
     ```yaml
       # Pet Battle API
@@ -46,14 +48,14 @@
         values:
           image_name: pet-battle-api
           image_version: 1.0.0
-          # ✋ ✋ ADD THIS CONFIG BELOW TO YOUR values.yaml FILE 
+          # ✋ ✋ ADD THIS CONFIG BELOW TO YOUR values.yaml FILE
           hpa:
             enabled: true
             cpuTarget: 200m
             memTarget: 300Mi
     ```
 
-3. Git commit the changes. We probably don't need to tell you the commands to do this by now, but just incase... here they are again 🐎🐎🐎 !
+3. Git で変更をコミットします。これを実行するためのコマンドをここで説明する必要はないかもしれませんが、念のため... ここで再び 🐎🐎🐎 !
 
     ```bash
     cd /projects/tech-exercise
@@ -62,11 +64,11 @@
     git push
     ```
 
-4. With the change synchronized, we should see a new object in ArgoCD and the cluster. Feel free to check those out.
+4. 変更が同期されると、ArgoCD とクラスターに新しいオブジェクトが表示されます。お気軽にチェックしてください。
 
-5. Let's now test our pod autoscaler, to do this we want to fire lots of load on the API of pet-battle. This should trigger an autoscale due to the increased load on the pods. `k6` is simple load testing tool that can be run from the command line that will fire lots of load at our endpoint:
+5. Pod自動スケーラーをテストしてみましょう。これを行うには、pet-battle の API に多くの負荷をかけたいと考えています。これにより、Podの負荷が増加するため、自動スケーリングがトリガーされます。 `k6`は、コマンド ラインから実行できる単純な負荷テスト ツールであり、エンドポイントで大量の負荷を発生させます。
 
-    First, create the load.js javascript file that defines the load test type to run.
+    最初に、実行する負荷テスト タイプを定義する load.js JavaScript ファイルを作成します。
 
     ```javascript
     cat << EOF > /tmp/load.js
@@ -78,22 +80,21 @@
     EOF
     ```
 
-    Then, using the `k6` binary, run the load test using more than one virtual user and a defined duration.
+    次に、 `k6`バイナリを使用して、複数の仮想ユーザーと定義された期間を使用して負荷テストを実行します。
 
     ```bash
-    k6 run --insecure-skip-tls-verify --vus 100 --duration 30s /tmp/load.js 
+    k6 run --insecure-skip-tls-verify --vus 100 --duration 30s /tmp/load.js
     ```
 
-    Where:
-    * --vus: Number of virtual users (VUs) to run concurrently (100)
-    * --duration: Test duration limit (30s)
+    オプション:
 
-6. While this is running, we should see in OpenShift land the autoscaler is kickin in and spinnin gup additional pods. If you navigate to the pet-battle-api deployment, you should see the replica count has jumped.
+    - --vus: 同時に実行する仮想ユーザー (VU) の数 (100)
+    - --duration: テスト期間の制限 (30 秒)
 
-    ![petbattle-api-hpa](./images/petbattle-api-hpa.png)
-    ![petbattle-api-hpa-topology](./images/petbattle-api-hpa-topology.png)
-    ![petbattle-api-deployment](./images/petbattle-api-deployment.png)
+6. これが実行されている間、OpenShift ランドで自動スケーラーが作動し、追加のPodを起動させていることがわかります。 pet-battle-api デプロイメントに移動すると、レプリカ数が急増していることがわかります。
 
-7. After a few moments you should see the autoscaler settle back down and the replicas are reduced.
+    ![petbattle-api-hpa](./images/petbattle-api-hpa.png) ![petbattle-api-hpa-topology](./images/petbattle-api-hpa-topology.png) ![petbattle-api-deployment](./images/petbattle-api-deployment.png)
+
+7. しばらくすると、自動スケーラーが元に戻り、レプリカが削減されます。
 
     ![petbattle-api-scale-down](./images/petbattle-api-scale-down.png)
