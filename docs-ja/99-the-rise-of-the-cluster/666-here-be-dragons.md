@@ -1,33 +1,33 @@
-## Here be dragons!
+## ドラゴンが来た！
 
 ![oh-look-a-dragon](../images/oh-look-dragons.png)
 
-### Moving from one cluster to another!
+### あるクラスターから別のクラスターに移動します!
 
-Because all of our code and configuration is in git, we can easily move our whole continuous delivery stack to another OpenShift cluster. This is useful if you wanted to try out all the exercises at a later stage using the code from this run.
+コードと構成はすべて git にあるため、継続的デリバリー スタック全体を別の OpenShift クラスターに簡単に移動できます。これは、この実行のコードを使用して、後の段階ですべての演習を試したい場合に便利です。
 
-As a prerequisite - you will need to have setup TL500 using the previous section [Tooling Installation](99-the-rise-of-the-cluster/1-tooling-installation). Lets cover the steps once you have a cluster and tooling installed to get going with your code.
+前提条件として、前のセクション[ツールのインストール を](99-the-rise-of-the-cluster/1-tooling-installation)使用して TL500 をセットアップする必要があります。クラスターとツールをインストールしたら、コードを実行するための手順を説明します。
 
-Lets take our code from `cluster-a` to `cluster-b`.
+コードを`cluster-a`から`cluster-b`に移してみましょう。
 
-#### Guided Steps
+#### ガイド付き手順
 
-> Here are the short series of steps to make this work.
+> これを機能させるための短い一連の手順を次に示します。
 
-1. You will need to git clone the `tech-exercise`, `pet-battle`, `pet-battle-api` repositories to your laptop for safe-keeping after taking this course.
+1. このコースを受講した後、安全に保管するために`tech-exercise` 、 `pet-battle` 、 `pet-battle-api`リポジトリをラップトップに git clone する必要があります。
 
-2. Use `vscode` IDE or similar to replace all the occurrances of `apps.cluster-a.com -> apps.cluster-b.com` in the code.
+2. `vscode` IDE などを使用して、コード内の`apps.cluster-a.com -> apps.cluster-b.com`の出現箇所をすべて置き換えます。
 
-3. Login to `gitlab` and create your ${TEAM_NAME}
+3. `gitlab`にログインして ${TEAM_NAME} を作成します
 
-4. Let's push our code into the hosted `gitlab` instance in our new cluster:
+4. 新しいクラスターでホストされている`gitlab`インスタンスにコードをプッシュしましょう。
 
     ```bash
     export GIT_SERVER=gitlab-ce.apps.cluster-b.com
     export TEAM_NAME=ateam
     ```
 
-    I'm assuming the code is in this folder locally on my laptop, adjust to suit. For each of the repos:
+    コードはラップトップのこのフォルダーにローカルにあると想定しているので、各リポジトリについて調整してください:
 
     `Pet-Battle`
 
@@ -53,11 +53,11 @@ Lets take our code from `cluster-a` to `cluster-b`.
     git push -u origin main
     ```
 
-5. Login to `gitlab` and make sure your newly created projects are set to **public** (they will be private by default).
+5. `gitlab`にログインし、新しく作成したプロジェクトが**public**に設定されていることを確認します (デフォルトではprivateになります)。
 
-6. Regenerate the `sealed-secrets` for this new cluster. This assumes we did _not_ migrate the secret master key to the new cluster when setting up (obviously skip this step if you did migrate it!).
+6. この新しいクラスターの`sealed-secrets`を再生成します。これは、セットアップ時にシークレット マスター キーを新しいクラスターに移行しなかっ*たことを*前提としています (移行した場合は、この手順をスキップしてください!)。
 
-    Set `git-auth`
+    `git-auth`を設定します
 
     ```bash
     export GITLAB_USER=<user>
@@ -87,13 +87,13 @@ Lets take our code from `cluster-a` to `cluster-b`.
     cat /tmp/sealed-git-auth.yaml| grep -E 'username|password'
     ```
 
-    Need to apply this to temporarily kick thins off
+    これをテンポラリに適用する必要があります
 
     ```bash
     oc apply -n ${TEAM_NAME} -f /tmp/git-auth.yaml
     ```
 
-    Set `sonarqube-auth`
+    `sonarqube-auth`設定します
 
     ```bash
     cat << EOF > /tmp/sonarqube-auth.yaml
@@ -118,7 +118,7 @@ Lets take our code from `cluster-a` to `cluster-b`.
     cat /tmp/sealed-sonarqube-auth.yaml| grep -E 'username|password|currentAdminPassword'
     ```
 
-    Set `allure-auth`
+    `allure-auth`を設定します
 
     ```bash
     cat << EOF > /tmp/allure-auth.yaml
@@ -140,7 +140,7 @@ Lets take our code from `cluster-a` to `cluster-b`.
     cat /tmp/sealed-allure-auth.yaml| grep -E 'username|password'
     ```
 
-    Set `rox-auth`
+    `rox-auth`を設定します
 
     ```bash
     export ROX_API_TOKEN=$(oc -n stackrox get secret rox-api-token-tl500 -o go-template='{{index .data "token" | base64decode}}')
@@ -167,7 +167,7 @@ Lets take our code from `cluster-a` to `cluster-b`.
     cat /tmp/sealed-rox-auth.yaml | grep -E 'username|password'
     ```
 
-7. Run the basics
+7. 基本を実行します
 
     ```bash
     export TEAM_NAME="ateam"
@@ -177,9 +177,9 @@ Lets take our code from `cluster-a` to `cluster-b`.
     oc login --server=https://api.${CLUSTER_DOMAIN##apps.}:6443 -u <TEAM_NAME> -p <PASSWORD>
     ```
 
-8. Install ArgoCD
+8. ArgoCDをインストール
 
-    Add our namespace to the operator env.var:
+    namespaceをオペレーターのenv.var に追加します。
 
     ```bash
     run()
@@ -202,7 +202,7 @@ Lets take our code from `cluster-a` to `cluster-b`.
     run
     ```
 
-    Deploy helm chart
+    Helm チャートをデプロイします
 
     ```bash
     oc new-project ${TEAM_NAME}-ci-cd
@@ -214,16 +214,16 @@ Lets take our code from `cluster-a` to `cluster-b`.
     redhat-cop/gitops-operator
     ```
 
-9. Install UJ
+9. UJをインストールします
 
     ```bash
     cd tech-exercise
     helm upgrade --install uj --namespace ${TEAM_NAME}-ci-cd .
     ```
 
-10. Add the integrations and web hooks to gitlab for `tech-exercise`, `pet-battle`, `pet-battle-api` git repos
+10. `tech-exercise` 、 `pet-battle` 、 `pet-battle-api` git リポジトリの統合と Web フックを gitlab に追加します。
 
-11. Create new cosign signing keys.
+11. 新しい cosign 署名キーを作成します。
 
     ```bash
     cd /tmp
@@ -241,11 +241,11 @@ Lets take our code from `cluster-a` to `cluster-b`.
     git push
     ```
 
-12. Kick off builds, make sure they work, fix up any helm chart version mismatches etc.
+12. ビルドを開始し、それらが機能することを確認し、Helmチャートのバージョンの不一致などを修正します。
 
     ```bash
     cd /projects/pet-battle-api; git commit -m "test" --allow-empty; git push
     cd /projects/pet-battle; git commit -m "test" --allow-empty; git push
     ```
 
-13. 🎉🎉🎉 Celebrate a successful migration to a new cluster 🎉🎉🎉
+13. 🎉🎉🎉 新しいクラスターへの移行の成功を祝いましょう 🎉🎉🎉
