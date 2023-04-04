@@ -1,16 +1,18 @@
-# Exercise X - The Rise of the Cluster
+# 演習 X - クラスターの夜明け
 
-## 👨‍🍳 Exercise Intro
+## 👨‍🍳演習の説明
 
-In this exercise, we will walk through the steps we take in order to have a ready cluster for all the other exercises. 
+この演習では、他のすべての演習のためにクラスタを準備するために実行する手順について説明します。
 
-## 🖼️ Big Picture
+## ビッグピクチャー
+
 ![empty-big-picture](images/big-picture-empty.jpg)
 
-## 🔮 Learning Outcomes
+## 🔮 学習成果
 
-- [ ] Can install the components which are necessary to run the exercises
+- [ ] 演習の実行に必要なコンポーネントをインストールできる
 
-## 🔨 Tools used in this exercise!
-* Openshift 4.9+
-* <span style="color:blue;">[Helm](https://helm.sh/)</span> - Helps us to define, install, and upgrade Kubernetes application.
+## 🔨 この演習で使用するツール!
+
+- Openshift 4.9+
+- <span style="color:blue;"><a href="https://helm.sh/">Helm</a></span> - Kubernetes アプリケーションの定義、インストール、およびアップグレードを支援します。
