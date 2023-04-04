@@ -1,28 +1,31 @@
-## Extend Jenkins Pipeline with Load Testing
+## 負荷テストによるJenkinsパイプラインの拡張
 
-1. For load testing, we will use a Python-based open source tool called <span style="color:blue;">[`locust`](https://docs.locust.io/en/stable/index.html)</span>. Locust helps us to write scenario based load testing and fail the pipeline if the results don't match with our expectations (ie if average response time ratio is higher 200ms, the pipeline fails).
+1. 負荷テストには、 <span style="color:blue;"><a href="https://docs.locust.io/en/stable/index.html"><code>locust</code></a></span>という Python ベースのオープン ソース ツールを使用します。 Locust は、シナリオ ベースの負荷テストを記述し、結果が期待と一致しない場合にパイプラインを失敗させるのに役立ちます (つまり、平均応答時間の比率が 200 ミリ秒を超える場合、パイプラインは失敗します)。
 
-    _You can find how to write more complex testing scenarios for your needs in <span style="color:blue;">[Locust documentation](https://docs.locust.io/en/stable/writing-a-locustfile.html)_</span>
+    *ニーズに合わせてより複雑なテスト シナリオを作成する方法については<span style="color:blue;"><a href="https://docs.locust.io/en/stable/writing-a-locustfile.html">、Locust のドキュメントを</a></span>参照してください。*
 
-    In order to use `locust cli`, we need a Jenkins agent with python3 in it. Open up `tech-exercise/ubiquitous-journey/values-tooling.yaml` and extend jenkins-agent list with the following:
+    `locust cli`を使用するには、python3 を含む Jenkins エージェントが必要です。 `tech-exercise/ubiquitous-journey/values-tooling.yaml`を開き、jenkins-agent リストを次のように拡張します。
 
     ```yaml
             - name: jenkins-agent-python
     ```
 
-    You should have a list similar this now:
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-            # Jenkins agents for running builds etc
-            # default names, versions, repo and paths set on the template
-            - name: jenkins-agent-npm
-            - name: jenkins-agent-mvn
-            - name: jenkins-agent-helm
-            - name: jenkins-agent-argocd
-            - name: jenkins-agent-python # add this
-    </code></pre></div>
+    次のようなリストが表示されます。
 
-    Commit the changes to the Git repository:
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+                # Jenkins agents for running builds etc
+                # default names, versions, repo and paths set on the template
+                - name: jenkins-agent-npm
+                - name: jenkins-agent-mvn
+                - name: jenkins-agent-helm
+                - name: jenkins-agent-argocd
+                - name: jenkins-agent-python # add this
+        </code></pre>
+    </div>
+
+
+    変更を Git リポジトリにコミットします。
 
     ```bash
     cd /projects/tech-exercise
@@ -31,14 +34,16 @@
     git push
     ```
 
-    <p class="warn">If you get an error like <b>error: failed to push some refs to..</b>, please run <b><i>git pull</i></b>, then push your changes again by running above commands.</p>    
+     <p class="warn">error <b>: failed to push some refs to..</b>のようなエラーが発生した場合は、 <b><i>git pull</i></b>を実行してから、上記のコマンドを実行して変更を再度プッシュしてください。</p>
+    
 
-2. We need to create a `locustfile.py` for testing scenario and save it in the application repository.
+2. テスト シナリオ用に`locustfile.py`を作成し、アプリケーション リポジトリに保存する必要があります。
 
-    Below scenario calls `/home` endpoint and fails the test if:
-    - 1% of /cats calls are not 200 (OK)
-    - Total average response time to /cats endpoint is more than 200 ms
-    - The max response time in 90 percentile is higher than 800 ms
+    以下のシナリオは`/home`エンドポイントを呼び出し、次の場合にテストに失敗します。
+
+    - /cats 呼び出しの 1% が 200 ではない (OK)
+    - /cats エンドポイントへの合計平均応答時間は 200 ミリ秒を超えています
+    - 90 パーセンタイルの最大応答時間は 800 ミリ秒を超えています
 
     ```bash
     cat << EOF > /projects/pet-battle/locustfile.py
@@ -67,7 +72,7 @@
     EOF
     ```
 
-3. Create a stage which uses `jenkins-agent-python` agent and triggers the load test. Copy the below code to the placeholder in `/project/pet-battle/Jenkinsfile`:
+3. `jenkins-agent-python`エージェントを使用して負荷テストをトリガーするステージを作成します。以下のコードを`/project/pet-battle/Jenkinsfile`のプレースホルダーにコピーします。
 
     ```groovy
             // 🏋🏻‍♀️ LOAD TESTING EXAMPLE GOES HERE
@@ -93,9 +98,9 @@
             }
     ```
 
-    Above command will install locust cli and then start requests of 10 users at the same time for one minute. Then either fail or keep the pipeline going.
+    上記のコマンドは locust cli をインストールし、1 分間同時に 10 ユーザーのリクエストを開始します。次に、失敗するか、パイプラインを続行します。
 
-    Now that we update the Jenkinsfile, we need to push the changes which also starts the pipeline.
+    Jenkinsfile を更新したので、パイプラインも開始する変更をプッシュする必要があります。
 
     ```bash
     cd /projects/pet-battle
@@ -104,9 +109,9 @@
     git push
     ```
 
-    🪄 Obeserve the **pet-battle** pipeline running with the **load testing** stage.
+    🪄**負荷テスト**ステージで実行されている**ペット バトル**パイプラインを観察します。
 
-    If the pipeline fails due to the thresh-holds we set, you can always adjust it by updating the `locustfile.py` with higher values.
+    設定したしきい値が原因でパイプラインが失敗した場合は、 `locustfile.py`をより高い値で更新することにより、いつでも調整できます。
 
     ```py
         if environment.stats.total.fail_ratio > 0.01:
