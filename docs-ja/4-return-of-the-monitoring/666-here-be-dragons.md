@@ -1,21 +1,21 @@
-## Here be dragons!
+## ドラゴンが来た！
 
 ![oh-look-another-dragon](../images/oh-look-dragons.png)
 
-### Oh look a wild dragon appears!!
+### ほら見て、野生のドラゴンがいるよ!!
 
-#### Dashboards
+#### ダッシュボード
 
-1. ADVANCED - Create a new Grafana Dashboard and have ArgoCD sync it. Dashboard-as-code!
-2. ADVANCED - Using Quarkus create a new custom counter or metric to visualise
-3. ADVANCED - Tekton Metrics
+1. 高度 - 新しい Grafana ダッシュボードを作成し、ArgoCD で同期させます。コードとしてのダッシュボード!
+2. 高度 - Quarkus を使用して、視覚化する新しいカスタム カウンターまたはメトリックを作成します。
+3. 高度 - Tekton メトリクス
 
-#### Alerts & Notifications
+#### アラートと通知
 
-- Create a notification for when Tekton / Jenkins fails a build
-- Create an alert for the new metric you've written in the previous statement
-- Push alerts to an external source eg Discord / Slack etc
+- Tekton / Jenkins がビルドに失敗したときの通知を作成する
+- 前のステートメントで記述した新しいメトリックのアラートを作成します
+- Discord / Slack などの外部ソースにアラートをプッシュする
 
-#### Logging
+#### ロギング
 
-- forward logs to an external source
+- ログを外部ソースに転送する
