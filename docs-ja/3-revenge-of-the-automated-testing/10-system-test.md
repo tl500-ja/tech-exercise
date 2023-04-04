@@ -1,14 +1,14 @@
-# System Tests
+# システムテスト
 
-> Validate the sum of the parts of the system are behaving as expected before moving them on to the next stage.
+> 次の段階に進む前に、システムの各部分が期待どおりに動作していることを検証します。
 
-## Task
+## タスク
 
 ![task-system-test](./images/task-system-test.png)
 
-#### In your groups pick the tool you'd like to integrate the pipeline with:
+#### グループで、パイプラインを統合するツールを選択します。
 
-| 🐈‍⬛ **Jenkins Group** 🐈‍⬛  |  🐅 **Tekton Group** 🐅 |
-|-----------------------|----------------------------|
-| *  | *  |
-| <span style="color:blue;">[jenkins](3-revenge-of-the-automated-testing/10a-jenkins.md)</span> | <span style="color:blue;">[tekton](3-revenge-of-the-automated-testing/10b-tekton.md)</span> |
+🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
+--- | ---
+* | *
+<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/10a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/10b-tekton.md">tekton</a></p></span>
