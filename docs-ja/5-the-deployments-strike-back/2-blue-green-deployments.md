@@ -1,12 +1,12 @@
-## Blue/Green Deployments
+## Blue/Greenデプロイメント
 
-> Blue/Green deployments involve running two versions of an application at the same time and moving the traffic from the old version to the new version. Blue/Green deployments make switching between two different versions very easy.
+> Blue/Green デプロイメントでは、アプリケーションの 2 つのバージョンを同時に実行し、トラフィックを古いバージョンから新しいバージョンに移動します。 Blue/Green デプロイメントにより、2 つの異なるバージョン間の切り替えが非常に簡単になります。
 
-<span style="color:blue;">[OpenShift Docs](https://docs.openshift.com/container-platform/4.9/applications/deployments/route-based-deployment-strategies.html#deployments-blue-green_route-based-deployment-strategies)</span> is pretty good at showing an example of how to do a manual Blue/Green deployment. But in the real world you'll want to automate this switching of the active routes based on some test or other metric. Plus this is GITOPS! So how do we do a Blue/Green with all of this automation and new tech, let's take a look with our Pet Battle UI!
+<span style="color:blue;"><a href="https://docs.openshift.com/container-platform/4.9/applications/deployments/route-based-deployment-strategies.html#deployments-blue-green_route-based-deployment-strategies">OpenShift Docs は、</a></span>手動で Blue/Green デプロイを行う方法の例を示すのに非常に優れています。しかし、現実の世界では、何らかのテストやその他のメトリックに基づいて、このアクティブなルートの切り替えを自動化する必要があります。さらに、これは GITOPS です。では、このすべての自動化と新しい技術を使用してBlue/Greenを行うにはどうすればよいでしょうか。Pet Battle UI を見てみましょう!
 
 ![blue-green-diagram](images/blue-green-diagram.jpg)
 
-1. Let's create two new deployments in our ArgoCD Repo for the pet-battle front end. We'll call one Blue and the other Green. Add 2 new application in `tech-exercise/pet-battle/test/values.yaml`. Adjust the `source_ref` helm chart version and `image_version` to match what you have built.
+1. ペットバトルのフロントエンド用に、ArgoCD リポジトリに 2 つの新しいデプロイメントを作成しましょう。 1 つをBlue、もう 1 つをGreenと呼びます。 `tech-exercise/pet-battle/test/values.yaml`に 2 つの新しいアプリケーションを追加します。作成したものと一致するように、 `source_ref` Helm チャートのバージョンと`image_version`を調整します。
 
     ```bash
     cat << EOF >> /projects/tech-exercise/pet-battle/test/values.yaml
@@ -63,7 +63,7 @@
     EOF
     ```
 
-2. Git commit the changes and in OpenShift UI, you'll see two new deployments are coming alive.
+2. Git で変更をコミットすると、OpenShift UI で 2 つの新しいデプロイが有効になっていることがわかります。
 
     ```bash
     cd /projects/tech-exercise
@@ -72,19 +72,19 @@
     git push
     ```
 
-3. Verify each of the services contains the correct labels - one should be `active` and the other `inactive`. Our pipeline will push new deployments to the inactive one before switching the labels around:
+3. 各サービスに正しいラベルが含まれていることを確認します。一方は`active`で、もう一方は`inactive`である必要があります。パイプラインは、ラベルを切り替える前に、新しいデプロイを非アクティブなデプロイにプッシュします。
 
     ```bash
     oc get svc -l blue_green=inactive --no-headers -n <TEAM_NAME>-test
     oc get svc -l blue_green=active --no-headers -n <TEAM_NAME>-test
     ```
 
-4. With both deployed, let's Update the `Jenkinsfile` to do the deployment for the `inactive` one. Jenkins will over write the currently labelled `inactive` deployment. Jenkins will then run some tests (🪞💨) and verify things working fine. Finally he will switch the traffic to it and swap the labels so this becomes the active service. The other svc will be labelled `inactive` and wait ready to switch back in case of an unwanted result.
+4. 両方がデプロイされたら、 `Jenkinsfile`を更新して`inactive`ファイルのデプロイを行いましょう。 Jenkins は、現在ラベル付けされている`inactive`デプロイメントを上書きします。その後、Jenkins はいくつかのテスト (🪞💨) を実行し、問題なく動作することを確認します。最後に、トラフィックをそこに切り替え、ラベルを交換して、これがアクティブなサービスになるようにします。他のサービスは`inactive`とラベル付けされ、望ましくない結果が発生した場合に備えて、元に戻す準備が整うまで待機します。
 
-    To do this, add the below stage in the right placeholder:
+    これを行うには、次のステージを適切なプレースホルダーに追加します。
 
     ```groovy
-    // 💥🔨 BLUE / GREEN DEPLOYMENT GOES HERE 
+    // 💥🔨 BLUE / GREEN DEPLOYMENT GOES HERE
     stage("🔷✅ Blue Green Deploy") {
       agent {
         label "jenkins-agent-argocd"
@@ -115,10 +115,10 @@
           git remote set-url origin  https://${GIT_CREDS}@${ARGOCD_CONFIG_REPO}
           git push -u origin ${ARGOCD_CONFIG_REPO_BRANCH}
 
-          #🌻 3. do some kind of verification of the deployment  
+          #🌻 3. do some kind of verification of the deployment
           sleep 10
           echo "🪞💨 TODO - some kinda test to validate blue or green is working as expected ... 🪞💨"
-          curl -k -L -f $(oc get route --no-headers ${INACTIVE//_/-} -n $DESTINATION_NAMESPACE | cut -d' ' -f 4) 
+          curl -k -L -f $(oc get route --no-headers ${INACTIVE//_/-} -n $DESTINATION_NAMESPACE | cut -d' ' -f 4)
 
           #🌻 4. If "tests" have passed swap inactive to active to and vice versa
           yq eval -i .applications.\\"${INACTIVE}\\".values.blue_green=\\"active\\" "${ARGOCD_CONFIG_REPO_PATH}"
@@ -137,7 +137,7 @@
     }
     ```
 
-5. Before we commit the changes to the `Jenkinsfile`, let's make a simple application change to make this more visual. In the frontend, we'll change the banner along the top of the app. In your IDE, open `pet-battle/src/app/shell/header/header.component.html`. Uncomment the `<nav>` under the `<!-- PB - Purple -->` comment and remove the line above it so it appears like this:
+5. `Jenkinsfile`への変更をコミットする前に、簡単なアプリケーションの変更を加えて、これをより視覚的にしましょう。フロントエンドでは、アプリの上部にあるバナーを変更します。 IDE で、 `pet-battle/src/app/shell/header/header.component.html`を開きます。 `<!-- PB - Purple -->`コメントの下にある`<nav>`コメントを外し、その上の行を削除して、次のようにします。
 
     ```html
     <header>
@@ -145,17 +145,19 @@
         <nav class="navbar  navbar-expand-lg navbar-dark" style="background-color: #563D7C;">
     ```
 
-6. Bump the version of the application to trigger a new release by updating the `version` in the `package.json` at the root of the frontend's repository
+6. フロントエンドのリポジトリのルートにある`package.json`のバージョンを更新して、アプリケーションの`version`を上げて新しいリリースをトリガーします。
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-    "name": "pet-battle",
-    "version": "1.6.1",  <- bump this
-    "private": true,
-    "scripts": ...
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+        "name": "pet-battle",
+        "version": "1.6.1",  &lt;- bump this
+        "private": true,
+        "scripts": ...
+        </code></pre>
+    </div>
+    
 
-7. Commit all these changes:
+7. これらすべての変更をコミットします。
 
     ```bash
     cd /projects/pet-battle
@@ -164,20 +166,16 @@
     git push
     ```
 
-8. When Jenkins executes, you should see things progress and the blue green deployment happen automatically.
+8. Jenkins が実行されると、進行状況が表示され、Blue/Greenデプロイが自動的に行われます。
 
-    The version in production is now the new `1.6.1` published with the latest change. As you can check from the
-    nav bar of the application from the production route `prod-pet-battle` (linked to the `green` service):
+    本番環境のバージョンは、最新の変更を加えて公開された新しい`1.6.1`です。本番環境のルート`prod-pet-battle`( `green`サービスにリンクされている)からアクセスできるアプリケーションのナビゲーション バーから確認できます:
 
     ![prod-pet-battle](images/bg-prod-pet-battle.png)
 
-    The previous `1.2.0` version, now identified as `blue`, is already available from the blue route `blue-pet-battle`:
+    現在`blue`として識別されている以前の`1.2.0`バージョンは、すでに blue ルート`blue-pet-battle`から入手できます。
 
     ![blue-pet-battle](images/bg-blue-pet-battle.png)
 
-    Every time you change the `version` variable in the `package.json` file the blue and green version will switch. Try it
-    publishing a new version of the application, e.g: `1.6.2`. Which one is in production? Which is `blue`? Which is `green`?
+    `package.json`ファイルの`version`変数を変更するたびに、BlueとGreenのバージョンが切り替わります。アプリケーションの新しいバージョンを公開してみてください (例: `1.6.2` )。どれが本番環境にありますか？ `blue`はどれ？ `green`はどれ？
 
-    This is a simple example to show how we can automate a blue green deployment using GitOps. However, we did not remove the
-    previous deployment of pet-battle, in the real world we would do this.
-
+    これは、GitOps を使用してBlue/Greenデプロイを自動化する方法を示す簡単な例です。ただし、pet-battleの以前のデプロイメントは削除しませんでした。現実の世界ではこれを行うのです。
