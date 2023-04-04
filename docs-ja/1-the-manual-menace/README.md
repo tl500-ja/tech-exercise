@@ -1,6 +1,6 @@
 # 演習 1 - 手動の脅威
 
-> A GitOps approach to perform and automate deployments.
+> デプロイを実行および自動化するための GitOps アプローチ。
 
 ## 👨‍🍳演習の紹介
 
