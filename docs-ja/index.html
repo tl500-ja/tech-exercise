@@ -12,17 +12,17 @@
   <div class="team-name-form">
       <div class="team-inputs">
         <label for="tname">チーム名</label><br/>
-        <input type="text" id="tname" name="teamname" placeholder="チーム名..">
+        <input type="text" id="tname" name="teamname" placeholder="Your team name..">
       </div>
 
       <div class="team-inputs">
         <label for="cdomain">クラスタードメイン</label><br/>
-        <input type="text" id="cdomain" name="clusterdomain" placeholder="クラスタードメイン..">
+        <input type="text" id="cdomain" name="clusterdomain" placeholder="Your cluster domain..">
       </div>
 
       <div class="team-inputs">
         <label for="gitserver">Gitサーバー (オプション)</label><br/>
-        <input type="text" id="gitserver" name="gitserver" placeholder="Gitサーバー..">
+        <input type="text" id="gitserver" name="gitserver" placeholder="Your git server..">
       </div>
 
       <div class="">
@@ -48,14 +48,15 @@
                     : document.getElementById('gitserver').value.toLowerCase();
 
       // Check inputs
-      if (tname == '') {        
-        alert('チーム名を入力してください');
+   　　if (tname == '') {        
+        alert('Please enter a team name');
         return;
       }
       if (cdomain == '') {        
-        alert('クラスタードメインを入力してください');
+        alert('Please enter a cluster domain');
         return;
       }
+
 
       console.info('INFO - setting team, cluster and git to :', tname, cdomain, gitserver);
       localStorage.setItem('TEAM_NAME', tname);
