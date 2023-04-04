@@ -1,28 +1,31 @@
-## Alerting and Notifications
+## アラートと通知
 
-> OpenShift's built in alerts.... blah
+> OpenShift のビルトイン アラート....など
+
 ### Platform Alerts
 
-1. The Pet Battle API and UI charts both have one basic `rule` for firing off an alert. If you open up the `/projects/pet-battle-api/chart/templates/prometheusrule.yaml` you'll see one configured to alert when a pod is not available for one minute. The alert rules are written in PromQL.
+1. Pet Battle API と UI チャートには、アラートを発生させる基本`rule` 1 つあります。 `/projects/pet-battle-api/chart/templates/prometheusrule.yaml`を開くと、Podが 1 分間使用できない場合にアラートを出すように構成されていることがわかります。アラート ルールは PromQL で記述されます。
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-yaml">
-    spec:
-      groups:
-      - name: petbattle-api.rules
-        rules:
-        - alert: PetBattleApiNotAvailable
-          annotations:
-            message: 'Pet Battle API in namespace {{ .Release.Namespace }} is not available for the last 1 minutes.'
-          expr: (1 - absent(kube_pod_status_ready{condition="true",namespace="{{ .Release.Namespace }}"} * 
-                on(pod) group_left(label_app_kubernetes_io_component) 
-                kube_pod_labels{label_app_kubernetes_io_component="pet-battle-api",namespace="{{ .Release.Namespace }}"})) == 0
-          for: 1m
-          labels:
-            severity: {{ .Values.prometheusrules.severity | default "critical" }}
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-yaml">
+        spec:
+          groups:
+          - name: petbattle-api.rules
+            rules:
+            - alert: PetBattleApiNotAvailable
+              annotations:
+                message: 'Pet Battle API in namespace {{ .Release.Namespace }} is not available for the last 1 minutes.'
+              expr: (1 - absent(kube_pod_status_ready{condition="true",namespace="{{ .Release.Namespace }}"} *
+                    on(pod) group_left(label_app_kubernetes_io_component)
+                    kube_pod_labels{label_app_kubernetes_io_component="pet-battle-api",namespace="{{ .Release.Namespace }}"})) == 0
+              for: 1m
+              labels:
+                severity: {{ .Values.prometheusrules.severity | default "critical" }}
+        </code></pre>
+    </div>
+    
 
-2. Add a new platform type rule to alert when the MongoDB disc gets busy / full
+2. MongoDB ディスクがビジー/フルになったときにアラートを出す新しいプラットフォーム タイプ ルールを追加
 
     ```bash
     cat << EOF >> /projects/pet-battle-api/chart/templates/prometheusrule.yaml
@@ -35,7 +38,7 @@
     EOF
     ```
 
-3. Let's add a workload monitoring type rule to alert us when the API request are under load.
+3. API リクエストに負荷がかかっているときに警告するワークロード モニタリング タイプのルールを追加しましょう。
 
     ```bash
     cat << EOF >> /projects/pet-battle-api/chart/templates/prometheusrule.yaml
@@ -48,21 +51,21 @@
     EOF
     ```
 
-4. We can now trigger the Pipeline with the new version. Edit pet-battle-api `pom.xml` found in the root of the `pet-battle-api` project and update the `version` number. The pipeline will update the `chart/Chart.yaml` with these versions for us. Increment and change the version number to suit.
+4. 新しいバージョンでパイプラインをトリガーできるようになりました。 pet- `pet-battle-api` -api `pom.xml`を編集し、 `version`番号を更新します。パイプラインは`chart/Chart.yaml`これらのバージョンで更新します。バージョン番号をインクリメントして適切に変更します。
 
     ```xml
         <artifactId>pet-battle-api</artifactId>
         <version>1.3.2</version>
     ```
 
-    You can also run this bit of code to do the replacement if you are feeling uber lazy!
+    非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
     cd /projects/pet-battle-api
     mvn -ntp versions:set -DnewVersion=1.3.2
     ```
 
-5. Now push the changes into the repo:
+5. 変更をリポジトリにプッシュします。
 
     ```bash
     cd /projects/pet-battle-api
@@ -71,11 +74,11 @@
     git push
     ```
 
-    This push will trigger the pipeline which updates the chart version for PetBattle API in `/projects/tech-exercise/pet-battle/test`.
+    このプッシュは`/projects/tech-exercise/pet-battle/test`の PetBattle API のチャート バージョンを更新するパイプラインをトリガーします。
 
-    When the chart version is updated automatically, ArgoCD will detect your new changes and apply them to the cluster 🔥🔥🔥
+    チャートのバージョンが自動的に更新されると、ArgoCD は新しい変更を検出してクラスターに適用します 🔥🔥🔥
 
-6. Let's test if the alerts are working as we hope - we created two alerts, one for HTTP Requests and one for disk usage. First, let's see if we can fill the disk to simulate the mongodb alert.
+6. アラートが期待どおりに機能しているかどうかをテストしてみましょう。1 つは HTTP 要求用、もう 1 つはディスク使用量用の 2 つのアラートを作成しました。まず、mongodb アラートをシミュレートするためにディスクをいっぱいにできるかどうかを見てみましょう。
 
     ```bash
     oc project ${TEAM_NAME}-test
@@ -86,16 +89,18 @@
     dd if=/dev/urandom of=/var/lib/mongodb/data/rando-calrissian bs=10M count=50
     ```
 
-    You should see an output like this:
+    次のような出力が表示されます。
 
-    <div class="highlight" style="background: #f7f7f7">
-    <pre><code class="language-bash">
-    sh-4.2$ dd if=/dev/urandom of=/var/lib/mongodb/data/rando-calrissian bs=10M count=50
-    50+0 records in
-    50+0 records out
-    524288000 bytes (524 MB) copied, 11.2603 s, 46.6 MB/s
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7">
+     <pre><code class="language-bash">
+        sh-4.2$ dd if=/dev/urandom of=/var/lib/mongodb/data/rando-calrissian bs=10M count=50
+        50+0 records in
+        50+0 records out
+        524288000 bytes (524 MB) copied, 11.2603 s, 46.6 MB/s
+        </code></pre>
+    </div>
+    
 
-7. Observe the alert is firing on OpenShift UI. In Developer view, go to Observe > Alerts. Make sure you select the right project from the drop down menu. You should see ` PetBattleMongoDBDiskUsage` alert as below:
+7. OpenShift UI でアラートが発生していることを確認します。開発者ビューで、Observe &gt; Alertsに移動します。ドロップダウン メニューから適切なプロジェクトを選択してください。以下のような`PetBattleMongoDBDiskUsage`アラートが表示されます。
 
     ![alert-mongodb](./images/alert-mongodb.png)
