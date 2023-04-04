@@ -1,49 +1,48 @@
-## Aggregated Logging
+## 集約ログ
 
-> OpenShift's built in logging .... Something something installed operator before hand. Very memory intensive, logging can be deployed to the infra plane though...
+> OpenShift のビルトイン ロギング .... オペレーターが事前にインストールされている何か。非常にメモリを集中的に使用しますが、ロギングはインフラプレーンに展開できます...
 
-1. Observe logs from any given container:
+1. 特定のコンテナーからログを観察します。
 
     ```bash
     oc project ${TEAM_NAME}-test
     oc logs `oc get po -l app.kubernetes.io/component=mongodb -o name -n ${TEAM_NAME}-test` --since 10m
     ```
 
-    By default, these logs are not stored in a database, but there are a number of reasons to store them (ie troubleshooting, legal obligations..)
+    デフォルトでは、これらのログはデータベースに保存されませんが、保存する理由はいくつかあります (トラブルシューティング、法的義務など)。
 
-2. OpenShift magic provides a great way to collect logs across services, anything that's pumped to `STDOUT` or `STDERR` is collected by FluentD and added to Elastic Search. This makes indexing and querrying logs very easy. Kibana is added on top for easy visualisation of the data. Let's take a look at Kibana now.
+2. OpenShift マジック`STDOUT` 、サービス全体でログを収集する優れた方法を提供します。STDOUT または`STDERR`に送られるものはすべて、FluentD によって収集され、Elastic Search に追加されます。これにより、ログのインデックス作成とクエリが非常に簡単になります。 Kibana がその上に追加され、データを簡単に視覚化できます。では、Kibana を見てみましょう。
 
     ```bash
     https://kibana-openshift-logging.<CLUSTER_DOMAIN>
     ```
 
-3. Login using your standard credentials. On first login you'll need to `Allow selected permissions` for OpenShift to pull your permissions.
+3. 標準の資格情報を使用してログインします。最初のログイン時に、OpenShift がアクセス`Allow selected permissions`必要があります。
 
-4. Once logged in, you'll be prompted to create an `index` to search on. This is beacause there are many data sets in elastic search, so you must choose the ones you would like to search on. We'll just search on the application logs as opposted to the platform logs in this exercise. Create an index pattern of `app-*` to search across all application logs in all namespaces.
+4. ログインすると、検索する`index`を作成するよう求められます。これは、Elasticsearchには多くのデータ セットがあるためです。そのため、検索したいデータ セットを選択する必要があります。この演習では、プラットフォーム ログとは対照的に、アプリケーション ログを検索します。 `app-*`のインデックス パターンを作成して、すべての名前空間のすべてのアプリケーション ログを検索します。
 
     ![kibana-create-index](./images/kibana-create-index.png)
 
-5. On configure settings, select `@timestamp` to filter by and create the index.
+5. 構成設定で、 `@timestamp`を選択してフィルタリングし、インデックスを作成します。
 
     ![kibana-create-index-timestamp](./images/kibana-create-index-timestamp.png)
 
-6. Go to the Kibana Dashboard - Hit `Discover` in the top left hand corner, we should now see all logs across all pods. It's a lot of information but we can query it easily.
+6. Kibana ダッシュボードに移動します。左上隅にある`Discover`をクリックすると、すべてのPodのすべてのログが表示されます。情報量は多いですが、簡単に調べることができます。
 
     ![kibana-discover](./images/kibana-discover.png)
 
-7. Let's filter the information, look for the logs specifically for pet-battle apps running in the test nameaspace by adding this to the query bar:
-`kubernetes.namespace_name="<TEAM_NAME>-test" AND kubernetes.container_name=pet-battle-.*`
+7. 情報をフィルタリングしましょう。queryバーに`kubernetes.namespace_name="<TEAM_NAME>-test" AND kubernetes.container_name=pet-battle-.*`追加して、テスト用namespaceで実行されているpet-battleアプリ専用のログを探します。
 
     ![kibana-example-query](./images/kibana-example-query.png)
 
-8. Container logs are ephemeral, so once they die you'd loose them unless they're aggregated and stored somewhere. Let's generate some messages and query them from the UI in Kibana. Connect to pod via rsh and generate logs.
+8. コンテナ ログは一時的なものであるため、それらが終了すると、それらが集約されてどこかに保存されない限り失われます。いくつかのメッセージを生成し、Kibana の UI からクエリを実行してみましょう。 rsh 経由でPodに接続し、ログを生成します。
 
     ```bash
     oc project ${TEAM_NAME}-test
     oc rsh `oc get po -l app.kubernetes.io/component=mongodb -o name -n ${TEAM_NAME}-test`
     ```
 
-    Then inside the container you've just remote logged on to we'll add some nonsense messages to the logs:
+    次に、リモート ログオンしたばかりのコンテナー内で、意味のないメッセージをログに追加します。
 
     ```bash
     echo "🦄🦄🦄🦄" >> /tmp/custom.log
@@ -55,7 +54,7 @@
     exit
     ```
 
-9. Back on Kibana we can filter and find these messages with another query:
+9. Kibana に戻り、これらのメッセージを別のクエリでフィルタリングして検索できます。
 
     ```yaml
     kubernetes.namespace_name="<TEAM_NAME>-test" AND kubernetes.container_name=mongodb AND message=🦄🦄🦄🦄
