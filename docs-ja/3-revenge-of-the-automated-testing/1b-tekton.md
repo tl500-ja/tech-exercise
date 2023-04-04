@@ -1,8 +1,8 @@
-## Extend Tekton Pipeline with Sonar Scanning
+## Sonar スキャンによる Tekton パイプラインの拡張
 
-> In this exercise, we're going to edit the tekton `Pipeline` to run code-analysis using sonar of the API and add an additional `Task` to analyse the results
+> この演習では、tekton `Pipeline`を編集して、API のソナーを使用してcode-analysisを実行し、追加の`Task`を追加して結果を分析します。
 
-1. Add `code-analysis` step to our `Pipeline`. Edit `tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml` file, add this step before the `maven` build step. We don't need to create a new task here, we can just supply some new parameters to the existing `maven` task giving us great reusability of Tekton components.
+1. `Pipeline`に`code-analysis`ステップを追加します。 `tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml`ファイルを編集し、 `maven`ビルド ステップの前にこのステップを追加します。ここで新しいタスクを作成する必要はありません。いくつかの新しいパラメーターを既存の`maven`タスクに提供するだけで、Tekton コンポーネントの再利用性が大幅に向上します。
 
     ```yaml
         # Code Analysis
@@ -29,7 +29,7 @@
               workspace: sonarqube-auth
     ```
 
-2. We also need to bind the `sonarqube-auth` workspace to our secret when we trigger the Pipeline to run. To do this edit `tekton/templates/triggers/gitlab-trigger-template.yaml` file, add this code to the end of the `workspaces list` where the `# sonarqube-auth` placeholder is:
+2. また、パイプラインの実行をトリガーするときに、 `sonarqube-auth`ワークスペースをシークレットにバインドする必要があります。これを行うには`tekton/templates/triggers/gitlab-trigger-template.yaml`ファイルを編集し、 `# sonarqube-auth`プレースホルダーがある`workspaces list`の末尾にこのコードを追加します。
 
     ```yaml
             # sonarqube-auth
@@ -38,7 +38,7 @@
                 secretName: sonarqube-auth
     ```
 
-3. Tekton Tasks are just piece of yaml. So it's easy for us to add more tasks. The Tekton Hub is a great place to go find some reusable components for doing specific activities. In our case, we're going to grab the `sonarqube-quality-gate-check.yaml` task and add it to our cluster. If you open `tekton/templates/tasks/sonarqube-quality-gate-check.yaml` file afterwards, you'll see the task is a simple one that executes one shell script in an image.
+3. Tekton タスクは yaml の一部です。そのため、タスクを簡単に追加できます。 Tekton Hub は、特定のアクティビティを行うための再利用可能なコンポーネントを見つけるのに最適な場所です。この例では、 `sonarqube-quality-gate-check.yaml`タスクを取得してクラスターに追加します。後で`tekton/templates/tasks/sonarqube-quality-gate-check.yaml`ファイルを開くと、タスクがイメージ内の 1 つのシェル スクリプトを実行する単純なタスクであることがわかります。
 
     ```bash
     cd /projects/tech-exercise
@@ -111,7 +111,7 @@
     EOF
     ```
 
-4. Let's add this task to our pipeline. Edit `tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml` file and add the `code-analysis-check` step to our pipeline as shown below.
+4. このタスクをパイプラインに追加しましょう。以下に示すように`tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml`ファイルを編集し、 `code-analysis-check`ステップをパイプラインに追加します。
 
     ```yaml
         # Code Analysis Check
@@ -131,40 +131,41 @@
           - code-analysis
     ```
 
-5. In Tekton, we can control flow by using `runAfter` to organize the structure of the pipeline. Adjust the `maven` build step's `runAfter` to be `analysis-check` so the static analysis steps happen before we even compile the app!
+5. Tekton では、 `runAfter`を使用してパイプラインの構造を整理することでフローを制御できます。 `maven`ビルド ステップの`runAfter` `analysis-check`に調整して、アプリをコンパイルする前に静的分析ステップが行われるようにします。
 
-    <div class="highlight" style="background: #f7f7f7"><pre><code class="language-yaml">
-        - name: maven
-          taskRef:
-            name: maven
-          runAfter:
-            - analysis-check # <- update this 💪💪
-          params:
-            - name: WORK_DIRECTORY
-              value: "$(params.APPLICATION_NAME)/$(params.GIT_BRANCH)"
-            - name: GOALS
-              value: "package"
-            - name: MAVEN_BUILD_OPTS
-              value: "-Dquarkus.package.type=fast-jar -DskipTests"
-          workspaces:
-            - name: maven-settings
-              workspace: maven-settings
-            - name: maven-m2
-              workspace: maven-m2
-            - name: output
-              workspace: shared-workspace
-    </code></pre></div>
+     <div class="highlight" style="background: #f7f7f7"><pre><code class="language-yaml">
+            - name: maven
+              taskRef:
+                name: maven
+              runAfter:
+                - analysis-check # &lt;- update this 💪💪
+              params:
+                - name: WORK_DIRECTORY
+                  value: "$(params.APPLICATION_NAME)/$(params.GIT_BRANCH)"
+                - name: GOALS
+                  value: "package"
+                - name: MAVEN_BUILD_OPTS
+                  value: "-Dquarkus.package.type=fast-jar -DskipTests"
+              workspaces:
+                - name: maven-settings
+                  workspace: maven-settings
+                - name: maven-m2
+                  workspace: maven-m2
+                - name: output
+                  workspace: shared-workspace
+        </code></pre></div>
+    
 
-6. With all these changes in place - Git add, commit, push your changes so our pipeline definition is updated on the cluster:
+6. これらすべての変更が整ったら、Git で追加、コミット、変更をプッシュして、パイプライン定義がクラスターで更新されるようにします。
 
     ```bash
     cd /projects/tech-exercise
     git add .
     git commit -m  "🥽 ADD - code-analysis & check steps 🥽"
-    git push 
+    git push
     ```
 
-7. Now let's trigger a pipeline build - we can push an empty commit to the repo to trigger the pipeline:
+7. 次に、パイプライン ビルドをトリガーします。空のコミットをリポジトリにプッシュして、パイプラインをトリガーできます。
 
     ```bash
     cd /projects/pet-battle-api
@@ -172,11 +173,12 @@
     git push
     ```
 
-    <p class="warn"><b>TIP</b> - If we didn't want to add a commit to the repo, we could always go to GitLab and trigger the WebHook directly from there which would also kick the pipeline but leave no trace in the git history 🧙‍♀️✨🧙‍♀️.</p>
+     <p class="warn"><b>ヒント</b>- リポジトリにコミットを追加したくない場合は、いつでも GitLab にアクセスして、そこから WebHook を直接トリガーすることができます。これにより、パイプラインも開始されますが、git 履歴には痕跡が残りません🧙‍♀️✨🧙‍♀️ .</p>
+
 
     ![images/sonar-pb-api-code-quality](images/sonar-pb-api-code-quality.png)
 
-8. When the pipeline has complete - we can inspect the results in Sonarqube UI. Browse to Sonarqube URL
+8. パイプラインが完了すると、Sonarqube UI で結果を調べることができます。 Sonarqube の URL を参照
 
     ```bash
     echo https://$(oc get route sonarqube --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)
