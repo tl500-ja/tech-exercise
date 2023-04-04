@@ -1,16 +1,16 @@
-# OWASP ZAP Vulnerability Scanning
+# OWASP ZAP 脆弱性スキャン
 
-> What is [OWASP Zed Attack Proxy](https://www.zaproxy.org/)? 
+> [OWASP Zed Attack Proxy](https://www.zaproxy.org/)とは?
 
-For this exercise, we will use a tool called "OWASP Zed Attack Proxy" or ZAP in short. It helps automatically find security vulnerabilities in your applications. This allows the developers to automate penetration testing and security regression testing of the application in the CI/CD pipeline.
+この演習では、OWASP Zed Attack Proxyまたは略して ZAP と呼ばれるツールを使用します。アプリケーションのセキュリティの脆弱性を自動的に検出するのに役立ちます。これにより、開発者は CI/CD パイプラインでアプリケーションの侵入テストとセキュリティ回帰テストを自動化できます。
 
-## Task
+## タスク
 
 ![task-owasp](./images/task-owasp.png)
 
-#### In your groups pick the tool you'd like to integrate the pipeline with:
+#### グループで、パイプラインを統合するツールを選択します。
 
-| 🐈‍⬛ **Jenkins Group** 🐈‍⬛  |  🐅 **Tekton Group** 🐅 |
-|-----------------------|----------------------------|
-| * Add a stage to our pipeline to run the security scan | * Add a task to our pipeline to run the security scan |
-| <span style="color:blue;">[jenkins](3-revenge-of-the-automated-testing/6a-jenkins.md)</span> | <span style="color:blue;">[tekton](3-revenge-of-the-automated-testing/6b-tekton.md)</span> |
+🐈‍⬛ **Jenkins グループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
+--- | ---
+* パイプラインにステージを追加して、セキュリティ スキャンを実行します | * パイプラインにタスクを追加して、セキュリティ スキャンを実行します
+<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/6a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/6b-tekton.md">tekton</a></p></span>
