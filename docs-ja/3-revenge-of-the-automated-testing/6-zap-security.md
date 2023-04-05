@@ -10,7 +10,7 @@
 
 #### グループで、パイプラインを統合するツールを選択します。
 
-🐈‍⬛ **Jenkins グループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
---- | ---
-* パイプラインにステージを追加して、セキュリティ スキャンを実行します | * パイプラインにタスクを追加して、セキュリティ スキャンを実行します
-<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/6a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/6b-tekton.md">tekton</a></p></span>
+|🐈‍⬛ **Jenkins グループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅|
+|--- | ---|
+|* パイプラインにステージを追加して、セキュリティ スキャンを実行します | * パイプラインにタスクを追加して、セキュリティ スキャンを実行します|
+|<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/6a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/6b-tekton.md">tekton</a></p></span>|

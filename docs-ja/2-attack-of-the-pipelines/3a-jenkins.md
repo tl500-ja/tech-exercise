@@ -97,7 +97,6 @@ git push
         </code></pre>
     </div>
 
-
     次に、 `pet-battle/stage/values.yaml`ファイルにも同じことを行います。
 
     非常に面倒な場合は、このコードを実行して置換を行うこともできます。

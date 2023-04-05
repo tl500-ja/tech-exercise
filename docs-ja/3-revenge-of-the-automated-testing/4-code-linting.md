@@ -8,7 +8,7 @@
 
 #### グループで、パイプラインを統合するツールを選択します。
 
-🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
+|🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅|
 --- | ---
-* ESlint を使用してコードベースを分析する | * Maven check-style を使用してコードを分析する
-<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/4a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/4b-tekton.md">tekton</a></p></span>
+|* ESlint を使用してコードベースを分析する | * Maven check-style を使用してコードを分析する|
+|<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/4a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/4b-tekton.md">tekton</a></p></span>|

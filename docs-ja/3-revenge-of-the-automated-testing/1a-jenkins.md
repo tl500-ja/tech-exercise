@@ -36,7 +36,6 @@
 
      <p class="warn">⛷️<b>注</b>⛷️ - OpenShift 4.11+ で DevSpaces を使用している場合は、Jenkinsfileを開くためにpet-battleフォルダーを Che Workspace に追加する必要がある場合があります。</p>
 
-
     ![add-folder-to-workspace](images/add-folder-to-workspace.png)
 
     ```groovy

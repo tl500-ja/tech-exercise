@@ -45,7 +45,6 @@ git pull
 
      <p class="warn">⛷️<b>注意</b>⛷️ - Kubeseal コマンドを実行して"Error: cannot get sealed secret service: Unauthorized" というエラーが表示された場合は、OpenShift に再度ログインして、コマンドを再度実行してください。</p>
 
-
     ```bash
     oc login --server=https://api.${CLUSTER_DOMAIN##apps.}:6443 -u <USER_NAME> -p <PASSWORD>
     ```

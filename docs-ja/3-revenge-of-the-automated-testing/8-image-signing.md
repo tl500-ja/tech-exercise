@@ -27,10 +27,9 @@
         </code></pre>
     </div>
 
-
     2 つのキー (1 つの秘密キーと 1 つの公開キー) を生成しました。秘密鍵はイメージの署名に使用され、選択したパスワードと共に`ci-cd`namespaceにシークレットとして自動的に保存されます。公開鍵は、署名されたイメージを検証するために使用されます。画像を検証するために公開鍵を共有することはできますが、秘密鍵は公開する前に共有したり、少なくとも封印したりしないでください。
 
-    <p class="tip">🐌 これは GITOPS ではありません - 生成された秘密鍵は、ユーザーの Kubernetes シークレットに保存されます{team_name1}-ci-cd プロジェクト。代わりに、これを抽出して SealedSecret として保存することは、読者の課題として残しておきます。 🐎{/team_name1}</p>
+    <p class="tip">🐌 これは GITOPS ではありません - 生成された秘密鍵は、<TEAM_NAME>-ci-cd プロジェクトの Kubernetes シークレットに保存されます。代わりに、これを抽出して SealedSecret として保存することは、読者の課題として残しておきます。 🐎</p>
 
 次に、イメージ署名ステップでパイプラインを拡張しましょう。
 
@@ -38,7 +37,7 @@
 
 #### グループで、パイプラインを統合するツールを選択します。
 
-🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
---- | ---
-* パイプラインにイメージ署名ステージを追加 | * イメージ署名タスクをパイプラインに追加します
-<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/8a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/8b-tekton.md">tekton</a></p></span>
+|🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅|
+|--- | ---|
+|* パイプラインにイメージ署名ステージを追加 | * イメージ署名タスクをパイプラインに追加します|
+|<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/8a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/8b-tekton.md">tekton</a></p></span>|

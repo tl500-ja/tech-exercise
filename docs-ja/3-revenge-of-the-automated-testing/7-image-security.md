@@ -85,7 +85,6 @@ StackRox / Advanced Cluster Security (ACS) は、クラスター スコープで
         </code></pre>
     </div>
 
-
     `ubiquitous-journey/values-tooling.yaml`ファイルを開き、Sealed Secrets エントリを拡張します。前のコマンドからの`username`と`password`の出力をコピーし、値を更新します。データを正しくインデントしていることを確認してください。
 
     ```yaml
@@ -136,11 +135,11 @@ StackRox / Advanced Cluster Security (ACS) は、クラスター スコープで
 
 #### グループで、パイプラインを統合するツールを選択します。
 
-Now we can use ACS to help move security **LEFT** in our build pipeline. In each group we will do the following:
+これで、ACSを使って、ビルドパイプラインでセキュリティを**左**に移動させることができるようになりました。各グループでは、以下のようにします。
 
-🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
---- | ---
-* ビルド時のポリシー違反を`check`ようにパイプラインを構成する | * ビルド時のポリシー違反を`check`ようにパイプラインを構成する
-* CVE/CVSS のイメージを`scan`ようにパイプラインを構成する | * CVE/CVSS のイメージを`scan`ようにパイプラインを構成する
-* パイプラインを壊す/直す | * パイプラインを壊す/直す
-<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/7a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/7b-tekton.md">tekton</a></p></span>
+|🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅|
+|--- | ---|
+|* ビルド時のポリシー違反を`check`ようにパイプラインを構成する | * ビルド時のポリシー違反を`check`ようにパイプラインを構成する|
+|* CVE/CVSS のイメージを`scan`ようにパイプラインを構成する | * CVE/CVSS のイメージを`scan`ようにパイプラインを構成する|
+|* パイプラインを壊す/直す | * パイプラインを壊す/直す|
+|<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/7a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/7b-tekton.md">tekton</a></p></span>|

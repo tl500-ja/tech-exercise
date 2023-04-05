@@ -57,7 +57,6 @@
         </code></pre>
     </div>
 
-
     `allure-auth`エントリを追加します。
 
     ```yaml

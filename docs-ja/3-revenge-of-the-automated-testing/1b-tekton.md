@@ -175,7 +175,6 @@
 
      <p class="warn"><b>ヒント</b>- リポジトリにコミットを追加したくない場合は、いつでも GitLab にアクセスして、そこから WebHook を直接トリガーすることができます。これにより、パイプラインも開始されますが、git 履歴には痕跡が残りません🧙‍♀️✨🧙‍♀️ .</p>
 
-
     ![images/sonar-pb-api-code-quality](images/sonar-pb-api-code-quality.png)
 
 8. パイプラインが完了すると、Sonarqube UI で結果を調べることができます。 Sonarqube の URL を参照

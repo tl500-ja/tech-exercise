@@ -23,14 +23,14 @@ git pull
 
 チーム内で 2 つのグループに分かれます。あなた自身の冒険を選んでください！各グループは同様のタスクを実行します。
 
-🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
---- | ---
-* PetBattle をフォークする必要があります (GitHub からクローンを作成し、GitLab にプッシュします)。 | * PetBattle API をフォークする必要があります (GitHub からクローンして GitLab にプッシュします)。
-* `Jenkinsfile`タスクを更新して、参加者のためにいくつかのものを除外します | * Tekton タスクを更新して、参加者のためにいくつかのものを除外します
-* ジョブをトリガーするための Webhook を GitLab リポジトリに追加します | * ジョブをトリガーするための Webhook を GitLab リポジトリに追加します
-* `pet-battle/stage/values.yaml` &amp;&amp; `pet-battle/test/values.yaml`サービス情報で更新します。 (ここで 2 つのチームが作業を統合します。) | * `pet-battle/stage/values.yaml` &amp;&amp; `pet-battle/test/values.yaml`サービス情報で更新します。 (ここで 2 つのチームが作業を統合します。)
-* バージョン ファイル (pom.xml など) を更新することで、パイプラインをキックします。 | * バージョン ファイル (pom.xml など) を更新することで、パイプラインをキックします。
-<span style="color:blue;"><p><a href="2-attack-of-the-pipelines/3a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="2-attack-of-the-pipelines/3b-tekton.md">tekton</a></p></span>
+|🐈 **Jenkinsグループ** 🐈 | 🐅 **Tekton グループ** 🐅|
+-------------------------- | -------------------------|
+|* PetBattle をフォークする必要があります (GitHub からクローンを作成し、GitLab にプッシュします)。 | * PetBattle API をフォークする必要があります (GitHub からクローンして GitLab にプッシュします)。|
+|* `Jenkinsfile`タスクを更新して、参加者のためにいくつかのものを除外します | * Tekton タスクを更新して、参加者のためにいくつかのものを除外します|
+|* ジョブをトリガーするための Webhook を GitLab リポジトリに追加します | * ジョブをトリガーするための Webhook を GitLab リポジトリに追加します|
+|* `pet-battle/stage/values.yaml` &amp;&amp; `pet-battle/test/values.yaml`サービス情報で更新します。 (ここで 2 つのチームが作業を統合します。) | * `pet-battle/stage/values.yaml` &amp;&amp; `pet-battle/test/values.yaml`サービス情報で更新します。 (ここで 2 つのチームが作業を統合します。)|
+|* バージョン ファイル (pom.xml など) を更新することで、パイプラインをキックします。 | * バージョン ファイル (pom.xml など) を更新することで、パイプラインをキックします。|
+|<span style="color:blue;"><p><a href="2-attack-of-the-pipelines/3a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="2-attack-of-the-pipelines/3b-tekton.md">tekton</a></p></span>|
 
 🐈<span style="color:purple;">期待される結果</span>: Pet Battle アプリケーション (フロントエンドとバックエンド) を構築する作業パイプライン - はい ..**猫**!! 🐈
 

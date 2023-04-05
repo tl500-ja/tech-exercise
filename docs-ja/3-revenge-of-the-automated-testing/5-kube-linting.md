@@ -62,8 +62,8 @@
 
 #### グループで、パイプラインを統合するツールを選択します。
 
-🐈‍⬛ **Jenkins Group** 🐈‍⬛ | 🐅 **Tekton Group** 🐅
---- | ---
-* 新しい jenkins エージェントをリストに追加 | * Tekton Hub からパイプラインにタスクを追加します
-* パイプラインで kube-lint を実行する | * コードがパイプラインでビルドされたときに kube-lint を実行する
-<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/5a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/5b-tekton.md">tekton</a></p></span>
+|🐈‍⬛ **Jenkins グループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅|
+|--- | ---
+|* 新しい jenkins エージェントをリストに追加 | * Tekton Hub からパイプラインにタスクを追加します|
+|* パイプラインで kube-lint を実行する | * コードがパイプラインでビルドされたときに kube-lint を実行する|
+|<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/5a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/5b-tekton.md">tekton</a></p></span>|

@@ -42,7 +42,6 @@
 
      <p class="warn">⛷️<b>注</b>⛷️ - Sonarqube のステップが完了したら、<strong>分析チェック</strong>として<strong>runAfter</strong>を設定する必要があります</p>
 
-
     次のようなパイプライン定義が必要です。
 
      <div class="highlight" style="background: #f7f7f7">
@@ -108,7 +107,6 @@
     ```
 
      <p class="warn">error <b>: failed to push some refs to..</b>のようなエラーが発生した場合は、 <b><i>git pull</i></b>を実行してから、上記のコマンドを実行して変更を再度プッシュしてください。</p>
-
 
     空のコミットを作成して、パイプラインをトリガーします。
 

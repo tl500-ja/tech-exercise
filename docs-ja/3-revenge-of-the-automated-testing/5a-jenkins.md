@@ -30,8 +30,8 @@
 
     *次のように表示されます。*
 
-     <div class="highlight" style="background: #f7f7f7">
-     <pre><code class="language-yaml">
+    <div class="highlight" style="background: #f7f7f7">
+    <pre><code class="language-yaml">
             chart/pet-battle/templates/deploymentconfig.yaml: (object: &lt;no namespace&gt;/test-release-pet-battle apps.openshift.io/v1,
             Kind=DeploymentConfig) container "pet-battle" does not specify a liveness probe
             (check: no-liveness-probe, remediation: Specify a liveness probe in your container.
@@ -39,9 +39,7 @@
             configure-liveness-readiness-startup-probes/ for details.)
 
             Error: found 1 lint errors
-        </code></pre>
-    </div>
-
+    </code></pre></div>
 
     Readiness および Liveness プローブは、アプリケーションの正常性状態を追跡するための基本的なベスト プラクティスです。詳細については、 [こちらを](https://docs.openshift.com/container-platform/4.9/applications/application-health.html)参照してください。
 
@@ -60,9 +58,9 @@
 
     YAML ファイルは次のようになります。
 
-     <div class="highlight" style="background: #f7f7f7">
-     <pre><code class="language-yaml">
-        ...
+    <div class="highlight" style="background: #f7f7f7">
+    <pre><code class="language-yaml">
+    ...
                 readinessProbe:
                   httpGet:
                       path: /
@@ -80,24 +78,22 @@
             dnsPolicy: ClusterFirst
             restartPolicy: Always
             schedulerName: default-scheduler
-        ...
-        </code></pre>
+    ...
+    </code></pre>
     </div>
-
 
     チャートに変更を加えたので、 `Chart.yaml`でチャートのバージョンを上げる必要があります。
 
-     <div class="highlight" style="background: #f7f7f7">
-     <pre><code class="language-yaml">
+    <div class="highlight" style="background: #f7f7f7">
+    <pre><code class="language-yaml">
     	apiVersion: v2
     	name: pet-battle
     	description: Pet Battle Frontend
     	type: application
     	version: 1.0.6 &lt;- bump this
     	appVersion: 0.0.1
-        </code></pre>
+    </code></pre>
     </div>
-
 
     変更をプッシュする前に、この変更が役立つかどうかを確認しましょう。
 
@@ -108,14 +104,13 @@
 
     このような出力が表示されるはずです💪💪
 
-     <div class="highlight" style="background: #f7f7f7">
-     <pre><code class="language-yaml">
+    <div class="highlight" style="background: #f7f7f7">
+    <pre><code class="language-yaml">
         KubeLinter 0.2.6
-
+        
         No lint errors found!
-        </code></pre>
+    </code></pre>
     </div>
-    
 
 4. 再度、変更をリポジトリにプッシュします。
 

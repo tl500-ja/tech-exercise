@@ -95,5 +95,4 @@
 
      <p class="tip">パイプラインを続行するには、パイプラインを中断し、これらの違反を修正する必要があります。詳しくは _ドラゴンが来た_ セクションを参照してください。</p>
 
-
     ![acs-pet-battle-violations](images/acs-pet-battle-violations.png)

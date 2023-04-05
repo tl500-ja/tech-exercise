@@ -4,7 +4,7 @@
 
 #### グループで、パイプラインを統合するツールを選択します。
 
-🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
---- | ---
-* 負荷テスト タスクをパイプラインに追加する | * 負荷テスト タスクをパイプラインに追加する
-<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/9a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/9b-tekton.md">tekton</a></p></span>
+|🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅|
+|--- | ---|
+|* 負荷テスト タスクをパイプラインに追加する | * 負荷テスト タスクをパイプラインに追加する|
+|<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/9a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/9b-tekton.md">tekton</a></p></span>|

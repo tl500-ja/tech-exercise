@@ -8,7 +8,7 @@
 
 #### グループで、パイプラインを統合するツールを選択します。
 
-🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
---- | ---
-* | *
-<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/10a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/10b-tekton.md">tekton</a></p></span>
+|🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅|
+|--- | ---|
+|* | *|
+|<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/10a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/10b-tekton.md">tekton</a></p></span>|

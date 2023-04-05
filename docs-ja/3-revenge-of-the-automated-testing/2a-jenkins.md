@@ -64,7 +64,6 @@
 
      <p class="warn">⛷️<b>注意</b>⛷️ - Sonarスキャンステップを完了している場合は、コード カバレッジの結果を Sonarqube に含めることもできます。 `/projects/pet-battle/sonar-project.js` ファイルを開き、先頭の `//` を削除して行の下のコメントを外し、カバレッジ レポートを SonarQube に保存します。</p>
 
-
     ```bash
         'sonar.javascript.lcov.reportPaths': 'reports/lcov.info',
     ```

@@ -65,7 +65,6 @@
         </code></pre>
     </div>
 
-
     `sonarqube-auth`エントリを追加します (これをコピーしてください!):
 
     ```yaml
@@ -139,9 +138,9 @@
 
 #### グループで、パイプラインを統合するツールを選択します。
 
-🐈‍⬛ **Jenkinsグループ** 🐈‍⬛ | 🐅 **Tekton グループ** 🐅
---- | ---
-* コード分析を実行するようにパイプラインを構成する | * コード分析を実行するようにパイプラインを構成する
-* 品質ゲートをチェックするようにパイプラインを構成する | * 品質ゲートをチェックするようにパイプラインを構成する
-* アプリケーション コードの品質を向上させる | * アプリケーション コードの品質を向上させる
-<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/1a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/1b-tekton.md">tekton</a></p></span>
+|🐈 **Jenkinsグループ** 🐈 | 🐅 **Tekton グループ** 🐅|
+|--- | ---
+|* コード分析を実行するようにパイプラインを構成する | * コード分析を実行するようにパイプラインを構成する|
+|* 品質ゲートをチェックするようにパイプラインを構成する | * 品質ゲートをチェックするようにパイプラインを構成する|
+|* アプリケーション コードの品質を向上させる | * アプリケーション コードの品質を向上させる|
+|<span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/1a-jenkins.md">jenkins</a></p></span> | <span style="color:blue;"><p><a href="3-revenge-of-the-automated-testing/1b-tekton.md">tekton</a></p></span>|

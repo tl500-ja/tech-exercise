@@ -113,7 +113,6 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
             </code></pre>
     </div>
 
-
     非常に面倒な場合は、このコードを実行して置換を行うこともできます。
 
     ```bash#test
@@ -165,17 +164,16 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
 
 10. いつものように、コードを git にプッシュして ...
 
-```
-```bash#test
-cd /projects/pet-battle-api
-git add .
-git commit -m  "🍕 UPDATED - pet-battle-version to 1.3.1 🍕"
-git push
-```
+    ```bash#test
+    cd /projects/pet-battle-api
+    git add .
+    git commit -m  "🍕 UPDATED - pet-battle-version to 1.3.1 🍕"
+    git push
+    ```
 
-🪄 Observe Pipeline running by browsing to OpenShift UI -&gt; Pipelines from left pane -&gt; Pipelines in your `<TEAM_NAME>-ci-cd` project:
+    🪄 Observe Pipeline running by browsing to OpenShift UI -&gt; Pipelines from left pane -&gt; Pipelines in your `<TEAM_NAME>-ci-cd` project:
 
-```bash
+    ![images/tekton-pipeline-running.png](images/tekton-pipeline-running.png)
 
 ?> **TIP** **tkn**コマンド ラインを使用して、 `PipelineRun`ログを観察することもできます。
 
