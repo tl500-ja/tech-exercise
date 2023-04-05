@@ -47,8 +47,7 @@ Red Hat Open Innovation Labs では、セットアップとオンボーディン
     export GITLAB_PASSWORD=<YOUR_GITLAB_PASSWORD>
     ```
 
-     <p class="tip">⛷️<b>ヒント</b>⛷️ - パスワードに特殊文字が含まれている場合は、一重引用符で囲みます。例: <strong>'A8y?Rpm!9+A3B/KG'</strong></p>
-
+    <p class="tip">⛷️<b>ヒント</b>⛷️ - パスワードに特殊文字が含まれている場合は、一重引用符で囲みます。例: <strong>'A8y?Rpm!9+A3B/KG'</strong></p>
 
     Gitlab PAT を生成します。
 
