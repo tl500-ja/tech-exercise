@@ -8,8 +8,7 @@
 
 - 図でわかるように、OpenShift はルートに来るトラフィックを分散できます。しかし、それはどのように行うのですか？ `route`定義を調べてみましょう。これは古典的な Route 定義です:
 
-      <div class="highlight" style="background: #f7f7f7">
-      <pre><code class="language-yaml">
+    ```yaml
         apiVersion: route.openshift.io/v1
         kind: Route
         metadata:
@@ -20,16 +19,13 @@
           to:
             kind: Service
             name: pet-battle
-            weight: 100       &lt;-- All of the traffic goes to `pet-battle` service
+            weight: 100       <-- All of the traffic goes to `pet-battle` service
           ...
-        </code></pre>
-    </div>
-
+    ```
 
     トラフィックを分割するために、 `alternateBackends`と呼ばれるものを導入します。
-
-      <div class="highlight" style="background: #f7f7f7">
-      <pre><code class="language-yaml">
+    
+    ```yaml
         apiVersion: route.openshift.io/v1
         kind: Route
         metadata:
@@ -41,13 +37,11 @@
             kind: Service
             name: pet-battle
             weight: 80
-          alternateBackends: &lt;-- This helps us to divide the traffic
+          alternateBackends: <-- This helps us to divide the traffic
           - kind: Service
             name: pet-battle-b
-            weight: 20       &lt;-- based on the percentage we give
-        </code></pre>
-    </div>
-
+            weight: 20       <-- based on the percentage we give
+    ```
 
     PetBattle UI ヘルム チャートには、既にこの機能があります。 `values`で有効にするだけです。ただし、その前に、ヘルパー ツールをインストールする必要があります。
 

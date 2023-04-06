@@ -48,7 +48,6 @@
         </code></pre>
     </div>
 
-
     それでは、PetBattle アプリの`ServiceMonitor`を作成して追加しましょう!もちろん、これはGITOPSなので、HelmとArgoCDを介して実行します!!
 
     pet-battle api の Helm チャート`pet-battle/test/values.yaml`および`pet-battle/stage/values.yaml`ファイルを開きます。以下を追加して、 `pet-battle-api`の`values`更新します。
