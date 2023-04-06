@@ -43,7 +43,7 @@
     * [🐈 Tekton](3-revenge-of-the-automated-testing/10b-tekton.md)
   * [🐉 ドラゴンが来た！](3-revenge-of-the-automated-testing/666-here-be-dragons.md)
 * [4. モニタリングの帰還](4-return-of-the-monitoring/README.md)
-  * [🔭 管理の有効化](4-return-of-the-monitoring/1-enable-monitoring.md)
+  * [🔭 モニタリングの有効化](4-return-of-the-monitoring/1-enable-monitoring.md)
   * [🛎️ アラートの作成](4-return-of-the-monitoring/2-create-alerts.md)
   * [🪵 ロギング](4-return-of-the-monitoring/3-logging.md)
   * [🐉 ドラゴンが来た！](4-return-of-the-monitoring/666-here-be-dragons.md)  
