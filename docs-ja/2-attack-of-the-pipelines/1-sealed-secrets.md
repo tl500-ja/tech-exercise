@@ -143,7 +143,7 @@ git pull
 
     🪄 🪄 ArgoCD にログインします。ArgoCD UI に SealedSecret チャートが表示されます。通常のk8sシークレットとして開封です🪄🪄![argocd-ss.png](images/argocd-ss.png)
 
-8. If you drill into the `SealedSecret` on ArgoCD's UI - you should see the `git-auth` secret has synced automatically:
+8. ArgoCD UIの`SealedSecret` を詳しく調べると、`git-auth` のシークレットが自動的に同期されたことがわかります。
 
     ![argocd-git-auth-synced.png](images/argocd-git-auth-synced.png)
 
