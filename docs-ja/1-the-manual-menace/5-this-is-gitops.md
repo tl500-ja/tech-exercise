@@ -16,11 +16,9 @@ git pull
 
 *注: 開発者ビューの場合は、左上から管理者ビューに切り替えることができます*![jenkins-new-var](./images/jenkins-new-var.png)
 
-```
 数秒待てば (私のように怠け者なら、ページを更新することもできます)、*BISCUITS変数はどこへ行った*!?!😱😱😱
 
 そうです、ArgoCD が git で構成を取得し、それを上に適用して上書きしたのです。 `BISCUITS` 変数は git に **ない** ため、削除されました。変数を永続化したい場合は、もちろんそれを git リポジトリに追加できます!
-```
 
 1. `ubiquitous-journey/values-tooling.yaml`ファイルを開き、以下に示すように、新しい環境変数を Jenkins 定義の`values`プロパティに追加します。
 

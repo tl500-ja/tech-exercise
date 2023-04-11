@@ -46,7 +46,6 @@
 
      <p class="tip">⛷️<b>ヒント</b>⛷️ - Enter キーを押す前に、チームのログイン情報と一致するようにユーザー名とパスワードを変更してください。パスワードに特殊文字が含まれている場合は、一重引用符で囲みます。例: <strong>'A8y?Rpm!9+A3B/KG'</strong></p>
 
-
     ```bash
     oc login --server=https://api.${CLUSTER_DOMAIN##apps.}:6443 -u <USER_NAME> -p <PASSWORD>
     ```
