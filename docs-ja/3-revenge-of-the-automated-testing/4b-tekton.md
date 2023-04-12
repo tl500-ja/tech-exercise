@@ -102,6 +102,6 @@
 
     ![images/checkstyle-sonar.png](images/checkstyle-sonar.png)
 
-    Sonarqube は * *Code Smells*の下に警告を報告します。
+    Sonarqube は *Code Smells*の下に警告を報告します。
 
     ![images/sonar-code-smells.png](images/sonar-code-smells.png)
