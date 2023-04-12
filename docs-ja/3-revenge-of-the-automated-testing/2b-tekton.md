@@ -18,7 +18,7 @@
     EOF
     ```
 
-2. `kubeseal`コマンドラインを使用して、シークレットの定義を封印します。
+2. `kubeseal`コマンドラインを使用して、シークレットの定義を暗号化します。
 
     ```bash
     kubeseal < /tmp/allure-auth.yaml > /tmp/sealed-allure-auth.yaml \

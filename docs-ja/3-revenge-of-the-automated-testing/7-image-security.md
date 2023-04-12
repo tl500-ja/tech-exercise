@@ -62,7 +62,7 @@ StackRox / Advanced Cluster Security (ACS) は、クラスター スコープで
     EOF
     ```
 
-    `kubeseal`コマンドラインを使用して、シークレットの定義を封印します。
+    `kubeseal`コマンドラインを使用して、シークレットの定義を暗号化します。
 
     ```bash
     kubeseal < /tmp/rox-auth.yaml > /tmp/sealed-rox-auth.yaml \
@@ -72,7 +72,7 @@ StackRox / Advanced Cluster Security (ACS) は、クラスター スコープで
         -o yaml
     ```
 
-    いつものように、この封印 アクティビティの結果、特に`encryptedData`取得します。これは GitOps であるため、Git リポジトリに保存します :)
+    いつものように、この暗号化作業の結果から、特に`encryptedData`取得します。これは GitOps であるため、Git リポジトリに保存します :)
 
     ```bash
     cat /tmp/sealed-rox-auth.yaml | grep -E 'username|password'

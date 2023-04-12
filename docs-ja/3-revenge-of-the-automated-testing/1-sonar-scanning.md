@@ -25,7 +25,7 @@
     EOF
     ```
 
-2. 前と同じように、 `kubeseal`コマンド ラインを使用して、作成したシークレット定義を封印します。
+2. 前と同じように、 `kubeseal`コマンド ラインを使用して、作成したシークレット定義を暗号化します。
 
     ```bash
     kubeseal < /tmp/sonarqube-auth.yaml > /tmp/sealed-sonarqube-auth.yaml \
@@ -35,7 +35,7 @@
         -o yaml
     ```
 
-    この封印の結果、特に`encryptedData`を取得します。
+    この暗号化の結果、特に`encryptedData`を取得します。
 
     ```bash
     cat /tmp/sealed-sonarqube-auth.yaml| grep -E 'username|password|currentAdminPassword'

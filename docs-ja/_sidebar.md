@@ -7,7 +7,7 @@
   * [🏃🏻‍♀️ GitOpsとは](1-the-manual-menace/5-this-is-gitops.md)
   * [🐉 ドラゴンが来た！](1-the-manual-menace/666-here-be-dragons.md)
 * [2. パイプラインの攻撃](2-attack-of-the-pipelines/README.md)
-  * [🕵🏻‍♂️ 封印されたシークレット](2-attack-of-the-pipelines/1-sealed-secrets.md)
+  * [🕵🏻‍♂️ 暗号化されたシークレット](2-attack-of-the-pipelines/1-sealed-secrets.md)
   * [🙌🏻 Application of Applications](2-attack-of-the-pipelines/2-app-of-apps.md)
   * [🏃🏻‍♀️ パイプライン](2-attack-of-the-pipelines/3-the-pipelines.md)
     * [🌸 Jenkins](2-attack-of-the-pipelines/3a-jenkins.md)
