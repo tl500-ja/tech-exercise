@@ -18,7 +18,7 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
 
 1. GitLab UI を開きます。 `<TEAM_NAME>`グループの下に`pet-battle-api`という名前の GitLab プロジェクトを作成します。プロジェクトを**internal**として作成します。
 
-    ![pet-battle-api-git-repo](images/tekton-pipeline-running.png)
+     ![pet-battle-api-git-repo](images/pet-battle-api-git-repo.png)
 
 2. CodeReady ワークスペースに戻り、PetBattle API コードを git で新しく作成されたリポジトリにフォークします。
 
@@ -128,7 +128,7 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
     git push
     ```
 
-    ![uj-and-tekkers](images/pet-battle-api-git-repo.png)
+    ![uj-and-tekkers](./images/uj-and-tekkers.png)
 
 7. パイプライン定義がクラスターに同期され (Argo CD に感謝🐙👏)、コードベースがフォークされたので、Webhook を GitLab `pet-battle-api`プロジェクトに追加できるようになりました。まず、パイプラインをトリガーするために呼び出す URL を取得します。
 
@@ -142,11 +142,11 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
     - `SSL Verification`を選択
     - `Add webhook`ボタンをクリックします。
 
-    ![gitlab-webhook-trigger.png](./images/uj-and-tekkers.png)
+    ![gitlab-webhook-trigger.png](images/gitlab-webhook-trigger.png)
 
     GitLab から Webhook の動作をテストできます。
 
-    ![gitlab-test-webhook.png](images/gitlab-webhook-trigger.png)
+    ![gitlab-test-webhook.png](images/gitlab-test-webhook.png)
 
 9. これらすべてのコンポーネントが配置されたら、Pet Battle API のコードをチェックインして、Webhook 経由でパイプラインをトリガーします。アプリケーションのバージョンに簡単な変更を加えてみましょう。 pet- `pet-battle-api` -api `pom.xml`を編集し、 `version`番号を更新します。パイプラインは`chart/Chart.yaml`これらのバージョンで更新します。
 
