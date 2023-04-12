@@ -9,7 +9,6 @@
 
      <p class="warn">⛷️<b>注</b>⛷️ - OpenShift 4.11+ で DevSpaces を使用している場合は、次のステップでファイルを開くためにpet-battle-apiフォルダーを Che Workspace に追加する必要がある場合があります。</p>
 
-
     ![add-folder-to-workspace](images/add-folder-to-workspace.png)
 
 2. `/projects/pet-battle-api/src/test/java/app/battle/CatEndpointTest.java`などの Java クラス ファイルを編集し、L19,21 などにいくつかの TAB/スペースを追加します。
