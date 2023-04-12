@@ -96,9 +96,9 @@
 
     これらのフェーズはアウト ビルド パイプラインで使用します。完全なライフサイクル リファレンスは<span style="color:blue;"><a href="https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference">こちらです。</a></span>
 
-    **Sonarqube 項目を実行した場合は、そこに追加情報が表示されます....**Sonarqubeのcheckstyleプラグインは**Rules**の下の**Java**言語や**Repository**を使用します。
+    **Sonarqube 項目を実行した場合は、そこに追加情報が表示されます....** Sonarqubeのcheckstyleプラグインは**Rules**の下の**Java**言語や**Repository**を使用します。
 
-    <p class="warn"><b>ヒント</b> <span style="color:blue;"><a href="https://sonarqube-&lt;TEAM_NAME&gt;-ci-cd.&lt;CLUSTER_DOMAIN&gt;/">https://sonarqube-{team_name4}-ci-cd.{cluster_domain5}/{/cluster_domain5}{/team_name4}</a></span>に移動すると、Sonarqube で利用可能なプロジェクトとレポートを見つけることができます。</p>
+    <p class="warn"><b>ヒント</b> <span style="color:blue;"><a href="https://sonarqube-<TEAM_NAME>-ci-cd.<CLUSTER_DOMAIN>/">https://sonarqube-<TEAM_NAME>-ci-cd.<CLUSTER_DOMAIN>/</a></span>に移動すると、Sonarqube で利用可能なプロジェクトとレポートを見つけることができます。</p>
 
     ![images/checkstyle-sonar.png](images/checkstyle-sonar.png)
 
