@@ -82,7 +82,7 @@ git pull
     </div>
     
 
-5. この封印活動の結果、特に`encryptedData`を取得し、gitに追加できるようにしたいと思います。封印されたシークレットを反復可能な方法でクラスターに追加するために使用できる<span style="color:blue;"><a href="https://github.com/redhat-cop/helm-charts/tree/master/charts/helper-sealed-secrets">ヘルパー Helm チャートを</a></span>既に作成しています。次のステップで、このチャートに`encryptedData`値を提供します。
+5. この封印作業の結果、特に`encryptedData`を取得し、gitに追加できるようにしたいと思います。封印されたシークレットを反復可能な方法でクラスターに追加するために使用できる<span style="color:blue;"><a href="https://github.com/redhat-cop/helm-charts/tree/master/charts/helper-sealed-secrets">ヘルパー Helm チャートを</a></span>既に作成しています。次のステップで、このチャートに`encryptedData`値を提供します。
 
     ```bash#test
     cat /tmp/sealed-git-auth.yaml | grep -E 'username|password'

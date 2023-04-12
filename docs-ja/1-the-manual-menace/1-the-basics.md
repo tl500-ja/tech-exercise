@@ -111,7 +111,7 @@ Helm を使用して簡単なアプリケーションをデプロイしてみま
     oc get pods -n ${TEAM_NAME}-ci-cd
     ```
 
-5. #amazing-todolist-app で遊んだことが終わったら、チャートを削除して作業を整理しましょう。これを行うには、helm uninstall を実行してチャートのリリースを削除します。
+5. #amazing-todolist-app で遊び終わったら、チャートを削除して作業を整理しましょう。これを行うには、helm uninstall を実行してチャートのリリースを削除します。
 
     ```bash#test
     helm uninstall my --namespace ${TEAM_NAME}-ci-cd

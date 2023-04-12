@@ -4,7 +4,7 @@
 
 ### 拡張🔥🦄
 
-- $SOMETHING を redhat-cop/helm-charts リポジトリから UJ に追加します。
+- redhat-cop/helm-charts リポジトリから何かを UJ に追加します。
 
 ### Helmの詳細
 
@@ -26,7 +26,7 @@
 
 OpenShift では、WebUI に入力する`HelmChartRepository`オブジェクトを作成できます。詳細については<span style="color:blue;"><a href="https://docs.openshift.com/container-platform/4.9/applications/working_with_helm_charts/configuring-custom-helm-chart-repositories.html">、こちらを</a></span>参照してください。
 
-helm チャートを名前空間にインストールすると、helm コマンド ラインは実際に完全なチャートをアップロードし、OpenShift クラスターの Helm コントローラーが操作できるシークレットに格納します。
+helm チャートをnamespaceにインストールすると、helm コマンド ラインは実際に完全なチャートをアップロードし、OpenShift クラスターの Helm コントローラーが操作できるシークレットに格納します。
 
 <div class="highlight" style="background: #f7f7f7">
 <pre><code class="language-bash">
@@ -112,7 +112,7 @@ data:
 
 ### ArgoCD - インストール時にリポジトリを追加
 
-**余分なマイルを行く**
+**もう少し頑張ってみましょう**
 
 インストール時にリポジトリを追加することもできます。必ず`GITLAB_URL`を使用してください。
 

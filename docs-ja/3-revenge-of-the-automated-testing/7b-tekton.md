@@ -177,7 +177,7 @@
     git push
     ```
 
-3. パイプラインの実行をトリガーする
+3. パイプラインの実行をトリガーします。
 
     ```bash
     cd /projects/pet-battle-api
@@ -185,7 +185,7 @@
     git push
     ```
 
-4. Our Pipeline should look like this now with two `image-scan` steps.
+4. ここでパイプラインは2つの`image-scan`ステップを持っているように見えるべきです。
 
     ![acs-tasks-pipe.png](images/acs-tasks-pipe.png)
 

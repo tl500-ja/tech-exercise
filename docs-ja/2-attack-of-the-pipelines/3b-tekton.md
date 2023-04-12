@@ -4,7 +4,7 @@
 
 Jenkins の機能と Tekton の機能には多くの類似点があります。たとえば、どちらもパイプライン定義をコードとして Git リポジトリに格納するために使用できます。 Tekton はOperatorとしてクラスターにデプロイされ、ユーザーは YAML パイプラインとタスク定義で定義できます。 <span style="color:blue;"><a href="https://hub.tekton.dev/">Tekton Hub </a></span>は、これらの YAML リソースをコミュニティ間で共有するためのリポジトリであり、標準的なワークフローに優れた再利用性を提供します。
 
-Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ多数の YAML ファイルで構成されています。これらは、`Pipeline`のインスタンスと、パイプラインのインスタンスを作成するためのワークスペースを含む別のYAMLファイル（ `PipelineRun` ）にまとめられる。
+Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ多数の YAML ファイルで構成されています。これらは、`Pipeline`のインスタンスと、パイプラインのインスタンスを作成するためのワークスペースを含む別のYAMLファイル（ `PipelineRun` ）にまとめられます。
 
 ![simple-tekkers-pipeline](./images/simple-tekkers-pipeline.png)
 
@@ -170,7 +170,7 @@ Tekton は、 `Task`や`Pipeline`など、それぞれ異なる目的を持つ�
     git push
     ```
 
-    🪄 Observe Pipeline running by browsing to OpenShift UI -&gt; Pipelines from left pane -&gt; Pipelines in your `<TEAM_NAME>-ci-cd` project:
+    🪄 OpenShift UIの`<TEAM_NAME>-ci-cd`プロジェクトにおいて、 左ペインのPipelines -> Pipelines でパイプラインの実行状況を確認します。
 
     ![images/tekton-pipeline-running.png](images/tekton-pipeline-running.png)
 

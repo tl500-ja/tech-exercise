@@ -2,7 +2,7 @@
 
 パイプラインで**kube-linter**タスクを有効にしましょう。
 
-1. Kube lint は Tekton Hub に tekton タスクを持っているので、それを取得してクラスターに`Task`を追加しましょう。 `Task`何をするかを自由に調べてください
+1. Kube lint は Tekton Hub に tekton タスクを持っているので、それを取得してクラスターに`Task`を追加しましょう。 `Task`が何をするかを自由に調べてください
 
     ```bash
     curl -sLo /projects/tech-exercise/tekton/templates/tasks/kube-linter.yaml \
@@ -40,7 +40,7 @@
 
     `runAfter`が`kube-linter`タスクになるように、パイプラインの`maven`タスクも必ず更新してください 💪💪💪
 
-     <p class="warn">⛷️<b>注</b>⛷️ - Sonarqube のステップが完了したら、<strong>分析チェック</strong>として<strong>runAfter</strong>を設定する必要があります</p>
+     <p class="warn">⛷️<b>注</b>⛷️ - Sonarqube のステップが完了したら、<strong>runAfter</strong>を<strong>analysis-check</strong>に設定する必要があります</p>
 
     次のようなパイプライン定義が必要です。
 
@@ -129,7 +129,7 @@
 
     ![images/acs-owner-label-fail.png](images/acs-owner-label-fail.png)
 
-5. リンターは、リソースにラベルがないことを訴えています。helm を使用して**所有者**ラベルを追加して、デプロイメントを修正しましょう。 `pet-battle-api/chart/values.yaml`ファイルを編集して、 **owner**の値を追加します。
+5. リンターは、リソースにラベルがないことを訴えています。helm を使用して**owner**ラベルを追加して、デプロイメントを修正しましょう。 `pet-battle-api/chart/values.yaml`ファイルを編集して、 **owner**の値を追加します。
 
     ```yaml
     # Owner value

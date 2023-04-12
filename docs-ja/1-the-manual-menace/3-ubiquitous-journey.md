@@ -33,7 +33,7 @@ Red Hat Open Innovation Labs では、セットアップとオンボーディン
 
 5. 新しいビューで、 `tech-exercise` Project Name として使用し、Visibility level で**Internal**を選択して、Create project をクリックします。プロジェクトがユーザー名ではなく、以前に作成したグループにあることを確認してください。![gitlab-new-project](images/gitlab-new-project-2.png)
 
-6. Gitlab Personal Access Token (PAT) を作成します。トークンは、後でスクリプトから Gitlab にアクセスするためのより安全で信頼性の高い方法です。参考までに、Web UI の [User] &gt; [Settings] &gt; [Access Tokens] の下にある Gitlab で PAT を生成することもできます。ここではヘルパー スクリプトを使用して、そのプロセスを自動化します。トークンを生成するには、ターミナルを開いていない場合は開き、次のコマンドを実行します。
+6. Gitlab Personal Access Token (PAT) を作成します。トークンは、後でスクリプトから Gitlab にアクセスするためのより安全で信頼性の高い方法です。参考までに、Gitlab Web UI の User &gt; Settings &gt; Access Tokens で PAT を生成することもできます。ここではヘルパー スクリプトを使用して、そのプロセスを自動化します。トークンを生成するには、ターミナルを開いていない場合は開き、次のコマンドを実行します。
 
     Gitlab ユーザー名をエクスポートします。
 
@@ -88,9 +88,9 @@ Red Hat Open Innovation Labs では、セットアップとオンボーディン
 
 ### ユビキタスジャーニーのデプロイ🔥🦄
 
-> この演習では、繰り返し可能なパターンである GitOps を使用して、最初の名前空間とツールを作成します。
+> この演習では、繰り返し可能なパターンである GitOps を使用して、最初のnamespaceとツールを作成します。
 
-1. The Ubiquitous Journey (🔥🦄) は、ArgoCD で App of Apps を作成するための非常にきちんとしたパターンが組み込まれた別の Helm チャートです。早速始めましょう - IDE で、プロジェクトのルートにある`values.yaml`ファイルを開きます。作成したばかりの git リポジトリとチーム名を参照するように更新します。この値ファイルはチャートのデフォルト ファイルであり、作成するこのチャートのすべてのインスタンスに適用されます。チャートのテンプレートは、以前に使用したチャート ( `services` 、 `deployments` &amp; `routes` ) とは異なりますが、前の演習で ArgoCD の UI にアプリをデプロイしたときに手動で作成したものと同じように、ArgoCD アプリケーション定義です。
+1. ユビキタス ジャーニー (🔥🦄) は、ArgoCD で App of Apps を作成するための非常にきちんとしたパターンが組み込まれた別の Helm チャートです。早速始めましょう - IDE で、プロジェクトのルートにある`values.yaml`ファイルを開きます。作成したばかりの git リポジトリとチーム名を参照するように更新します。この値ファイルはチャートのデフォルト ファイルであり、作成するこのチャートのすべてのインスタンスに適用されます。チャートのテンプレートは、以前に使用したチャート ( `services` 、 `deployments` &amp; `routes` ) とは異なりますが、前の演習で ArgoCD の UI にアプリをデプロイしたときに手動で作成したものと同じように、ArgoCD アプリケーション定義です。
 
     ```yaml
     source: "https://<GIT_SERVER>/<TEAM_NAME>/tech-exercise.git"
@@ -104,7 +104,7 @@ Red Hat Open Innovation Labs では、セットアップとオンボーディン
     yq eval ".source = \"https://$GIT_SERVER/$TEAM_NAME/tech-exercise.git\"" -i /projects/tech-exercise/values.yaml
     ```
 
-2. `values.yaml`ファイルは`ubiquitous-journey/values-tooling.yaml`を参照します。ここには、CI/CD パイプラインに必要なすべての定義が格納されています。 Jenkins、Nexus、Sonar などの定義は最終的にすべてここに格納されますが、2 つのオブジェクトから始めましょう。 1 つは、いくつかの名前空間とアクセス許可を使用してクラスターをブートストラップするためのものです。もう 1 つは、Jenkins をデプロイすることです。ブートストラップ セクションで`\<TEAM_NAME\>`を次のように変更して、 `ubiquitous-journey/values-tooling.yaml`を更新します。
+2. `values.yaml`ファイルは`ubiquitous-journey/values-tooling.yaml`を参照します。ここには、CI/CD パイプラインに必要なすべての定義が格納されています。 Jenkins、Nexus、Sonar などの定義は最終的にすべてここに格納されますが、2 つのオブジェクトから始めましょう。 1 つは、いくつかのnamespaceとアクセス許可を使用してクラスターをブートストラップするためのものです。もう 1 つは、Jenkins をデプロイすることです。ブートストラップ セクションで`\<TEAM_NAME\>`を次のように変更して、 `ubiquitous-journey/values-tooling.yaml`を更新します。
 
     ```bash
             - name: jenkins
@@ -166,7 +166,7 @@ Red Hat Open Innovation Labs では、セットアップとオンボーディン
     EOF
     ```
 
-2. Ubiquitous Journey にツールをインストールします (この段階ではブートストラップと Jenkins のみ..)。コマンドが実行されたら、ArgoCD UI を開いて、作成中のリソースを表示します。最初の AppOfApps をデプロイしました。
+2. ユビキタス ジャーニーにツールをインストールします (この段階ではブートストラップと Jenkins のみ..)。コマンドが実行されたら、ArgoCD UI を開いて、作成中のリソースを表示します。最初の AppOfApps をデプロイしました。
 
     ```bash#test
     cd /projects/tech-exercise

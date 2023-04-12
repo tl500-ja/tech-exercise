@@ -53,11 +53,11 @@
 
 6. `CatResource.java`クラス ファイルを編集し、 `loadlitter()`メソッドの一部である catch ブロックのスタック トレースを削除して、空にします。
 
-    From this:
+    これを
 
     ![images/codestyle-violation2.png](images/codestyle-violation1.png)
 
-    To this:
+    次のように変更します。
 
     ![images/codestyle-violation2.png](images/codestyle-violation2.png)
 

@@ -1,4 +1,4 @@
-## 🐙 ArgoCD - GitOps Controller
+## 🐙 ArgoCD - GitOpsコントローラー
 
 GitOps は、Ops に対する開発者中心のアプローチと見なすことができます。開発者は、マシンから離れたコードの所有権を取得するための優れたプラクティスと、このコードが実行された後にデプロイおよび監視する方法を学ぶことができます。
 
@@ -65,7 +65,7 @@ Git で必要な状態に一致しないものがあると見なされると、�
 
     また、シークレット 🔐 を使用して Git リポジトリからプルできるように ArgoCD を構成します。
 
-    少しの yaml を作成して、 &lt;TEAM_NAME&gt;-ci-cd 名前空間で、ArgoCD インスタンスにシークレットを設定します 😋:
+    少しの yaml を作成して、 &lt;TEAM_NAME&gt;-ci-cd namespaceで、ArgoCD インスタンスにシークレットを設定します 😋:
 
     ```bash#test
     cat << EOF > /projects/tech-exercise/argocd-values.yaml
@@ -96,7 +96,7 @@ Git で必要な状態に一致しないものがあると見なされると、�
       redhat-cop/gitops-operator
     ```
 
-     <p class="tip">⛷️<b>注</b>⛷️ - ArgoCD がこれらの演習のためにかなり寛容なモードで実行できるようにしていることも注目に値します。これにより、どこからでもチャートを取得できます。 ArgoCD をもう少し安全にすることに興味がある場合は、このラボの最後にある<span style="color:blue;"><a href="/#/1-the-manual-menace/666-here-be-dragons?id=here-be-dragons">here-be-dragons</a></span>演習をチェックしてください。</p>
+     <p class="tip">⛷️<b>注</b>⛷️ - ArgoCD がこれらの演習のためにかなり寛容なモードで実行できるようにしていることも注目に値します。これにより、どこからでもチャートを取得できます。 ArgoCD をもう少し安全にすることに興味がある場合は、このラボの最後にある<span style="color:blue;"><a href="/#/1-the-manual-menace/666-here-be-dragons?id=here-be-dragons">ドラゴンが来た！</a></span>演習をチェックしてください。</p>
     
 
 4. OpenShift をチェックインすると、Operator Pod が起動し、(最終的に) argocd-server、dex、およびその他の Pod が起動するのがわかります。これを行うには、watchフラグ (-w) を指定してコマンドを実行し、Pod の作成を継続的に監視します。
@@ -107,9 +107,9 @@ Git で必要な状態に一致しないものがあると見なされると、�
 
     ![argocd-pods](images/argocd-pods.png)
 
-    *すべてのポッドがRunningになった後に次のステップに進むには、Control+C を実行して「ウォッチ」モードを解除する必要があります。*
+    *すべてのPodがRunningになった後に次のステップに進むには、Control+C を実行して「ウォッチ」モードを解除する必要があります。*
 
-5. すべてのポッドが起動して実行されると、ArgoCD の UI にログインできます。ルートを取得し、新しいブラウザー タブで開きます。
+5. すべてのPodが起動して実行されると、ArgoCD の UI にログインできます。ルートを取得し、新しいブラウザー タブで開きます。
 
     ```bash#test
     echo https://$(oc get route argocd-server --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)
@@ -140,7 +140,7 @@ Git で必要な状態に一致しないものがあると見なされると、�
 
     フォームは次のようになります。 ![argocd-create-application](images/argocd-create-application.png)
 
-9. 作成をクリックすると、 `our-todolist`アプリケーションが作成され、 `${TEAM_NAME}-ci-cd`名前空間でデプロイを開始するはずです。![argocd-todolist](images/argocd-todolist.png)
+9. 作成をクリックすると、 `our-todolist`アプリケーションが作成され、 `${TEAM_NAME}-ci-cd` namespaceでデプロイを開始するはずです。![argocd-todolist](images/argocd-todolist.png)
 
 10. アプリケーションをドリルダウンすると、チャートによって生成されたすべての k8s リソースの ArgoCD の素晴らしいビューが表示されます![argocd-todolist-detail](images/argocd-todolist-detail.png)
 

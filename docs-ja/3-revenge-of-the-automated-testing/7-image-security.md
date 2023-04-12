@@ -111,7 +111,7 @@ StackRox / Advanced Cluster Security (ACS) は、クラスター スコープで
 
     ![images/acs-find-policy.png](images/acs-find-policy.png)
 
-6. 右側の 3 つのドットをクリックしてこのポリシーを複製し、編集して新しい名前を付けます。
+6. 右側の 3 つのドットをクリックしてこのポリシーをクローンして、編集して新しい名前を付けます。
 
     ![images/acs-clone-policy.png](images/acs-clone-policy.png)
 
@@ -119,7 +119,7 @@ StackRox / Advanced Cluster Security (ACS) は、クラスター スコープで
 
     ![images/acs-policy-behaviour.png](images/acs-policy-behaviour.png)
 
-8. <strong>Policy Criteria</strong>に到達するまで<em>Next</em>をクリックします。許可されていない Dockerfile 行の<em>Arguments</em>の正規表現に<strong>22</strong>を追加します。
+8. <strong>Policy Criteria</strong>に到達するまで<em>Next</em>をクリックします。Disallowed Dockerfile lineの<em>Arguments</em>の正規表現に<strong>22</strong>を追加します。
 
     ![images/acs-policy-criteria.png](images/acs-policy-criteria.png)
 

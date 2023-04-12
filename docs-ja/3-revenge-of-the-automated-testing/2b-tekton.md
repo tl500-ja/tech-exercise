@@ -188,7 +188,7 @@
 
 3. <strong>(オプション)</strong>このステップは、前のテスト セクション<a>3. 自動テスト / Sonarqube / Tekton の復習 を</a>実行して<strong>いない</strong>場合にのみ実行してください。それ以外の場合は、この手順をスキップしてください。 Maven パイプライン ( `/projects/tech-exercise/tekton/templates/pipelines/maven-pipeline.yaml` ) を開き、パイプラインから<code>skipTests</code>引数<strong>を削除します</strong>。これにより、単体テストが確実に実行されます。
 
-    ビルド オプションを次から変更します。
+    以下のビルド オプションの設定を
 
      <div class="highlight" style="background: #f7f7f7">  <pre><code class="language-yaml">
         - name: maven
@@ -196,7 +196,9 @@
             - name: MAVEN_BUILD_OPTS
               value: "-Dquarkus.package.type=fast-jar <strong>-DskipTests"</strong>
         </code></pre>
-    </div>  to this:  <div class="highlight" style="background: #f7f7f7">  <pre><code class="language-yaml">
+    </div>
+    次のように変更します。
+    <div class="highlight" style="background: #f7f7f7">  <pre><code class="language-yaml">
         - name: maven
           params:
             - name: MAVEN_BUILD_OPTS
@@ -233,7 +235,7 @@
 
     ![images/allure-test-suite.png](images/allure-test-suite.png)
 
-    ドリルダウンしてボディの取り付けをテストすることもできます。
+    ドリルダウンしてテストの詳細情報を表示することもできます。
 
     ![images/allure-behaviours.png](images/allure-behaviours.png)
 

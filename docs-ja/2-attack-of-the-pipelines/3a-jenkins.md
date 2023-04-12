@@ -30,7 +30,7 @@ git push
 
 #### Pet Battle (フロントエンド) GitLabプロジェクトのセットアップ
 
-1. GitLab UI を開きます。 `pet-battle`という名前の`<TEAM_NAME>`グループの下に GitLab でプロジェクトを作成します。プロジェクトを**public**にします。
+1. GitLab UI を開きます。 GitLab で`<TEAM_NAME>`グループの下に`pet-battle`という名前のプロジェクトを作成します。プロジェクトを**public**にします。
 
     ![pet-battle-git-repo](images/pet-battle-git-repo.png)
 

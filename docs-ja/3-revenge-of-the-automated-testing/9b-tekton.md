@@ -94,7 +94,7 @@
               value: "$(params.APPLICATION_NAME)/$(params.GIT_BRANCH)"
     ```
 
-4. 覚えておいてください-gitにない場合、それは本物ではありません。
+4. 覚えておいてください。gitにない場合、それは本物ではありません。
 
     ```bash
     cd /projects/tech-exercise/tekton

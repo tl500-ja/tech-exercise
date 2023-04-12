@@ -12,7 +12,7 @@
 
 ページ上部のボックスを使用すると、チームが使用する変数が事前に入力されたドキュメントを読み込むことができます。ページ上部のボックスに自分のチーム名とクラスターが使用しているドメインを入力し、 `save`をクリックするだけです。これにより、サイトのローカル ストレージに値が保持されます。間違いを犯した場合は、 `clear`押すと値がリセットされます。
 
-- 私のチームが`biscuits`と呼ばれている場合は、最初のボックスに入れます。この値は、使用する名前空間などの一部にプレフィックスが付けられます。
+- 私のチームが`biscuits`と呼ばれている場合は、最初のボックスに入れます。この値は、使用するnamespaceなどの一部にプレフィックスが付けられます。
 - クラスター ドメインの場合、 `apps.*` の該当部分はOpenShift ドメインを追加します。たとえば、私のコンソール アドレスが<code class="language-yaml">https://console-openshift-console.apps.hivec.sandbox1243.opentlc.com/</code>にある場合、 `apps.hivec.sandbox1243.opentlc.com`とボックスに記入すれば、演習用の正しいアドレスが生成されます。
 - git サーバーの場合、好みのアクセス可能な Git サーバー (GitHub、GitLab など) を使用できます。インストラクターはあなたにそれを提供することができます。たとえば、git サーバーが<code class="language-yaml">https://gitlab-ce.apps.hivec.sandbox1243.opentlc.com/</code>にある場合、ボックスに`gitlab-ce.apps.hivec.sandbox1243.opentlc.com`を入れるだけで正しい演習のアドレスが生成されます。
 

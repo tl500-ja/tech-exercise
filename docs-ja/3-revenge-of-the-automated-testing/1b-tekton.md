@@ -131,7 +131,7 @@
           - code-analysis
     ```
 
-5. Tekton では、 `runAfter`を使用してパイプラインの構造を整理することでフローを制御できます。 `maven`ビルド ステップの`runAfter` `analysis-check`に調整して、アプリをコンパイルする前に静的分析ステップが行われるようにします。
+5. Tekton では、 `runAfter`を使用してパイプラインの構造を整理することでフローを制御できます。 `maven`ビルド ステップの`runAfter`を`analysis-check`に設定して、アプリをコンパイルする前に静的分析ステップが行われるようにします。
 
      <div class="highlight" style="background: #f7f7f7"><pre><code class="language-yaml">
             - name: maven
