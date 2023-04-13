@@ -31,10 +31,10 @@
     <span style="color:blue;"><a href="https://jestjs.io/">Jest</a></span> 、
     <span style="color:blue;"><a href="https://github.com/allure-framework/allure2">Allure</a></span> 、
     <span style="color:blue;"><a href="https://quarkus.io/guides/getting-started-testing">RESTassured</a></span> - API とフロントエンドのテストを追加
-- コード リンティング -
+- コードリンティング -
     <span style="color:blue;"><a href="https://www.npmjs.com/package/lint">npm lint</a></span> 、
     <span style="color:blue;"><a href="https://checkstyle.sourceforge.io">checkstyle</a></span> - テストの静的コード リンターとカバレッジ レポート
-- Kube リンティング -
+- Kubeリンティング -
     <span style="color:blue;"><a href="https://github.com/stackrox/kube-linter">kubeinter</a></span> - ベスト プラクティスに照らして K8S yaml を検証
 - <span style="color:blue;"><a href="https://owasp.org/www-project-zap">ZAP - OWASP</a></span> 一般的な攻撃パターンをチェックするための アプリケーション スキャン
 - イメージセキュリティ -
