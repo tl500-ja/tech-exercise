@@ -31,7 +31,7 @@
 
     ![kibana-discover](./images/kibana-discover.png)
 
-7. 情報をフィルタリングしましょう。queryバーに`kubernetes.namespace_name="<TEAM_NAME>-test" AND kubernetes.container_name=pet-battle-.*`追加して、テスト用namespaceで実行されているpet-battleアプリ専用のログを探します。
+7. 情報をフィルタリングしましょう。queryバーに`kubernetes.namespace_name="<TEAM_NAME>-test" AND kubernetes.container_name=pet-battle-.*を`追加して、テスト用namespaceで実行されているpet-battleアプリ専用のログを探します。
 
     ![kibana-example-query](./images/kibana-example-query.png)
 

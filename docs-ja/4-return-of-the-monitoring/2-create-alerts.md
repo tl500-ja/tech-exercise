@@ -25,7 +25,7 @@
     </div>
     
 
-2. MongoDB ディスクがビジー/フルになったときにアラートを出す新しいプラットフォーム タイプ ルールを追加
+2. MongoDB ディスクがビジー/フルになったときにアラートを出す新しいプラットフォーム タイプ ルールを追加します。
 
     ```bash
     cat << EOF >> /projects/pet-battle-api/chart/templates/prometheusrule.yaml
@@ -51,7 +51,7 @@
     EOF
     ```
 
-4. 新しいバージョンでパイプラインをトリガーできるようになりました。 pet- `pet-battle-api` -api `pom.xml`を編集し、 `version`番号を更新します。パイプラインは`chart/Chart.yaml`これらのバージョンで更新します。バージョン番号をインクリメントして適切に変更します。
+4. 新しいバージョンでパイプラインをトリガーできるようになりました。 `pet-battle-api`の `pom.xml`を編集し、 `version`番号を更新します。パイプラインは`chart/Chart.yaml`これらのバージョンで更新します。バージョン番号をインクリメントして適切に変更します。
 
     ```xml
         <artifactId>pet-battle-api</artifactId>

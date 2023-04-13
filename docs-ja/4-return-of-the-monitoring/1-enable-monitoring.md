@@ -50,7 +50,7 @@
 
     それでは、PetBattle アプリの`ServiceMonitor`を作成して追加しましょう!もちろん、これはGITOPSなので、HelmとArgoCDを介して実行します!!
 
-    pet-battle api の Helm チャート`pet-battle/test/values.yaml`および`pet-battle/stage/values.yaml`ファイルを開きます。以下を追加して、 `pet-battle-api`の`values`更新します。
+    pet-battle api の Helm チャート`pet-battle/test/values.yaml`および`pet-battle/stage/values.yaml`ファイルを開きます。`pet-battle-api`の`values`に以下を追加して更新します。
 
     ```yaml
           servicemonitor: true
@@ -133,7 +133,7 @@
 
     ![grafana-add-panel](./images/grafana-add-panel.png)
 
-4. 新しいパネルで、プロジェクトに関する情報を照会するように構成しましょう。namespaceで実行されているPodの数をカウントするために、非常に単純なクエリを使用します (他のクエリを自由に使用してください)。パネル設定で、タイトルを適切なものに設定し、以下のクエリを追加します。保存を押してください！
+4. 新しいパネルで、プロジェクトに関する情報を照会するように構成しましょう。namespaceで実行されているPodの数をカウントするために、非常に単純なクエリを使用します (他のクエリを自由に使用してください)。Panel > Settingsで、タイトルを適切なものに設定し、以下のクエリを追加します。Saveを押してください！
 
     ```bash
     sum(kube_pod_status_ready{namespace="<TEAM_NAME>-test",condition="true"})
@@ -149,7 +149,6 @@
     ```
 
      <!--![grafana-less-pods](./images/grafana-less-pods.png) -->
-
 
      <p class="tip">🐌 これは GITOPS ではありません - ダッシュボードを手動で構成することは、Grafana で遊ぶ良い方法です。ダッシュボードをコードとして作成および保存するための高度な演習を参照してください 🐎</p>
     
