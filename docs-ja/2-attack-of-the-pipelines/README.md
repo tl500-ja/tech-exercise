@@ -16,7 +16,7 @@
 - ソフトウェア Jenkins または Tekton を自動的にビルド /イメージ作成/ デプロイできます
 - パイプラインで使用されるシークレットを git に安全に保存できます
 
-## 🔨 この演習で使用するツール!
+## 🔨 この演習で使用するツール
 
 - <span style="color:blue;"><a href="https://github.com/bitnami-labs/sealed-secrets">SealedSecrets</a></span> - シークレットを暗号化して安全に保存するのに役立ちます。パブリック リポジトリにも使用できます。
 - <span style="color:blue;"><a href="https://tekton.dev/">Tekton</a></span> - クラウド ネイティブな CI/CD ツールで、どこでもビルド、テスト、デプロイできます。
