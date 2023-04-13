@@ -26,7 +26,7 @@
 
 ## 🔨 この演習で使用されるツール
 
-- <span style="color:blue;"><a href="https://www.sonarqube.org/">Sonar</a></span> - 静的コード分析をパイプラインに追加する
+- <span style="color:blue;"><a href="https://www.sonarqube.org/">Sonar</a></span> - 静的コード分析をパイプラインに追加
 - テストツール -
     <span style="color:blue;"><a href="https://jestjs.io/">Jest</a></span> 、
     <span style="color:blue;"><a href="https://github.com/allure-framework/allure2">Allure</a></span> 、
@@ -34,13 +34,13 @@
 - コード リンティング -
     <span style="color:blue;"><a href="https://www.npmjs.com/package/lint">npm lint</a></span> 、
     <span style="color:blue;"><a href="https://checkstyle.sourceforge.io">checkstyle</a></span> - テストの静的コード リンターとカバレッジ レポート
-- Kube Linting -
-    <span style="color:blue;"><a href="https://github.com/stackrox/kube-linter">kubeinter</a></span> - ベスト プラクティスに照らして K8S yaml を検証する
+- Kube リンティング -
+    <span style="color:blue;"><a href="https://github.com/stackrox/kube-linter">kubeinter</a></span> - ベスト プラクティスに照らして K8S yaml を検証
 - <span style="color:blue;"><a href="https://owasp.org/www-project-zap">ZAP - OWASP</a></span> 一般的な攻撃パターンをチェックするための アプリケーション スキャン
-- Image Security -
-    <span style="color:blue;"><a href="https://www.stackrox.com">StackRox</a></span> - StackRox を使用してイメージとホスト内の脆弱性を見つける
-- 画像署名 -
-    <span style="color:blue;"><a href="https://www.sigstore.dev">sigstore</a></span> - cosign でイメージに署名します
+- イメージセキュリティ -
+    <span style="color:blue;"><a href="https://www.stackrox.com">StackRox</a></span> - StackRox を使用してイメージとホスト内の脆弱性を発見
+- イメージ署名 -
+    <span style="color:blue;"><a href="https://www.sigstore.dev">sigstore</a></span> - cosign でイメージに署名
 - 負荷テスト -
     <span style="color:blue;"><a href="https://docs.locust.io/en/stable/index.html">イナゴ</a></span>- パイプラインでの自動負荷テスト
 - システム テスト - 次の段階に進む前にシステムをテストします。
