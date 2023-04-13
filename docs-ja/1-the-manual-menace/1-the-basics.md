@@ -15,19 +15,19 @@
 
 3. stack-tl500 コンテナーの気の利いたデフォルト シェルは、swish と韻を踏む`zsh`であることに注意してください。また、きちんとしたショートカットとプラグインもあります - さらに、すべてのクールな子供たちがそれを使用しています 😎! `bash`に切り替えたい場合に備えて`~/.zshrc`と`~/.bashrc`の両方で環境変数を設定します。
 
-4. 以下のコマンドを実行して、CodeReadyWorkspace の環境で`TEAM_NAME`名をセットアップします。演習全体で`TEAM_NAME`変数を使用するため、セッションに保存すると、演習全体でこの変数の変更が少なくなります 💪. <strong data-md-type="double_emphasis">`TEAM_NAME`が小文字の英数字または「-」のみで構成されていることを確認し、英数字で開始および終了する必要があります (例: 「my-name」または「123-abc.」)。</strong>
+4. 以下のコマンドを実行して、CodeReadyWorkspace の環境変数で`TEAM_NAME`名をセットアップします。演習全体で`TEAM_NAME`変数を使用するため、セッションに保存すると、演習全体でこの変数の変更が少なくなります 💪. <strong data-md-type="double_emphasis">`TEAM_NAME`が小文字の英数字または「-」のみで構成されていることを確認し、英数字で開始および終了する必要があります (例: 「my-name」または「123-abc.」)。</strong>
 
     ```bash#test
     echo export TEAM_NAME="<TEAM_NAME>" | tee -a ~/.bashrc -a ~/.zshrc
     ```
 
-5. `CLUSTER_DOMAIN`を環境に追加します。
+5. `CLUSTER_DOMAIN`を環境変数に追加します。
 
     ```bash#test
     echo export CLUSTER_DOMAIN="<CLUSTER_DOMAIN>" | tee -a ~/.bashrc -a ~/.zshrc
     ```
 
-6. `GIT_SERVER`環境に追加します。
+6. `GIT_SERVER`を環境変数に追加します。
 
     ```bash#test
     echo export GIT_SERVER="<GIT_SERVER>" | tee -a ~/.bashrc -a ~/.zshrc
@@ -58,7 +58,7 @@
 
     ![new-project](./images/new-project.png)
 
-     <p class="warn">⛷️<b>注</b>⛷️ - チームとして作業していて、同じ TEAM_NAME を使用している場合、このプロジェクトが既に存在するというメッセージが表示される場合があります。チーム メイトの 1 人がすでにこのプロジェクトを作成しているはずです。問題ありません！</p>
+     <p class="warn">⛷️<b>注</b>⛷️ - チームとして作業していて、同じ TEAM_NAME を使用している場合、このプロジェクトが既に存在するというメッセージが表示される場合があります。チームメイトの 1 人がすでにこのプロジェクトを作成しているはずです。問題ありません！</p>
     
 
 ### Helm 入門
