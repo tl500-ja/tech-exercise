@@ -148,7 +148,6 @@ git pull
     ![argocd-git-auth-synced.png](images/argocd-git-auth-synced.png)
 
 9. `Jenkins -> Manage Jenkins -> Manage Credentials`開いて`<TEAM_NAME>-ci-cd-git-auth`を表示することで、Jenkins に同期されていることを確認することもできます。
-    ※ TODO: ここの記載消すか
 
     ```bash#test
     echo https://$(oc get route jenkins --template='{{ .spec.host }}' -n ${TEAM_NAME}-ci-cd)
