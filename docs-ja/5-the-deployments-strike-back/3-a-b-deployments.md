@@ -143,10 +143,10 @@ A/B デプロイにジャンプする前に、Argo CD を介して Matomo(Piwik)
             source_ref: 1.0.6 # helm chart version
             values:
               image_version: latest # container image version
-              &lt;strong&gt;a_b_deploy:
+              <strong>a_b_deploy:
                 a_weight: 80
                 b_weight: 20 # 20% of the traffic will be directed to 'B'
-                svc_name: pet-battle-b&lt;/strong&gt;
+                svc_name: pet-battle-b</strong>
               config_map: ...
         </code></pre>
     </div>
