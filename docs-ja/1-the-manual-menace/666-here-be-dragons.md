@@ -24,9 +24,9 @@
 | Windows          | %TEMP%\helm               | %APPDATA%\helm                 | %APPDATA%\helm          |
 ```
 
-OpenShift では、WebUI に入力する`HelmChartRepository`オブジェクトを作成できます。詳細については<span style="color:blue;"><a href="https://docs.openshift.com/container-platform/4.9/applications/working_with_helm_charts/configuring-custom-helm-chart-repositories.html">、こちらを</a></span>参照してください。
+OpenShift では、WebUI に入力する`HelmChartRepository`オブジェクトを作成できます。詳細については、<span style="color:blue;"><a href="https://docs.openshift.com/container-platform/4.9/applications/working_with_helm_charts/configuring-custom-helm-chart-repositories.html">こちらを</a></span>参照してください。
 
-helm チャートをnamespaceにインストールすると、helm コマンド ラインは実際に完全なチャートをアップロードし、OpenShift クラスターの Helm コントローラーが操作できるシークレットに格納します。
+helm チャートをnamespaceにインストールすると、helm コマンドラインは実際に完全なチャートをアップロードし、OpenShift クラスターの Helm コントローラーが操作できるシークレットに格納します。
 
 <div class="highlight" style="background: #f7f7f7">
 <pre><code class="language-bash">

@@ -125,7 +125,7 @@
     echo https://allure-<TEAM_NAME>-ci-cd.<CLUSTER_DOMAIN>/allure-docker-service/projects/zap-scan/reports/latest/index.html
     ```
 
-ドリルダウンしてボディの添付ファイルをテストします。
+ドリルダウンしてボディの添付ファイルを確認します。
 
 ![images/allure-zap-report-attachment.png](images/allure-zap-report-attachment.png)
 

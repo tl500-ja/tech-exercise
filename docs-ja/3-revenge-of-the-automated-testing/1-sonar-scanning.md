@@ -115,7 +115,7 @@
               - https://github.com/dependency-check/dependency-check-sonar-plugin/releases/download/2.0.8/sonar-dependency-check-plugin-2.0.8.jar
     ```
 
-3. Git の追加、コミット、変更のプッシュ (GITOPS 🪄🪄)。 ArgoCD では、それが生きているのがわかります。
+3. Git の追加、コミット、変更のプッシュ (GitOps 🪄🪄)。 ArgoCD では、それが生成されているのがわかります。
 
     ```bash
     cd /projects/tech-exercise
