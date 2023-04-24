@@ -132,7 +132,7 @@ Red Hat Open Innovation Labs では、セットアップとオンボーディン
     sed -i "s|TEAM_NAME|$TEAM_NAME|" /projects/tech-exercise/ubiquitous-journey/values-tooling.yaml
     ```
 
-3. これが GitOps です。つまり、変更に影響を与えるには、コミットする必要があります。 ArgoCDに変更を同期するように指示する前に、構成をgitに取得しましょう。
+3. これが GITOPS です。つまり、変更に影響を与えるには、コミットする必要があります。 ArgoCDに変更を同期するように指示する前に、構成をgitに取得しましょう。
 
     ```bash#test
     cd /projects/tech-exercise/
